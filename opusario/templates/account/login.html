@@ -1,0 +1,88 @@
+{% extends "index.html" %}
+{% load static from staticfiles %}
+
+{% load account_tags %}
+{% load i18n %}
+
+{% block title %}{% trans "Account Login" %}{% endblock %}
+{% block static %}
+
+    <!-- OWASP 20170211: Turn off password autocomplete -->
+    <script>
+        $(document).ready(function(){
+            $('#id_password').attr('autocomplete', 'off');
+        });
+    </script>
+
+{% endblock %}
+
+{% block body_container %}
+
+    <div class="col-md-6 col-md-offset-3">
+
+            <form id="login_form" class="margin-top-30 sky-form boxed" method="POST" action="{% url "account_login" %}"
+                    {% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>
+                {% csrf_token %}
+
+                <header>{% trans "Log In" %}</header>
+
+                <div class="box-static box-transparent box-bordered padding-30">
+
+                    <!-- ALERT -->
+                    {% include "./_form_errors.html" %}
+
+                    <fieldset>
+
+                    <div class="row"> <!-- username -->
+                        <div class="form-group">
+                            <div class="col-md-6 col-sm-6">
+                                <label>{{ form.username.label }}: *</label>
+                                <label class="input margin-bottom-5" id="id_username">
+                                    <i class="ico-append fa fa-user"></i>
+                                    {{ form.username }}
+                                    <b class="tooltip tooltip-bottom-left">Your user name may be different than
+                                        your email address.</b>
+                                </label>
+                                {% include "./_username_errors.html" %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row"> <!-- password -->
+                        <div class="form-group">
+                            <div class="col-md-6 col-sm-6">
+                                <label for="register:pass1">{{ form.password.label }}: *</label>
+                                <label class="input margin-bottom-5">
+                                    <i class="ico-append fa fa-lock"></i>
+                                    {{ form.password }}
+                                </label>
+                                {% include "./_password_errors.html" %}
+                            </div>
+                        </div>
+                    </div>
+
+                    </fieldset>
+
+                    {% if redirect_field_value %}
+                        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                    {% endif %}
+
+                    <button type="submit" class="btn btn-primary btn-bordered pull-right" >{% trans "Log in" %}</button>
+                    <a href="{% url "account_password_reset" %}" class="btn btn-link">{% trans "Forgot your password?" %}</a>
+
+                </div>
+            </form>
+
+            {% if ACCOUNT_OPEN_SIGNUP %}
+                <p class="login-signup">
+                    <small>
+                        {% trans "Don't have an account?" %}  <strong><a href="{% url 'account_signup' %}">{% trans "Sign up" %}</a></strong>
+                    </small>
+                </p>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

@@ -1,0 +1,29 @@
+{% load render_bundle from webpack_loader %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Opusario - {% block title %}{% endblock %}</title>
+    {% block static %}{% endblock %}
+  </head>
+  <body>
+    <div>
+        {% if user.is_authenticated %}
+            <a href="{% url 'account_logout' %}">Log out</a>
+        {% else %}
+            <a href="{% url 'account_signup' %}">Join</a>
+            <a href="{% url 'account_login' %}">Sign in</a>
+        {% endif %}
+    </div>
+    <div>
+        {% block body_container %}{% endblock %}
+    </div>
+    {% if 'account' not in request.path and not request.path == '/' %}
+        <div id="root"></div>
+        {% render_bundle 'main' %}
+    {% endif %}
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

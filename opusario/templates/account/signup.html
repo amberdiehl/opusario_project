@@ -1,0 +1,162 @@
+{% extends "index.html" %}
+{% load static from staticfiles %}
+
+{% load account_tags %}
+{% load i18n %}
+
+{% block title %}{% trans "Create Account" %}{% endblock %}
+{% block static %}
+
+    <!-- Style modal that shows terms of use -->
+    <style>
+
+        .modal-dialog {
+            margin: 2.5vh auto;
+        }
+
+        .modal-content {
+            min-height: 70vh;
+            max-height: 90vh;
+            overflow: scroll;
+        }
+
+        /*Sets the maximum height of the modal body to 90% of the screen height*/
+        .modal-body {
+            min-height: 40vh;
+            max-height: 60vh;
+            overflow: scroll;
+        }
+
+    </style>
+
+    <!-- OWASP 20170211: Turn off password autocomplete -->
+    <script>
+        $(document).ready(function(){
+            $('#id_password').attr('autocomplete', 'off');
+            $('#id_password_confirm').attr('autocomplete', 'off');
+        });
+    </script>
+
+{% endblock %}
+
+{% block body_classes %} bg-grey {% endblock %}
+{% block body_container %}
+
+    <div class="col-md-6 col-md-offset-3">
+
+        <form id="signup_form" class="margin-top-30 sky-form boxed centered" method="post" action="{% url "account_signup" %}"
+                {% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>
+        {% csrf_token %}
+
+        <header>{% trans "Create Account" %}</header>
+
+            <div class="box-static box-transparent box-bordered padding-30">
+
+                {% include "./_form_errors.html" %}
+
+                <fieldset>
+                    <div class="row"> <!-- username -->
+                        <div class="form-group">
+                            <div class="col-md-6 col-sm-6">
+                                <label>{{ form.username.label }} *</label>
+                                <label class="input margin-bottom-10">
+                                    <i class="ico-append fa fa-user"></i>
+                                    {{ form.username }}
+                                    <b class="tooltip tooltip-bottom-left">This is what you will use to log in with.</b>
+                                </label>
+                                {% include "./_username_errors.html" %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row"> <!-- email -->
+                        <div class="form-group">
+                            <div class="col-md-6 col-sm-6">
+                                <label for="register:email">{{ form.email.label }} *</label>
+                                <label class="input margin-bottom-10">
+                                    <i class="ico-append fa fa-envelope"></i>
+                                    {{ form.email }}
+                                    <b class="tooltip tooltip-bottom-left">Your favorite email address.</b>
+                                </label>
+                                {% include "./_email_errors.html" %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row"> <!-- password -->
+                        <div class="form-group">
+                            <div class="col-md-6 col-sm-6">
+                                <label for="register:pass1">{{ form.password.label }} *</label>
+                                <label class="input margin-bottom-10">
+                                    <i class="ico-append fa fa-lock"></i>
+                                    {{ form.password }}
+                                    <b class="tooltip tooltip-bottom-left">Mininimum 8 charachters; include 1 upper
+                                        case letter and one number.</b>
+                                </label>
+                                {% include "./_password_errors.html" %}
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                <label for="register:pass2">{{ form.password_confirm.label }} *</label>
+                                <label class="input margin-bottom-10">
+                                    <i class="ico-append fa fa-lock"></i>
+                                    {{ form.password_confirm }}
+                                    <b class="tooltip tooltip-bottom-left">Retype password to validate.</b>
+                                </label>
+                                {% include "./_password_confirm_errors.html" %}
+                            </div>
+                        </div>
+                    </div>
+
+                </fieldset>
+
+                {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-primary btn-bordered pull-right"><i class="fa fa-check"></i>
+                            {% trans "Create account" %}</button>
+                        <span><strong>Wait!</strong> By creating an account, you are stating you have read and agree to
+                            our <a href="#termsModal" data-toggle="modal" data-target="#termsModal">Terms of Service</a></span>
+                    </div>
+                </div>
+
+            </div>
+
+        </form>
+
+            <p class="login-signup">
+                <small>
+                    {% trans "Already have an account?" %}  <strong><a href="{% url 'account_login' %}">{% trans "Log in" %}</a></strong>
+                </small>
+            </p>
+
+    </div>
+
+    <!-- Modal form for terms of use -->
+    <div class="modal fade" id="termsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Site Terms and Conditions</h4>
+                </div>
+                <div class="modal-body">
+                    {* include "public/_terms-of-use.html" *}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+    <!-- As with vehicle template, cannot include js that keeps banner while scrolling as it causes the modal
+    dialog box to immediately close right after opening. -->
+
+{% endblock %}
