@@ -59,8 +59,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'account',
     'webpack_loader',
+    'account',
 ]
 
 MIDDLEWARE = [
@@ -77,8 +77,8 @@ MIDDLEWARE = [
 
 WEBPACK_LOADER = {
     'DEFAULT': {
-            'BUNDLE_DIR_NAME': 'bundles/',
-            'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.dev.json'),
+            'BUNDLE_DIR_NAME': 'dist/',
+            'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
         }
 }
 
@@ -101,19 +101,13 @@ TEMPLATES = [
     },
 ]
 
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
 WSGI_APPLICATION = 'opusario.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#   }
-#}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
