@@ -117,14 +117,10 @@ class Role(models.Model):
 class Skill(models.Model):
     at_functional_area = models.ManyToManyField(
         FunctionalArea,
-        models.SET_NULL,
-        null=True,
         help_text='Functional area this skill is associated with.'
     )
     at_role = models.ManyToManyField(
         Role,
-        models.SET_NULL,
-        null=True,
         help_text='Role this skill is associated with.'
     )
     name = models.CharField(
@@ -149,14 +145,10 @@ class Skill(models.Model):
 class Tool(models.Model):
     at_functional_area = models.ManyToManyField(
         FunctionalArea,
-        models.SET_NULL,
-        null=True,
         help_text='Functional area this tool is associated with.'
     )
     at_role = models.ManyToManyField(
         Role,
-        models.SET_NULL,
-        null=True,
         help_text='Role this tool is associated with.'
     )
     name = models.CharField(
@@ -393,8 +385,6 @@ class ProjectRole(models.Model):
     )
     at_role = models.ManyToManyField(
         Role,
-        models.SET_NULL,
-        null=True,
         help_text='Your functional role on the project.'
     )
     description = models.TextField(
