@@ -3,8 +3,9 @@ import {Route, Switch, BrowserRouter} from 'react-router-dom';
 
 import { Provider } from "react-redux";
 import { createStore } from "redux";
-import OpusarioApp from "./reducers";
+import OpusarioReducers from "./reducers";
 
+import Industry from './containers/Industry';
 import Myself from './components/Myself';
 import NotFound from './components/NotFound';
 
@@ -15,7 +16,7 @@ import '../../static/css/main.css';
 import '../../static/images/banner.jpg';
 
 
-let store = createStore(OpusarioApp);
+let store = createStore(OpusarioReducers);
 
 
 class App extends Component {
@@ -24,8 +25,9 @@ class App extends Component {
             <Provider store={store}>
                 <BrowserRouter>
                     <Switch>
-                        <Route exact path="/myself" component={Myself}/>
-                        <Route component={NotFound}/>
+                        <Route exact path="/industry" component={Industry} />
+                        <Route exact path="/myself" component={Myself} />
+                        <Route component={NotFound} />
                     </Switch>
                 </BrowserRouter>
             </Provider>

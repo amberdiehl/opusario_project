@@ -58,6 +58,7 @@ class Industry(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        verbose_name_plural = 'Industries'
         ordering = ['name', ]
 
     def __str__(self):

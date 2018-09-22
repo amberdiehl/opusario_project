@@ -1,9 +1,11 @@
 import { combineReducers } from 'redux';
+import industry from "./industry";
 import myself from "./myself";
 
 
-const OpusarioApp = combineReducers({
-    myself,
+const OpusarioReducers = combineReducers({
+    industry,
+    myself
 });
 
-export default OpusarioApp;
+export default OpusarioReducers;
