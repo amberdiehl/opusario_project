@@ -1,16 +1,22 @@
 import {connect} from 'react-redux';
 import DynamicSelectList from '../components/DynamicSelectList';
+import { fetchItems } from '../actions/dynamic_select_list';
+
 
 const mapStateToProps = state => {
     return {
         componentId: state.industry.componentId,
-        componentName: state.industry.componentName,
-        items: state.industry.items
+        items: state.industry.items,
+        route: state.industry.route,
     };
 };
 
 const mapDispatchToProps = dispatch => {
-    return {};
+    return {
+        fetchItems: () => {
+            dispatch(fetchItems());
+        }
+    };
 };
 
 const Industry = connect(
