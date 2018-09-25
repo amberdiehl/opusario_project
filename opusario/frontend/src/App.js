@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
 import OpusarioReducers from "./reducers";
 import thunk from "redux-thunk";
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 import IndustryContainer from './containers/IndustryContainer';
 import Myself from './components/Myself';
@@ -18,7 +19,7 @@ import '../../static/css/font-awesome.min.css';
 import '../../static/images/banner.jpg';
 
 
-let store = createStore(OpusarioReducers, applyMiddleware(thunk));
+let store = createStore(OpusarioReducers, composeWithDevTools(applyMiddleware(thunk)));
 
 
 class App extends Component {

@@ -5,9 +5,10 @@ import { fetchItems, addItem, setLoading } from '../actions/industry';
 
 const mapStateToProps = state => {
     return {
+        allowAdd: state.industry.allowAdd,
         componentId: state.industry.componentId,
         items: state.industry.items,
-        selectedItem: state.industry.selectedItem,
+        selectItem: state.industry.selectItem,
         isLoading: state.industry.isLoading,
     };
 };

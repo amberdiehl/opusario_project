@@ -6,9 +6,51 @@ export default class DynamicSelectList extends Component {
     constructor(props) {
         super(props);
         this.inputNewItem = React.createRef();
+        this.renderSelectField = this.renderSelectField.bind(this);
+        this.renderAddInput = this.renderAddInput.bind(this);
+        this.renderAddButton = this.renderAddButton.bind(this);
     }
     componentDidMount() {
         this.props.fetchItems();
+    }
+    renderSelectField() {
+        return (
+            <div className={"col-6 col-12-xsmall"}>
+                <select id={`select${this.props.componentId}`}
+                    disabled={this.props.isLoading}
+                    value={this.props.selectItem}
+                    defaultValue={this.props.selectItem} >
+                        {this.props.items.map(item => (
+                            <option key={`industry-${item.id}`} value={item.id}>{item.name}</option>
+                        ))}
+                </select>
+            </div>
+        )
+    }
+    renderAddInput() {
+        if (this.props.allowAdd) {
+            return (
+                <div className="col-3 col-3-xsmall">
+                    <input type={"text"} ref={this.inputNewItem} placeholder={this.props.componentId}/>
+                </div>
+            )
+        }
+    }
+    renderAddButton() {
+        if (this.props.allowAdd) {
+            return (
+                <div className="col-3 col-3-xsmall">
+                    <button onClick={
+                        (e) => {
+                            e.preventDefault();
+                            this.props.addItem(this.inputNewItem.current.value);
+                            this.inputNewItem.current.value = '';
+                        }
+                    }>
+                        Add {this.props.componentId}</button>
+                </div>
+            )
+        }
     }
     render() {
         return (
@@ -16,34 +58,22 @@ export default class DynamicSelectList extends Component {
                 <div className={"inner"}>
                     <form>
                         <div className="row gtr-uniform">
-                            <div className={"col-6 col-12-xsmall"}>
-                                <select id={`select${this.props.componentId}`}
-                                        disabled={this.props.isLoading}
-                                        defaultValue={this.props.selectedItem} >
-                                    {this.props.items.map(item => (
-                                        <option key={`industry-${item.id}`} value={item.id}>{item.name}</option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div className="col-3 col-3-xsmall">
-                                <input type={"text"} ref={this.inputNewItem} placeholder={this.props.componentId}/>
-                            </div>
-                            <div className="col-3 col-3-xsmall">
-                                <button onClick={() => {this.props.addItem(this.inputNewItem.current.value)}}>
-                                    Add {this.props.componentId}</button>
-                            </div>
+                            {this.renderSelectField()}
+                            {this.renderAddInput()}
+                            {this.renderAddButton()}
                         </div>
                     </form>
                 </div>
             </section>
-        )
+        );
     }
 }
 
 DynamicSelectList.propTypes = {
+    allowAdd: PropTypes.bool.isRequired,
     componentId: PropTypes.string.isRequired,
     items: PropTypes.array.isRequired,
-    selectedItem: PropTypes.string.isRequired,
+    selectItem: PropTypes.string.isRequired,
     isLoading: PropTypes.bool.isRequired,
     addItem: PropTypes.func.isRequired,
     fetchItems: PropTypes.func.isRequired,

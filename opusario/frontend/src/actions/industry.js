@@ -1,6 +1,6 @@
 import { getCookie } from "../helpers";
 
-const ADD_ITEM = 'ADD_ITEM';
+const ADD_INDUSTRY = 'ADD_INDUSTRY';
 const FETCH_ITEMS = 'FETCH_ITEMS';
 const SET_LOADING = 'SET_LOADING';
 
@@ -41,9 +41,12 @@ export const addItem = (text) => {
             .then(response => response.json())
             .then(item => {
                 return dispatch({
-                    type: ADD_ITEM,
-                    item
+                    type: ADD_INDUSTRY,
+                    item: item.id.toString()
                 });
+            })
+            .then( () => {
+                dispatch(fetchItems());
             });
     };
 };
