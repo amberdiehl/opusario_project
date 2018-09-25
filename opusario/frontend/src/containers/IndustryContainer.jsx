@@ -1,27 +1,34 @@
 import {connect} from 'react-redux';
 import DynamicSelectList from '../components/DynamicSelectList';
-import { fetchItems } from '../actions/dynamic_select_list';
+import { fetchItems, addItem, setLoading } from '../actions/industry';
 
 
 const mapStateToProps = state => {
     return {
         componentId: state.industry.componentId,
         items: state.industry.items,
-        route: state.industry.route,
+        selectedItem: state.industry.selectedItem,
+        isLoading: state.industry.isLoading,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+        addItem: (text) => {
+            dispatch(addItem(text));
+        },
         fetchItems: () => {
             dispatch(fetchItems());
+        },
+        setLoading: (value) => {
+            dispatch(setLoading(value));
         }
     };
 };
 
-const Industry = connect(
+const IndustryContainer = connect(
     mapStateToProps,
     mapDispatchToProps
 )(DynamicSelectList);
 
-export default Industry;
+export default IndustryContainer;

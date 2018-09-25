@@ -6,7 +6,7 @@ import { createStore, applyMiddleware } from "redux";
 import OpusarioReducers from "./reducers";
 import thunk from "redux-thunk";
 
-import Industry from './containers/Industry';
+import IndustryContainer from './containers/IndustryContainer';
 import Myself from './components/Myself';
 import NotFound from './components/NotFound';
 
@@ -27,7 +27,7 @@ class App extends Component {
             <Provider store={store}>
                 <BrowserRouter>
                     <Switch>
-                        <Route exact path="/industry" component={Industry} />
+                        <Route exact path="/industry" component={IndustryContainer} />
                         <Route path="/myself" component={Myself} />
                         <Route component={NotFound} />
                     </Switch>
