@@ -28,7 +28,7 @@ class App extends Component {
             <Provider store={store}>
                 <BrowserRouter>
                     <Switch>
-                        <Route exact path="/industry" component={IndustryContainer} />
+                        <Route exact path="/app/industry" component={IndustryContainer} />
                         <Route path="/myself" component={Myself} />
                         <Route component={NotFound} />
                     </Switch>

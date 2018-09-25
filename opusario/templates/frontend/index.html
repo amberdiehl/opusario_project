@@ -1,0 +1,19 @@
+{% extends "../opusario/base.html" %}
+{% load static %}
+{% load render_bundle from webpack_loader %}
+
+{% block title %}App{% endblock %}
+
+{% block header_static %}
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+{% endblock %}
+
+{% block body_container %}
+    {% if 'account' not in request.path and not request.path == '/' %}
+        <div id="root"></div>
+        {% render_bundle 'main' 'js' %}
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}{% endblock %}

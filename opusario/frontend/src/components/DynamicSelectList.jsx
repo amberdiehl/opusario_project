@@ -18,8 +18,7 @@ export default class DynamicSelectList extends Component {
             <div className={"col-6 col-12-xsmall"}>
                 <select id={`select${this.props.componentId}`}
                     disabled={this.props.isLoading}
-                    value={this.props.selectItem}
-                    defaultValue={this.props.selectItem} >
+                    value={this.props.selectItem} >
                         {this.props.items.map(item => (
                             <option key={`industry-${item.id}`} value={item.id}>{item.name}</option>
                         ))}
