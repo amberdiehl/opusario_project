@@ -15,6 +15,8 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# Variable files. Logs, media, etc.
+VAR_DIR = os.path.join(BASE_DIR, 'var')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -32,7 +34,7 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 # Don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ('*', )
 SITE_ID = 1
 
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
@@ -61,12 +63,15 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'webpack_loader',
     'rest_framework',
+    'corsheaders',
     'django_filters',
     'account',
-    'backend.apps.BackendConfig',
+    'backend.apps.BackendConfig',  # <-- in short, backend
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # requirement for corsheaders
+    'django.middleware.common.CommonMiddleware',  # requirement for corsheaders
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -77,6 +82,11 @@ MIDDLEWARE = [
     'account.middleware.LocaleMiddleware',
     'account.middleware.TimezoneMiddleware',
 ]
+
+CORS_ORIGIN_WHITELIST = (
+    'localhost:3000/',
+    '127.0.0.1:3000'
+)
 
 WEBPACK_LOADER = {
     'DEFAULT': {
@@ -105,6 +115,9 @@ TEMPLATES = [
 ]
 
 
+WSGI_APPLICATION = 'opusario.wsgi.application'
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
@@ -113,8 +126,9 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
+MEDIA_ROOT = os.path.join(VAR_DIR, 'media')
+MEDIA_URL = '/media/'
 
-WSGI_APPLICATION = 'opusario.wsgi.application'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators

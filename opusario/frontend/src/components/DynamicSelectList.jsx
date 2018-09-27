@@ -18,7 +18,8 @@ export default class DynamicSelectList extends Component {
             <div className={"col-6 col-12-xsmall"}>
                 <select id={`select${this.props.componentId}`}
                     disabled={this.props.isLoading}
-                    value={this.props.selectItem} >
+                    value={this.props.selectItem}
+                    onChange={(event) => {this.props.setSelectValue(event.target.value);}}>
                         {this.props.items.map(item => (
                             <option key={`industry-${item.id}`} value={item.id}>{item.name}</option>
                         ))}
@@ -76,4 +77,5 @@ DynamicSelectList.propTypes = {
     isLoading: PropTypes.bool.isRequired,
     addItem: PropTypes.func.isRequired,
     fetchItems: PropTypes.func.isRequired,
+    setSelectValue: PropTypes.func.isRequired,
 };

@@ -1,14 +1,15 @@
 import {connect} from 'react-redux';
 import DynamicSelectList from '../components/DynamicSelectList';
-import { fetchItems, addItem, setLoading } from '../actions/industry';
+import { fetchItems, addItem, setLoading, setSelectValue } from '../actions/industry';
 
 
 const mapStateToProps = state => {
     return {
-        allowAdd: state.industry.allowAdd,
         componentId: state.industry.componentId,
         items: state.industry.items,
         selectItem: state.industry.selectItem,
+        allowAdd: state.industry.allowAdd,
+        validationRegEx: state.industry.validationRegEx,
         isLoading: state.industry.isLoading,
     };
 };
@@ -23,6 +24,9 @@ const mapDispatchToProps = dispatch => {
         },
         setLoading: (value) => {
             dispatch(setLoading(value));
+        },
+        setSelectValue: (value) => {
+            dispatch(setSelectValue(value));
         }
     };
 };

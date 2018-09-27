@@ -1,8 +1,10 @@
 import { getCookie } from "../helpers";
 
-const ADD_INDUSTRY = 'ADD_INDUSTRY';
-const FETCH_ITEMS = 'FETCH_ITEMS';
-const SET_LOADING = 'SET_LOADING';
+export const FETCH_ITEMS = 'FETCH_ITEMS';
+export const ADD_INDUSTRY = 'ADD_INDUSTRY';
+export const CHANGE_SELECTED_ITEM = 'CHANGE_SELECTED_ITEM';
+export const SET_LOADING = 'SET_LOADING';
+export const SHOW_ERROR = 'SHOW_ERROR';
 
 const headers = {
     "Content-Type": "application/json",
@@ -42,11 +44,25 @@ export const addItem = (text) => {
             .then(item => {
                 return dispatch({
                     type: ADD_INDUSTRY,
-                    item: item.id.toString()
+                    itemValue: item.id.toString()
                 });
             })
             .then( () => {
                 dispatch(fetchItems());
             });
+    };
+};
+
+export const setSelectValue = (newValue) => {
+    return {
+        type: CHANGE_SELECTED_ITEM,
+        newValue
+    };
+};
+
+export const showError = (bool) => {
+    return {
+        type: SHOW_ERROR,
+        value: bool
     };
 };
