@@ -1,4 +1,4 @@
-import { FETCH_ITEMS, ADD_INDUSTRY, CHANGE_SELECTED_ITEM, SET_LOADING, SHOW_ERROR } from '../actions/industry';
+import { FETCH_ITEMS, ADD_ITEM, CHANGE_SELECTED_ITEM, SET_LOADING, SHOW_ERROR } from '../actions/industry';
 
 const defaultValue = {id: 0, name: "- Select industry -"};
 
@@ -9,7 +9,8 @@ const initialState = {
     ],
     selectItem: '0',
     allowAdd: true,
-    validationRegEx: /^[a-zA-Z]*$/,
+    validationRegEx: /^[a-zA-Z0-9 ]*$/,
+    regExDescription: 'letters, numbers, and spaces.',
     errorMessage: '',
     isError: false,
     isLoading: false
@@ -21,12 +22,16 @@ export default function industry(state=initialState, action) {
         case FETCH_ITEMS:
             action.items.unshift(defaultValue);
             return {...state, "items": action.items};
-        case SET_LOADING:
-            return {...state, "isLoading": action.value};
-        case ADD_INDUSTRY:
+        case ADD_ITEM:
             return {...state, "selectItem": action.itemValue};
         case CHANGE_SELECTED_ITEM:
             return {...state, "selectItem": action.newValue};
+        case SHOW_ERROR:
+            return {...state,
+                "isError": action.trueFalse,
+                "errorMessage": action.message};
+        case SET_LOADING:
+            return {...state, "isLoading": action.value};
         default:
             return state;
     }

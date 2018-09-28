@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import DynamicSelectList from '../components/DynamicSelectList';
-import { fetchItems, addItem, setLoading, setSelectValue } from '../actions/industry';
+import { fetchItems, addItem, setLoading, setSelectValue, showError } from '../actions/industry';
 
 
 const mapStateToProps = state => {
@@ -10,6 +10,9 @@ const mapStateToProps = state => {
         selectItem: state.industry.selectItem,
         allowAdd: state.industry.allowAdd,
         validationRegEx: state.industry.validationRegEx,
+        regExDescription: state.industry.regExDescription,
+        errorMessage: state.industry.errorMessage,
+        isError: state.industry.isError,
         isLoading: state.industry.isLoading,
     };
 };
@@ -27,7 +30,10 @@ const mapDispatchToProps = dispatch => {
         },
         setSelectValue: (value) => {
             dispatch(setSelectValue(value));
-        }
+        },
+        showError: (trueFalse, message) => {
+            dispatch(showError(trueFalse, message));
+        },
     };
 };
 

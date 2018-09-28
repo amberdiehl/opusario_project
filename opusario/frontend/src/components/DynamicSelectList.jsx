@@ -38,13 +38,19 @@ export default class DynamicSelectList extends Component {
     }
     renderAddButton() {
         if (this.props.allowAdd) {
+            const validationErrorMessage = `${this.props.componentId} can only contain ${this.props.regExDescription}`;
             return (
                 <div className="col-3 col-3-xsmall">
-                    <button onClick={
+                    <button className={"button primary small"} onClick={
                         (e) => {
                             e.preventDefault();
-                            this.props.addItem(this.inputNewItem.current.value);
-                            this.inputNewItem.current.value = '';
+                            let isValid = this.props.validationRegEx.test(this.inputNewItem.current.value);
+                            if (isValid) {
+                                this.props.addItem(this.inputNewItem.current.value);
+                                this.inputNewItem.current.value = '';
+                            } else {
+                                this.props.showError(true, validationErrorMessage)
+                            }
                         }
                     }>
                         Add {this.props.componentId}</button>
@@ -53,14 +59,21 @@ export default class DynamicSelectList extends Component {
         }
     }
     render() {
+        const showErrorStyle = {display: "block"};
+        const hideErrorStyle = {display: "none"};
         return (
             <section className={"wrapper style5"}>
                 <div className={"inner"}>
                     <form>
-                        <div className="row gtr-uniform">
+                        <div className={"row gtr-uniform"}>
                             {this.renderSelectField()}
                             {this.renderAddInput()}
                             {this.renderAddButton()}
+                        </div>
+                        <div className={"row"} style={(this.props.isError) ? showErrorStyle : hideErrorStyle}>
+                            <div className={"col-10 component-error-message"}>
+                                {this.props.errorMessage}
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -70,12 +83,17 @@ export default class DynamicSelectList extends Component {
 }
 
 DynamicSelectList.propTypes = {
-    allowAdd: PropTypes.bool.isRequired,
     componentId: PropTypes.string.isRequired,
     items: PropTypes.array.isRequired,
     selectItem: PropTypes.string.isRequired,
+    allowAdd: PropTypes.bool.isRequired,
+    validationRegEx: PropTypes.any.isRequired, // Not clear on how to indicate this is a RegEx.
+    regExDescription: PropTypes.string.isRequired,
+    errorMessage: PropTypes.string.isRequired,
+    isError: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,
-    addItem: PropTypes.func.isRequired,
     fetchItems: PropTypes.func.isRequired,
+    addItem: PropTypes.func.isRequired,
     setSelectValue: PropTypes.func.isRequired,
+    showError: PropTypes.func.isRequired,
 };
