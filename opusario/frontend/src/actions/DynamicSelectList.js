@@ -28,10 +28,10 @@ export const showError = (trueFalse, message) => {
     };
 };
 
-export const fetchItems = () => {
+export const fetchItems = (apiRoute) => {
     return (dispatch) => {
         dispatch(setLoading(true));
-        return fetch(`/api/industries/`, {headers,})
+        return fetch(apiRoute, {headers,})
             .then(response => response.json())
             .then(items => {
                 return dispatch({
@@ -48,12 +48,12 @@ export const fetchItems = () => {
     };
 };
 
-export const addItem = (text) => {
+export const addItem = (apiRoute, text) => {
     return (dispatch) => {
         const body = JSON.stringify({
             "name": text
         });
-        return fetch("/api/industries/", {headers, method: "POST", body, })
+        return fetch(apiRoute, {headers, method: "POST", body, })
             .then( response =>
                 response.json().then(json => ({
                 status: response.status,
@@ -70,7 +70,8 @@ export const addItem = (text) => {
                         type: ADD_ITEM,
                         itemValue: json.id.toString()
                     });
-                    dispatch(fetchItems());
+                    dispatch(showError(false, ''));
+                    dispatch(fetchItems(apiRoute));
                 }
             })
             .catch( () => {

@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import industry from "./industry";
+import industry from "./Industry";
 import myself from "./myself";
 
 

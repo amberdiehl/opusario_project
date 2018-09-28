@@ -11,7 +11,7 @@ export default class DynamicSelectList extends Component {
         this.renderAddButton = this.renderAddButton.bind(this);
     }
     componentDidMount() {
-        this.props.fetchItems();
+        this.props.fetchItems(this.props.apiRoute);
     }
     renderSelectField() {
         return (
@@ -46,7 +46,7 @@ export default class DynamicSelectList extends Component {
                             e.preventDefault();
                             let isValid = this.props.validationRegEx.test(this.inputNewItem.current.value);
                             if (isValid) {
-                                this.props.addItem(this.inputNewItem.current.value);
+                                this.props.addItem(this.props.apiRoute, this.inputNewItem.current.value);
                                 this.inputNewItem.current.value = '';
                             } else {
                                 this.props.showError(true, validationErrorMessage)
@@ -92,6 +92,7 @@ DynamicSelectList.propTypes = {
     errorMessage: PropTypes.string.isRequired,
     isError: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,
+    apiRoute: PropTypes.string.isRequired,
     fetchItems: PropTypes.func.isRequired,
     addItem: PropTypes.func.isRequired,
     setSelectValue: PropTypes.func.isRequired,

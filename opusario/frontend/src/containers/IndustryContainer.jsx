@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import DynamicSelectList from '../components/DynamicSelectList';
-import { fetchItems, addItem, setLoading, setSelectValue, showError } from '../actions/industry';
+import { fetchItems, addItem, setLoading, setSelectValue, showError } from '../actions/DynamicSelectList';
 
 
 const mapStateToProps = state => {
@@ -14,16 +14,17 @@ const mapStateToProps = state => {
         errorMessage: state.industry.errorMessage,
         isError: state.industry.isError,
         isLoading: state.industry.isLoading,
+        apiRoute: state.industry.apiRoute
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        addItem: (text) => {
-            dispatch(addItem(text));
+        addItem: (apiRoute, text) => {
+            dispatch(addItem(apiRoute, text));
         },
-        fetchItems: () => {
-            dispatch(fetchItems());
+        fetchItems: (apiRoute) => {
+            dispatch(fetchItems(apiRoute));
         },
         setLoading: (value) => {
             dispatch(setLoading(value));

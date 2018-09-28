@@ -1,4 +1,4 @@
-import { FETCH_ITEMS, ADD_ITEM, CHANGE_SELECTED_ITEM, SET_LOADING, SHOW_ERROR } from '../actions/industry';
+import { FETCH_ITEMS, ADD_ITEM, CHANGE_SELECTED_ITEM, SET_LOADING, SHOW_ERROR } from '../actions/DynamicSelectList';
 
 const defaultValue = {id: 0, name: "- Select industry -"};
 
@@ -9,11 +9,12 @@ const initialState = {
     ],
     selectItem: '0',
     allowAdd: true,
-    validationRegEx: /^[a-zA-Z0-9 ]*$/,
-    regExDescription: 'letters, numbers, and spaces.',
+    validationRegEx: /^[a-zA-Z ]*$/,
+    regExDescription: 'letters and spaces.',
     errorMessage: '',
     isError: false,
-    isLoading: false
+    isLoading: false,
+    apiRoute: '/api/industries/',
 };
 
 
