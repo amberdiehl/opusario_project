@@ -1,4 +1,4 @@
-import { FETCH_ITEMS, ADD_ITEM, CHANGE_SELECTED_ITEM, SET_LOADING, SHOW_ERROR } from '../actions/DynamicSelectList';
+import { FETCH_ITEMS, ADD_ITEM, CHANGE_SELECTED_ITEM, SET_LOADING, SHOW_ERROR } from "../constants";
 
 const defaultValue = {id: 0, name: "- Select industry -"};
 

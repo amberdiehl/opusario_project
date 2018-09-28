@@ -1,16 +1,6 @@
-import { getCookie } from "../helpers";
-
-export const FETCH_ITEMS = 'FETCH_ITEMS';
-export const ADD_ITEM = 'ADD_ITEM';
-export const CHANGE_SELECTED_ITEM = 'CHANGE_SELECTED_ITEM';
-export const SET_LOADING = 'SET_LOADING';
-export const SHOW_ERROR = 'SHOW_ERROR';
-
-const headers = {
-    "Content-Type": "application/json",
-    "X-CSRFToken": getCookie('csrftoken')
-};
-const server500ErrorMessage = 'Oops! An error occurred on the server. Please try again later.';
+import { csrfHeader } from "../helpers";
+import {FETCH_ITEMS, ADD_ITEM, CHANGE_SELECTED_ITEM, SET_LOADING, SHOW_ERROR,
+    server500ErrorMessage} from "../constants";
 
 
 export const setLoading = (bool) => {
@@ -31,7 +21,7 @@ export const showError = (trueFalse, message) => {
 export const fetchItems = (apiRoute) => {
     return (dispatch) => {
         dispatch(setLoading(true));
-        return fetch(apiRoute, {headers,})
+        return fetch(apiRoute, {headers: csrfHeader,})
             .then(response => response.json())
             .then(items => {
                 return dispatch({
@@ -53,7 +43,7 @@ export const addItem = (apiRoute, text) => {
         const body = JSON.stringify({
             "name": text
         });
-        return fetch(apiRoute, {headers, method: "POST", body, })
+        return fetch(apiRoute, {headers: csrfHeader, method: "POST", body, })
             .then( response =>
                 response.json().then(json => ({
                 status: response.status,

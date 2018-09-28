@@ -15,3 +15,8 @@ export function getCookie(name) {
     }
     return cookieValue;
 }
+
+export const csrfHeader = {
+    "Content-Type": "application/json",
+    "X-CSRFToken": getCookie('csrftoken')
+};
