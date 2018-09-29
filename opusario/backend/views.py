@@ -11,3 +11,13 @@ class IndustryList(generics.ListCreateAPIView):
 class IndustryDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Industry.objects.all()
     serializer_class = IndustrySerializer
+
+
+class FunctionalAreaList(generics.ListCreateAPIView):
+    queryset = FunctionalArea.objects.all()
+    serializer_class = FunctionalAreaSerializer
+
+
+class FunctionalAreaDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = FunctionalArea.objects.all()
+    serializer_class = FunctionalAreaSerializer

@@ -69,6 +69,7 @@ class Industry(models.Model):
 class FunctionalArea(models.Model):
     name = models.CharField(
         max_length=100,
+        unique=True,
         help_text='Name for functional area, e.g. Technology, Marketing, Product Management, Executive Management.'
     )
     description = models.TextField(

@@ -1,9 +1,11 @@
 import { combineReducers } from 'redux';
-import industry from "./Industry";
-import myself from "./myself";
+import functional_area from './FunctionalArea';
+import industry from './Industry';
+import myself from './myself';
 
 
 const OpusarioReducers = combineReducers({
+    functional_area,
     industry,
     myself
 });

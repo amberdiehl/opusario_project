@@ -8,6 +8,7 @@ import thunk from "redux-thunk";
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import IndustryContainer from './containers/IndustryContainer';
+import FunctionalAreaContainer from './containers/FunctionalAreaContainer';
 import Myself from './components/Myself';
 import NotFound from './components/NotFound';
 
@@ -28,6 +29,7 @@ class App extends Component {
             <Provider store={store}>
                 <BrowserRouter>
                     <Switch>
+                        <Route exact path="/app/functional-area" component={FunctionalAreaContainer} />
                         <Route exact path="/app/industry" component={IndustryContainer} />
                         <Route path="/myself" component={Myself} />
                         <Route component={NotFound} />
