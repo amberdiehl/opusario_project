@@ -11,7 +11,7 @@ export default class DynamicSelectList extends Component {
         this.renderAddButton = this.renderAddButton.bind(this);
     }
     componentDidMount() {
-        this.props.fetchItems(this.props.apiRoute);
+        this.props.actions.fetchItems(this.props.apiRoute);
     }
     renderSelectField() {
         return (
@@ -19,7 +19,7 @@ export default class DynamicSelectList extends Component {
                 <select id={`select${this.props.componentId}`}
                     disabled={this.props.isLoading}
                     value={this.props.selectItem}
-                    onChange={(event) => {this.props.setSelectValue(event.target.value);}}>
+                    onChange={(event) => {this.props.actions.setSelectValue(event.target.value);}}>
                         {this.props.items.map(item => (
                             <option key={`industry-${item.id}`} value={item.id}>{item.name}</option>
                         ))}
@@ -46,10 +46,10 @@ export default class DynamicSelectList extends Component {
                             e.preventDefault();
                             let isValid = this.props.validationRegEx.test(this.inputNewItem.current.value);
                             if (isValid) {
-                                this.props.addItem(this.props.apiRoute, this.inputNewItem.current.value);
+                                this.props.actions.addItem(this.props.apiRoute, this.inputNewItem.current.value);
                                 this.inputNewItem.current.value = '';
                             } else {
-                                this.props.showError(true, validationErrorMessage)
+                                this.props.actions.showError(true, validationErrorMessage)
                             }
                         }
                     }>

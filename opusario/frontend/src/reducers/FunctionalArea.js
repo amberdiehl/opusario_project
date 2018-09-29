@@ -1,11 +1,11 @@
 import { FETCH_ITEMS, ADD_ITEM, CHANGE_SELECTED_ITEM, SET_LOADING, SHOW_ERROR } from "../constants";
 
-const defaultValue = {id: 0, name: "- Select functional area -"};
+const defaultFunctionalArea = {id: 0, name: "- Select functional area -"};
 
 const initialState = {
     componentId: 'FunctionalArea',
     items: [
-        defaultValue,
+        defaultFunctionalArea,
     ],
     selectItem: '0',
     allowAdd: true,
@@ -21,7 +21,7 @@ const initialState = {
 export default function functional_area(state=initialState, action) {
     switch (action.type) {
         case FETCH_ITEMS:
-            action.items.unshift(defaultValue);
+            action.items.unshift(defaultFunctionalArea);
             return {...state, "items": action.items};
         case ADD_ITEM:
             return {...state, "selectItem": action.itemValue};

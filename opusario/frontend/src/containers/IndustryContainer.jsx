@@ -1,7 +1,7 @@
 import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import DynamicSelectList from '../components/DynamicSelectList';
-import { fetchItems, addItem, setLoading, setSelectValue, showError } from '../actions/DynamicSelectList';
-
+import * as dynamicSelectListActions from '../actions/DynamicSelectList';
 
 const mapStateToProps = state => {
     return {
@@ -18,25 +18,9 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        addItem: (apiRoute, text) => {
-            dispatch(addItem(apiRoute, text));
-        },
-        fetchItems: (apiRoute) => {
-            dispatch(fetchItems(apiRoute));
-        },
-        setLoading: (value) => {
-            dispatch(setLoading(value));
-        },
-        setSelectValue: (value) => {
-            dispatch(setSelectValue(value));
-        },
-        showError: (trueFalse, message) => {
-            dispatch(showError(trueFalse, message));
-        },
-    };
-};
+function mapDispatchToProps(dispatch) {
+    return {actions: bindActionCreators(dynamicSelectListActions, dispatch)};
+}
 
 const IndustryContainer = connect(
     mapStateToProps,
