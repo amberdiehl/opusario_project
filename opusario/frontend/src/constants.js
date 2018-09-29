@@ -1,4 +1,3 @@
-
 // Constants for Redux Actions and Reducers
 
 export const ADD_ITEM = 'ADD_ITEM';
