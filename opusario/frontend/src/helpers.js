@@ -37,5 +37,5 @@ export function getNamespace() {
 
 // Format label and placeholder text from ComponentID
 export function getFormattedLabelText(componentID) {
-    return componentID.replace(/([A-Z])/g, ' $1');
+    return componentID.replace(/([A-Z])/g, ' $1').substring(1);
 }

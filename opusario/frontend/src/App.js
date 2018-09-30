@@ -30,10 +30,12 @@ class App extends Component {
             <Provider store={store}>
                 <BrowserRouter>
                     <Switch>
-                        <Route exact path="/app/functional-area" render={
-                            ()=><GenericParent><FunctionalAreaContainer/></GenericParent>
+                        <Route exact path="/app/components" render={()=>
+                            <GenericParent>
+                                <FunctionalAreaContainer/>
+                                <IndustryContainer/>
+                            </GenericParent>
                         } />
-                        <Route exact path="/app/industry" component={IndustryContainer} />
                         <Route path="/myself" component={Myself} />
                         <Route component={NotFound} />
                     </Switch>
