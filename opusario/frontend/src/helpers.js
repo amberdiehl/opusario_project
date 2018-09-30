@@ -25,7 +25,7 @@ export const csrfHeader = {
 
 
 // Generate two random numbers to form one string--used to setup a namespace for actions/reducers
-export default function getNamespace() {
+export function getNamespace() {
     let randomString = '';
     const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -33,4 +33,9 @@ export default function getNamespace() {
         randomString += possible.charAt(Math.floor(Math.random() * possible.length));
     }
     return randomString;
+}
+
+// Format label and placeholder text from ComponentID
+export function getFormattedLabelText(componentID) {
+    return componentID.replace(/([A-Z])/g, ' $1');
 }

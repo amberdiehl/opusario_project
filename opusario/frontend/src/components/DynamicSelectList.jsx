@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { getFormattedLabelText } from '../helpers';
+
 
 export default class DynamicSelectList extends Component {
     constructor(props) {
@@ -31,9 +33,13 @@ export default class DynamicSelectList extends Component {
     }
     renderAddInput() {
         if (this.props.allowAdd) {
+            const formattedPlaceholder = getFormattedLabelText(this.props.componentId);
+            console.log(formattedPlaceholder);
             return (
                 <div className="col-3 col-3-xsmall">
-                    <input type={"text"} ref={this.inputNewItem} placeholder={this.props.componentId}/>
+                    <input type={"text"}
+                           ref={this.inputNewItem}
+                           placeholder={getFormattedLabelText(this.props.componentId)}/>
                 </div>
             )
         }
@@ -58,7 +64,7 @@ export default class DynamicSelectList extends Component {
                             }
                         }
                     }>
-                        Add {this.props.componentId}</button>
+                        Add {getFormattedLabelText(this.props.componentId)}</button>
                 </div>
             )
         }
