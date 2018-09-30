@@ -3,6 +3,7 @@ import { FETCH_ITEMS, ADD_ITEM, CHANGE_SELECTED_ITEM, SET_LOADING, SHOW_ERROR } 
 const defaultFunctionalArea = {id: 0, name: "- Select functional area -"};
 
 const initialState = {
+    namespace: '',
     componentId: 'FunctionalArea',
     items: [
         defaultFunctionalArea,

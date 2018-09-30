@@ -4,8 +4,9 @@ import DynamicSelectList from '../components/DynamicSelectList';
 import * as FunctionalAreaActions from '../actions/DynamicSelectList';
 
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
+        namespace: state.functional_area.namespace,
         componentId: state.functional_area.componentId,
         items: state.functional_area.items,
         selectItem: state.functional_area.selectItem,
