@@ -5,6 +5,7 @@ import * as IndustryActions from '../actions/DynamicSelectList';
 
 const mapStateToProps = state => {
     return {
+        namespace: state.industry.namespace,
         componentId: state.industry.componentId,
         items: state.industry.items,
         selectItem: state.industry.selectItem,
