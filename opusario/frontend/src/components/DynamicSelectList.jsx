@@ -11,7 +11,7 @@ export default class DynamicSelectList extends Component {
         this.renderAddButton = this.renderAddButton.bind(this);
     }
     componentDidMount() {
-        this.props.actions.fetchItems(this.props.apiRoute);
+        this.props.actions.fetchItems(this.props.namespace, this.props.apiRoute);
     }
     renderSelectField() {
         return (
@@ -19,7 +19,9 @@ export default class DynamicSelectList extends Component {
                 <select id={`select${this.props.componentId}`}
                     disabled={this.props.isLoading}
                     value={this.props.selectItem}
-                    onChange={(event) => {this.props.actions.setSelectValue(event.target.value);}}>
+                    onChange={(event) => {
+                        this.props.actions.setSelectValue(this.props.namespace, event.target.value);}
+                    }>
                         {this.props.items.map(item => (
                             <option key={`industry-${item.id}`} value={item.id}>{item.name}</option>
                         ))}
@@ -46,10 +48,13 @@ export default class DynamicSelectList extends Component {
                             e.preventDefault();
                             let isValid = this.props.validationRegEx.test(this.inputNewItem.current.value);
                             if (isValid) {
-                                this.props.actions.addItem(this.props.apiRoute, this.inputNewItem.current.value);
+                                this.props.actions.addItem(
+                                    this.props.namespace,
+                                    this.props.apiRoute,
+                                    this.inputNewItem.current.value);
                                 this.inputNewItem.current.value = '';
                             } else {
-                                this.props.actions.showError(true, validationErrorMessage)
+                                this.props.actions.showError(this.props.namespace, true, validationErrorMessage)
                             }
                         }
                     }>
@@ -83,6 +88,7 @@ export default class DynamicSelectList extends Component {
 }
 
 DynamicSelectList.propTypes = {
+    namespace: PropTypes.string.isRequired,
     componentId: PropTypes.string.isRequired,
     items: PropTypes.array.isRequired,
     selectItem: PropTypes.string.isRequired,
@@ -93,8 +99,5 @@ DynamicSelectList.propTypes = {
     isError: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,
     apiRoute: PropTypes.string.isRequired,
-    fetchItems: PropTypes.func.isRequired,
-    addItem: PropTypes.func.isRequired,
-    setSelectValue: PropTypes.func.isRequired,
-    showError: PropTypes.func.isRequired,
+    actions: PropTypes.object.isRequired,
 };

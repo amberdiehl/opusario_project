@@ -1,8 +1,10 @@
-import { FETCH_ITEMS, ADD_ITEM, CHANGE_SELECTED_ITEM, SET_LOADING, SHOW_ERROR } from "../constants";
+import { FETCH_ITEMS, ADD_ITEM, CHANGE_SELECTED_ITEM, SET_LOADING, SHOW_ERROR } from '../constants';
+import getNamespace from '../helpers';
 
 const defaultFunctionalArea = {id: 0, name: "- Select functional area -"};
 
 const initialState = {
+    namespace: getNamespace(),
     componentId: 'FunctionalArea',
     items: [
         defaultFunctionalArea,
@@ -19,20 +21,27 @@ const initialState = {
 
 
 export default function functional_area(state=initialState, action) {
+
     switch (action.type) {
-        case FETCH_ITEMS:
+
+        case `${state.namespace}/${FETCH_ITEMS}`:
             action.items.unshift(defaultFunctionalArea);
             return {...state, "items": action.items};
-        case ADD_ITEM:
+
+        case `${state.namespace}/${ADD_ITEM}`:
             return {...state, "selectItem": action.itemValue};
-        case CHANGE_SELECTED_ITEM:
+
+        case `${state.namespace}/${CHANGE_SELECTED_ITEM}`:
             return {...state, "selectItem": action.newValue};
-        case SHOW_ERROR:
+
+        case `${state.namespace}/${SHOW_ERROR}`:
             return {...state,
                 "isError": action.trueFalse,
                 "errorMessage": action.message};
-        case SET_LOADING:
+
+        case `${state.namespace}/${SET_LOADING}`:
             return {...state, "isLoading": action.value};
+
         default:
             return state;
     }

@@ -3,46 +3,50 @@ import {FETCH_ITEMS, ADD_ITEM, CHANGE_SELECTED_ITEM, SET_LOADING, SHOW_ERROR,
     server500ErrorMessage} from "../constants";
 
 
-export const setLoading = (bool) => {
+export const setLoading = (namespace, bool) => {
     return {
-        type: SET_LOADING,
+        type: `${namespace}/${SET_LOADING}`,
         value: bool
     };
 };
 
-export const showError = (trueFalse, message) => {
+export const showError = (namespace, trueFalse, message) => {
     return {
-        type: SHOW_ERROR,
+        type: `${namespace}/${SHOW_ERROR}`,
         trueFalse,
         message
     };
 };
 
-export const fetchItems = (apiRoute) => {
+export const fetchItems = (namespace, apiRoute) => {
     return (dispatch) => {
-        dispatch(setLoading(true));
+
+        dispatch(setLoading(namespace, true));
+
         return fetch(apiRoute, {headers: csrfHeader,})
             .then(response => response.json())
             .then(items => {
                 return dispatch({
-                    type: FETCH_ITEMS,
+                    type: `${namespace}/${FETCH_ITEMS}`,
                     items
                 });
             })
             .then( () => {
-                dispatch(setLoading(false));
+                dispatch(setLoading(namespace, false));
             })
             .catch( () => {
-                dispatch(showError(true, server500ErrorMessage));
+                dispatch(showError(namespace, true, server500ErrorMessage));
             });
     };
 };
 
-export const addItem = (apiRoute, text) => {
+export const addItem = (namespace, apiRoute, text) => {
     return (dispatch) => {
+
         const body = JSON.stringify({
             "name": text
         });
+
         return fetch(apiRoute, {headers: csrfHeader, method: "POST", body, })
             .then( response =>
                 response.json().then(json => ({
@@ -53,26 +57,26 @@ export const addItem = (apiRoute, text) => {
             .then( ({status, json}) => {
                 if (status >= 400) {
                     if (status === 400) {
-                        dispatch(showError(true, json.name[0]));
+                        dispatch(showError(namespace, true, json.name[0]));
                     }
                 } else {
                     dispatch({
-                        type: ADD_ITEM,
+                        type: `${namespace}/${ADD_ITEM}`,
                         itemValue: json.id.toString()
                     });
-                    dispatch(showError(false, ''));
-                    dispatch(fetchItems(apiRoute));
+                    dispatch(showError(namespace, false, ''));
+                    dispatch(fetchItems(namespace, apiRoute));
                 }
             })
             .catch( () => {
-                dispatch(showError(true, server500ErrorMessage));
+                dispatch(showError(namespace, true, server500ErrorMessage));
             });
     };
 };
 
-export const setSelectValue = (newValue) => {
+export const setSelectValue = (namespace, newValue) => {
     return {
-        type: CHANGE_SELECTED_ITEM,
+        type: `${namespace}/${CHANGE_SELECTED_ITEM}`,
         newValue
     };
 };

@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+# React related
+webpack-stats.json
+
 # Distribution / packaging
 .Python
 env/

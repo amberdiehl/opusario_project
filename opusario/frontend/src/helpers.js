@@ -1,5 +1,6 @@
 import $ from 'jquery';
 
+// Get the contents of a cookie.
 export function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -16,7 +17,20 @@ export function getCookie(name) {
     return cookieValue;
 }
 
+// Define header for API calls which require the CSRF token
 export const csrfHeader = {
     "Content-Type": "application/json",
     "X-CSRFToken": getCookie('csrftoken')
 };
+
+
+// Generate two random numbers to form one string--used to setup a namespace for actions/reducers
+export default function getNamespace() {
+    let randomString = '';
+    const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (let i = 0; i < 15; i++) {
+        randomString += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return randomString;
+}
