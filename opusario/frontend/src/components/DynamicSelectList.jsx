@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { getFormattedLabelText } from '../helpers';
+import { getFormattedLabelText, getTextAsTitleCase } from '../helpers';
 
 
 export default class DynamicSelectList extends Component {
@@ -57,10 +57,13 @@ export default class DynamicSelectList extends Component {
                                 this.props.actions.addItem(
                                     this.props.namespace,
                                     this.props.apiRoute,
-                                    this.inputNewItem.current.value);
+                                    getTextAsTitleCase(this.inputNewItem.current.value));
                                 this.inputNewItem.current.value = '';
                             } else {
-                                this.props.actions.showError(this.props.namespace, true, validationErrorMessage)
+                                this.props.actions.showError(
+                                    this.props.namespace,
+                                    true,
+                                    validationErrorMessage)
                             }
                         }
                     }>

@@ -23,6 +23,10 @@ export const csrfHeader = {
     "X-CSRFToken": getCookie('csrftoken')
 };
 
+// Format label and placeholder text from ComponentID
+export function getFormattedLabelText(componentID) {
+    return componentID.replace(/([A-Z])/g, ' $1').substring(1);
+}
 
 // Generate two random numbers to form one string--used to setup a namespace for actions/reducers
 export function getNamespace() {
@@ -35,7 +39,9 @@ export function getNamespace() {
     return randomString;
 }
 
-// Format label and placeholder text from ComponentID
-export function getFormattedLabelText(componentID) {
-    return componentID.replace(/([A-Z])/g, ' $1').substring(1);
+// Format text as title case
+export function getTextAsTitleCase(textItem) {
+  return textItem.toLowerCase().split(' ').map(function(singleWord) {
+    return (singleWord.charAt(0).toUpperCase() + singleWord.slice(1));
+  }).join(' ');
 }
