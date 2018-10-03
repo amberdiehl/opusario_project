@@ -6,4 +6,8 @@ admin.site.register(City)
 admin.site.register(Country)
 admin.site.register(FunctionalArea)
 admin.site.register(Industry)
-admin.site.register(State)
+
+
+@admin.register(State)
+class StateAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'abbreviation', )
