@@ -8,7 +8,7 @@ import thunk from "redux-thunk";
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import GenericParent from './components/GenericParent';
-import CityContainer from './containers/CityContainer';
+import CountryContainer from './containers/CountryContainer';
 import FunctionalAreaContainer from './containers/FunctionalAreaContainer';
 import IndustryContainer from './containers/IndustryContainer';
 import RoleDescriptionContainer from './containers/RoleDescriptionContainer';
@@ -36,7 +36,7 @@ class App extends Component {
                     <Switch>
                         <Route exact path="/app/components" render={()=>
                             <GenericParent>
-                                <CityContainer/>
+                                <CountryContainer/>
                                 <FunctionalAreaContainer/>
                                 <IndustryContainer/>
                                 <RoleDescriptionContainer/>

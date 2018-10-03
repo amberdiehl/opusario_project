@@ -1,0 +1,25 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
+import CityContainer from '../containers/CityContainer';
+import StateContainer from '../containers/StateContainer';
+
+
+export default class CompanyObjectComponent extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return(
+            <div className={"form-field-group"}>
+                <div className={"row gtr-uniform"}>
+                    <CityContainer/>
+                </div>
+                <div className={"row gtr-uniform"}>
+                    <StateContainer/>
+                </div>
+            </div>
+        );
+    }
+}

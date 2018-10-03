@@ -2,7 +2,10 @@ from django.contrib import admin
 from .models import *
 
 
-admin.site.register(City)
+@admin.register(City)
+class CityAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', )
+
 admin.site.register(Country)
 admin.site.register(FunctionalArea)
 admin.site.register(Industry)

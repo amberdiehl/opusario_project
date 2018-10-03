@@ -15,6 +15,16 @@ class CityDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CitySerializer
 
 
+class CountryList(generics.ListCreateAPIView):
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
+
+
+class CountryDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
+
+
 class FunctionalAreaList(generics.ListCreateAPIView):
     queryset = FunctionalArea.objects.all()
     serializer_class = FunctionalAreaSerializer
