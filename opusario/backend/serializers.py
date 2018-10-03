@@ -3,10 +3,10 @@ from rest_framework import serializers
 from .models import *
 
 
-class IndustrySerializer(serializers.ModelSerializer):
+class CitySerializer(serializers.ModelSerializer):
 
     def validate(self, data):
-        error_message1 = 'Industry name may only consist of letters and spaces.'
+        error_message1 = 'City may only consist of letters and spaces.'
         if re.match("^[a-zA-Z ]*$", data['name']):
             pass
         else:
@@ -14,7 +14,7 @@ class IndustrySerializer(serializers.ModelSerializer):
         return data
 
     class Meta:
-        model = Industry
+        model = City
         fields = '__all__'
 
 
@@ -30,4 +30,34 @@ class FunctionalAreaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FunctionalArea
+        fields = '__all__'
+
+
+class IndustrySerializer(serializers.ModelSerializer):
+
+    def validate(self, data):
+        error_message1 = 'Industry name may only consist of letters and spaces.'
+        if re.match("^[a-zA-Z ]*$", data['name']):
+            pass
+        else:
+            raise serializers.ValidationError({'name': error_message1})
+        return data
+
+    class Meta:
+        model = Industry
+        fields = '__all__'
+
+
+class StateSerializer(serializers.ModelSerializer):
+
+    def validate(self, data):
+        error_message1 = 'State may only consist of letters and spaces.'
+        if re.match("^[a-zA-Z ]*$", data['name']):
+            pass
+        else:
+            raise serializers.ValidationError({'name': error_message1})
+        return data
+
+    class Meta:
+        model = State
         fields = '__all__'

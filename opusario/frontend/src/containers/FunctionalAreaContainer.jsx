@@ -1,7 +1,7 @@
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import DynamicSelectList from '../components/DynamicSelectList';
-import * as FunctionalAreaActions from '../actions/DynamicSelectList';
+import SingleSelectComponent from '../components/SingleSelectComponent';
+import * as FunctionalAreaActions from '../actions/SingleSelect';
 
 
 const mapStateToProps = (state) => {
@@ -27,6 +27,6 @@ function mapDispatchToProps(dispatch) {
 const FunctionalAreaContainer = connect(
     mapStateToProps,
     mapDispatchToProps
-)(DynamicSelectList);
+)(SingleSelectComponent);
 
 export default FunctionalAreaContainer;

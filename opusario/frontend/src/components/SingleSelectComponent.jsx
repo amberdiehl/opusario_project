@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { getFormattedLabelText, getTextAsTitleCase } from '../helpers';
 
 
-export default class DynamicSelectList extends Component {
+export default class SingleSelectComponent extends Component {
     constructor(props) {
         super(props);
         this.inputNewItem = React.createRef();
@@ -76,27 +76,23 @@ export default class DynamicSelectList extends Component {
         const showErrorStyle = {display: "block"};
         const hideErrorStyle = {display: "none"};
         return (
-            <section className={"wrapper style5"}>
-                <div className={"inner"}>
-                    <form>
-                        <div className={"row gtr-uniform"}>
-                            {this.renderSelectField()}
-                            {this.renderAddInput()}
-                            {this.renderAddButton()}
-                        </div>
-                        <div className={"row"} style={(this.props.isError) ? showErrorStyle : hideErrorStyle}>
-                            <div className={"col-10 component-error-message"}>
-                                {this.props.errorMessage}
-                            </div>
-                        </div>
-                    </form>
+            <div className={"form-field-group"}>
+                <div className={"row gtr-uniform"}>
+                    {this.renderSelectField()}
+                    {this.renderAddInput()}
+                    {this.renderAddButton()}
                 </div>
-            </section>
+                <div className={"row"} style={(this.props.isError) ? showErrorStyle : hideErrorStyle}>
+                    <div className={"col-10 component-error-message"}>
+                        {this.props.errorMessage}
+                    </div>
+                </div>
+            </div>
         );
     }
 }
 
-DynamicSelectList.propTypes = {
+SingleSelectComponent.propTypes = {
     namespace: PropTypes.string.isRequired,
     componentId: PropTypes.string.isRequired,
     items: PropTypes.array.isRequired,

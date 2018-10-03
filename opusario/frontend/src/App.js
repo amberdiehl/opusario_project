@@ -8,8 +8,11 @@ import thunk from "redux-thunk";
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import GenericParent from './components/GenericParent';
-import IndustryContainer from './containers/IndustryContainer';
+import CityContainer from './containers/CityContainer';
 import FunctionalAreaContainer from './containers/FunctionalAreaContainer';
+import IndustryContainer from './containers/IndustryContainer';
+import RoleDescriptionContainer from './containers/RoleDescriptionContainer';
+import StateNameContainer from './containers/StateContainer';
 import Myself from './components/Myself';
 import NotFound from './components/NotFound';
 
@@ -19,6 +22,7 @@ import NotFound from './components/NotFound';
 import '../../static/css/main.css';
 import '../../static/css/font-awesome.min.css';
 import '../../static/images/banner.jpg';
+import InputComponent from "./components/InputComponent";
 
 
 let store = createStore(OpusarioReducers, composeWithDevTools(applyMiddleware(thunk)));
@@ -32,8 +36,11 @@ class App extends Component {
                     <Switch>
                         <Route exact path="/app/components" render={()=>
                             <GenericParent>
+                                <CityContainer/>
                                 <FunctionalAreaContainer/>
                                 <IndustryContainer/>
+                                <RoleDescriptionContainer/>
+                                <StateNameContainer/>
                             </GenericParent>
                         } />
                         <Route path="/myself" component={Myself} />

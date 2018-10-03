@@ -1,7 +1,7 @@
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import DynamicSelectList from '../components/DynamicSelectList';
-import * as IndustryActions from '../actions/DynamicSelectList';
+import SingleSelectComponent from '../components/SingleSelectComponent';
+import * as IndustryActions from '../actions/SingleSelect';
 
 const mapStateToProps = state => {
     return {
@@ -26,6 +26,6 @@ function mapDispatchToProps(dispatch) {
 const IndustryContainer = connect(
     mapStateToProps,
     mapDispatchToProps
-)(DynamicSelectList);
+)(SingleSelectComponent);
 
 export default IndustryContainer;

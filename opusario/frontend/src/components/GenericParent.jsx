@@ -6,9 +6,13 @@ export default class GenericParent extends Component {
     }
     render(){
         return(
-            <div>
-                {this.props.children}
-            </div>
+           <section className={"wrapper style5"}>
+                <div className={"inner"}>
+                    <form>
+                        {this.props.children}
+                    </form>
+                </div>
+           </section>
         );
     }
 }

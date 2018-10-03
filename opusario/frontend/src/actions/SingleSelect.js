@@ -1,11 +1,11 @@
 import { csrfHeader } from "../helpers";
-import {FETCH_ITEMS, ADD_ITEM, CHANGE_SELECTED_ITEM, SET_LOADING, SHOW_ERROR,
+import {FETCH_ITEMS, ADD_ITEM, SET_VALUE, SHOW_LOADING, SHOW_ERROR,
     server500ErrorMessage} from "../constants";
 
 
 export const setLoading = (namespace, bool) => {
     return {
-        type: `${namespace}/${SET_LOADING}`,
+        type: `${namespace}/${SHOW_LOADING}`,
         value: bool
     };
 };
@@ -76,7 +76,7 @@ export const addItem = (namespace, apiRoute, text) => {
 
 export const setSelectValue = (namespace, newValue) => {
     return {
-        type: `${namespace}/${CHANGE_SELECTED_ITEM}`,
+        type: `${namespace}/${SET_VALUE}`,
         newValue
     };
 };

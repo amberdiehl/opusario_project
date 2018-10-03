@@ -3976,12 +3976,3 @@ input, select, textarea {
 	body.is-mobile.landing #footer {
 		background-color: #1d242a;
 	}
-
-    .component-error-message {
-        margin: 15px 0 0 22px;
-        padding: 5px 10px 5px 10px;
-        color: red;
-        background-color: cornsilk;
-        border: 1px solid moccasin;
-        border-radius: 10px;
-    }
