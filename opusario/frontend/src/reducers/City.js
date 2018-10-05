@@ -17,6 +17,3 @@ const initialState = {
 export default function city(state=initialState, action) {
     return base_reducer_single_select(state, action);
 }
-
-export const getCitySelectedItem = (state) =>
-  state.selectItem;

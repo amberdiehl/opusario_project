@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import city, {getCitySelectedItem} from './City';
+import city from './City';
 import company_info from './CompanyInfo';
 import country from './Country';
 import functional_area from './FunctionalArea';
@@ -18,10 +18,6 @@ const OpusarioReducers = combineReducers({
     myself,
     role_description,
     state_name,
-});
-
-export const getSelectedItemsForCompany = (state) => ({
-   city: getCitySelectedItem(state)
 });
 
 export default OpusarioReducers;

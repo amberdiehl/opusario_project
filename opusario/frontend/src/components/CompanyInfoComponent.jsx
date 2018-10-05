@@ -32,9 +32,7 @@ export default class CompanyInfoComponent extends Component {
 CompanyInfoComponent.propTypes = {
     namespace: PropTypes.string.isRequired,
     componentId: PropTypes.string.isRequired,
-    childCityValue: PropTypes.string.isRequired,
-    childStateValue: PropTypes.string.isRequired,
-    childCountryValue: PropTypes.string.isRequired,
+    selectItems: PropTypes.object.isRequired,
     validationRegEx: PropTypes.any.isRequired, // Not clear on how to indicate this is a RegEx.
     regExDescription: PropTypes.string.isRequired,
     errorMessage: PropTypes.string.isRequired,
