@@ -1,6 +1,8 @@
 // Constants for Redux Actions and Reducers
 
 export const ADD_ITEM = 'ADD_ITEM';
+export const CHANGE_ITEM = 'CHANGE_ITEM';
+export const FETCH_ITEM = 'FETCH_ITEM';
 export const FETCH_ITEMS = 'FETCH_ITEMS';
 export const SET_VALUE = 'SET_VALUE';
 export const SHOW_LOADING = 'SHOW_LOADING';

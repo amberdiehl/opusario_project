@@ -6,7 +6,10 @@ from .models import *
 class CityAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', )
 
-admin.site.register(Country)
+@admin.register(Country)
+class CountryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', )
+
 admin.site.register(FunctionalArea)
 admin.site.register(Industry)
 

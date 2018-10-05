@@ -3,15 +3,18 @@ import { getNamespace } from '../helpers';
 export const initialState = {
     namespace: getNamespace(),
     componentId: 'CompanyInformation',
-    validationRegEx: /^[a-zA-Z ]*$/,
-    regExDescription: 'letters and spaces.',
+    childCityValue: '0',
+    childStateValue: '0',
+    childCountryValue: '1',
+    validationRegEx: /^[a-zA-Z0-9 ]*$/,
+    regExDescription: 'letters, numbers and spaces.',
     errorMessage: '',
     isError: false,
     isLoading: false,
     apiRoute: '/api/companies/',
 };
 
-export function company_information(state=initialState, action) {
+export default function company_info(state=initialState, action) {
     switch (action.type) {
         default:
             return state;

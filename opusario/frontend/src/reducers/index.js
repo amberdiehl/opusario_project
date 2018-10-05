@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import city from './City';
+import company_info from './CompanyInfo';
 import country from './Country';
 import functional_area from './FunctionalArea';
 import industry from './Industry';
@@ -10,6 +11,7 @@ import state_name from './State';
 
 const OpusarioReducers = combineReducers({
     city,
+    company_info,
     country,
     functional_area,
     industry,
