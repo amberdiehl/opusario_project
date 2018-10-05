@@ -1,11 +1,10 @@
 import { getNamespace } from '../helpers';
+import {getCitySelectedItem} from "./City";
 
 export const initialState = {
     namespace: getNamespace(),
     componentId: 'CompanyInformation',
-    childCityValue: '0',
-    childStateValue: '0',
-    childCountryValue: '1',
+    citySelectItem: '0',
     validationRegEx: /^[a-zA-Z0-9 ]*$/,
     regExDescription: 'letters, numbers and spaces.',
     errorMessage: '',

@@ -2,15 +2,14 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import CompanyInfoComponent from '../components/CompanyInfoComponent';
 import * as CompanyInfoActions from '../actions/CompanyInfo';
+import { getCitySelectedItem } from '../reducers/City';
 
 
 const mapStateToProps = state => {
     return {
         namespace: state.company_info.namespace,
         componentId: state.company_info.componentId,
-        childCityValue: state.city.selectItem,
-        childStateValue: state.state_name.selectItem,
-        childCountryValue: state.country.selectItem,
+        citySelectedItem: getCitySelectedItem(state),
         validationRegEx: state.company_info.validationRegEx,
         regExDescription: state.company_info.regExDescription,
         errorMessage: state.company_info.errorMessage,
