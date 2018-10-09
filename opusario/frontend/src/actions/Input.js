@@ -1,15 +1,7 @@
-import { SET_VALUE, SHOW_ERROR } from "../constants";
+import {SET_VALUE} from '../constants';
 
 
-export const showError = (namespace, trueFalse, message) => {
-    return {
-        type: `${namespace}/${SHOW_ERROR}`,
-        trueFalse,
-        message
-    };
-};
-
-export const setTextValue = (namespace, newValue) => {
+export const setInputValue = (namespace, newValue) => {
     return {
         type: `${namespace}/${SET_VALUE}`,
         newValue

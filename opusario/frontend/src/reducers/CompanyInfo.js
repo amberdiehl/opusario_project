@@ -1,12 +1,10 @@
 import { getNamespace } from '../helpers';
-import { getCompanySelectItemsState } from '../selectors';
 
 export const initialState = {
     namespace: getNamespace(),
     componentId: 'CompanyInformation',
-    selectItems: {},
-    validationRegEx: /^[a-zA-Z0-9 ]*$/,
-    regExDescription: 'letters, numbers and spaces.',
+    companyNameIsError: false,
+    childState: {},
     errorMessage: '',
     isError: false,
     isLoading: false,

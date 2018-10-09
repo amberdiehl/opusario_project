@@ -1,22 +1,22 @@
 import { combineReducers } from 'redux';
-import city from './City';
+import city from './single_selects/City';
 import company_info from './CompanyInfo';
-import country from './Country';
-import functional_area from './FunctionalArea';
-import industry from './Industry';
+import company_name from './inputs/CompanyName';
+import country from './single_selects/Country';
+import functional_area from './single_selects/FunctionalArea';
+import industry from './single_selects/Industry';
 import myself from './myself';
-import role_description from './RoleDescription';
-import state_name from './State';
+import state_name from './single_selects/State';
 
 
 const OpusarioReducers = combineReducers({
     city,
     company_info,
+    company_name,
     country,
     functional_area,
     industry,
     myself,
-    role_description,
     state_name,
 });
 

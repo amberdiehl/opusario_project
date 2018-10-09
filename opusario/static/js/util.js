@@ -324,7 +324,7 @@
 			var $this = $(this);
 
 		// Text, TextArea.
-			$this.find('input[type=text],textarea')
+			$this.find('inputs[type=text],textarea')
 				.each(function() {
 
 					var i = $(this);
@@ -364,7 +364,7 @@
 				});
 
 		// Password.
-			$this.find('input[type=password]')
+			$this.find('inputs[type=password]')
 				.each(function() {
 
 					var i = $(this);
@@ -396,7 +396,7 @@
 
 							event.preventDefault();
 
-							var x = i.parent().find('input[name=' + i.attr('name') + '-polyfill-field]');
+							var x = i.parent().find('inputs[name=' + i.attr('name') + '-polyfill-field]');
 
 							if (i.val() == '') {
 
@@ -412,7 +412,7 @@
 
 							event.preventDefault();
 
-							var i = x.parent().find('input[name=' + x.attr('name').replace('-polyfill-field', '') + ']');
+							var i = x.parent().find('inputs[name=' + x.attr('name').replace('-polyfill-field', '') + ']');
 
 							x.hide();
 
@@ -434,7 +434,7 @@
 			$this
 				.on('submit', function() {
 
-					$this.find('input[type=text],input[type=password],textarea')
+					$this.find('inputs[type=text],inputs[type=password],textarea')
 						.each(function(event) {
 
 							var i = $(this);
@@ -459,7 +459,7 @@
 					$this.find('select')
 						.val($('option:first').val());
 
-					$this.find('input,textarea')
+					$this.find('inputs,textarea')
 						.each(function() {
 
 							var i = $(this),
@@ -476,7 +476,7 @@
 								case 'password':
 									i.val(i.attr('defaultValue'));
 
-									x = i.parent().find('input[name=' + i.attr('name') + '-polyfill-field]');
+									x = i.parent().find('inputs[name=' + i.attr('name') + '-polyfill-field]');
 
 									if (i.val() == '') {
 										i.hide();

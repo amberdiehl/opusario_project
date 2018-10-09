@@ -1,22 +1,7 @@
-import { csrfHeader } from "../helpers";
-import {FETCH_ITEMS, ADD_ITEM, SET_VALUE, SHOW_LOADING, SHOW_ERROR,
-    server500ErrorMessage} from "../constants";
+import { csrfHeader } from '../helpers';
+import {setLoading, showError} from './generic';
+import {FETCH_ITEMS, ADD_ITEM, SET_VALUE, server500ErrorMessage} from '../constants';
 
-
-export const setLoading = (namespace, bool) => {
-    return {
-        type: `${namespace}/${SHOW_LOADING}`,
-        value: bool
-    };
-};
-
-export const showError = (namespace, trueFalse, message) => {
-    return {
-        type: `${namespace}/${SHOW_ERROR}`,
-        trueFalse,
-        message
-    };
-};
 
 export const fetchItems = (namespace, apiRoute) => {
     return (dispatch) => {

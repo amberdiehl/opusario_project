@@ -1,7 +1,8 @@
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import SingleSelectComponent from '../components/SingleSelectComponent';
-import * as FunctionalAreaActions from '../actions/SingleSelect';
+import SingleSelectComponent from '../../components/form_components/SingleSelectComponent';
+import * as FunctionalAreaActions from '../../actions/SingleSelect';
+import * as GenericActions from '../../actions/generic';
 
 
 const mapStateToProps = (state) => {
@@ -21,7 +22,7 @@ const mapStateToProps = (state) => {
 };
 
 function mapDispatchToProps(dispatch) {
-    return {actions: bindActionCreators(FunctionalAreaActions, dispatch)};
+    return {actions: bindActionCreators({...FunctionalAreaActions, ...GenericActions}, dispatch)};
 }
 
 const FunctionalAreaContainer = connect(

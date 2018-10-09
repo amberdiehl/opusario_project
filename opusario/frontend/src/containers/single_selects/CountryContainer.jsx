@@ -1,7 +1,8 @@
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import SingleSelectComponent from '../components/SingleSelectComponent';
-import * as CountryActions from '../actions/SingleSelect';
+import SingleSelectComponent from '../../components/form_components/SingleSelectComponent';
+import * as CountryActions from '../../actions/SingleSelect';
+import * as GenericActions from '../../actions/generic';
 
 const mapStateToProps = state => {
     return {
@@ -20,7 +21,7 @@ const mapStateToProps = state => {
 };
 
 function mapDispatchToProps(dispatch) {
-    return {actions: bindActionCreators(CountryActions, dispatch)};
+    return {actions: bindActionCreators({...CountryActions, ...GenericActions}, dispatch)};
 }
 
 const CountryContainer = connect(

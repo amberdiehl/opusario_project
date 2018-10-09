@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { getFormattedLabelText, getTextAsTitleCase } from '../helpers';
+import { getFormattedLabelText, getTextAsTitleCase } from '../../helpers';
 
 
 export default class SingleSelectComponent extends Component {
@@ -73,8 +73,6 @@ export default class SingleSelectComponent extends Component {
         }
     }
     render() {
-        const showErrorStyle = {display: "block"};
-        const hideErrorStyle = {display: "none"};
         return (
             <div className={"form-field-group"}>
                 <div className={"row gtr-uniform"}>
@@ -82,7 +80,7 @@ export default class SingleSelectComponent extends Component {
                     {this.renderAddInput()}
                     {this.renderAddButton()}
                 </div>
-                <div className={"row"} style={(this.props.isError) ? showErrorStyle : hideErrorStyle}>
+                <div className={"row"} style={(this.props.isError) ? {display: "block"} : {display: "none"}}>
                     <div className={"col-10 component-error-message"}>
                         {this.props.errorMessage}
                     </div>

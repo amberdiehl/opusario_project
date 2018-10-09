@@ -1,22 +1,7 @@
 import { csrfHeader } from "../helpers";
-import {FETCH_ITEM, CHANGE_ITEM, SHOW_LOADING, SHOW_ERROR,
-    server500ErrorMessage} from "../constants";
+import {setLoading, showError} from './generic';
+import {FETCH_ITEM, CHANGE_ITEM, server500ErrorMessage} from "../constants";
 
-
-export const setLoading = (namespace, bool) => {
-    return {
-        type: `${namespace}/${SHOW_LOADING}`,
-        value: bool
-    };
-};
-
-export const showError = (namespace, trueFalse, message) => {
-    return {
-        type: `${namespace}/${SHOW_ERROR}`,
-        trueFalse,
-        message
-    };
-};
 
 export const fetchItem = (namespace, apiRoute) => {
     return (dispatch) => {
@@ -25,10 +10,10 @@ export const fetchItem = (namespace, apiRoute) => {
 
         return fetch(apiRoute, {headers: csrfHeader,})
             .then(response => response.json())
-            .then(items => {
+            .then(item => {
                 return dispatch({
                     type: `${namespace}/${FETCH_ITEM}`,
-                    items
+                    item
                 });
             })
             .then( () => {

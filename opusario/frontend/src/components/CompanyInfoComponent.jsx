@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import CityContainer from '../containers/CityContainer';
-import CountryContainer from '../containers/CountryContainer';
-import StateContainer from '../containers/StateContainer';
+import CompanyNameContainer from '../containers/inputs/CompanyNameContainer';
+import CityContainer from '../containers/single_selects/CityContainer';
+import CountryContainer from '../containers/single_selects/CountryContainer';
+import StateContainer from '../containers/single_selects/StateContainer';
 
 
 export default class CompanyInfoComponent extends Component {
@@ -11,10 +12,15 @@ export default class CompanyInfoComponent extends Component {
         super(props);
     }
     componentDidMount() {
+        this.props.childActions.setSelectValue(this.props.childState.cityNamespace, '5');
     }
     render() {
         return(
+            <form>
             <div className={"form-field-group"}>
+                <div className={"row gtr-uniform"}>
+                    <CompanyNameContainer/>
+                </div>
                 <div className={"row gtr-uniform"}>
                     <CityContainer/>
                 </div>
@@ -25,6 +31,7 @@ export default class CompanyInfoComponent extends Component {
                     <CountryContainer/>
                 </div>
             </div>
+            </form>
         );
     }
 }
@@ -32,12 +39,12 @@ export default class CompanyInfoComponent extends Component {
 CompanyInfoComponent.propTypes = {
     namespace: PropTypes.string.isRequired,
     componentId: PropTypes.string.isRequired,
-    selectItems: PropTypes.object.isRequired,
-    validationRegEx: PropTypes.any.isRequired, // Not clear on how to indicate this is a RegEx.
-    regExDescription: PropTypes.string.isRequired,
+    companyNameIsError: PropTypes.bool.isRequired,
+    childState: PropTypes.object.isRequired,
     errorMessage: PropTypes.string.isRequired,
     isError: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,
     apiRoute: PropTypes.string.isRequired,
     actions: PropTypes.object.isRequired,
+    childActions: PropTypes.object.isRequired,
 };

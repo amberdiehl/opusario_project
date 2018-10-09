@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 
-export default class GenericParent extends Component {
+export default class WrapperComponent extends Component {
     render(){
         return(
            <section className={"wrapper style5"}>
                 <div className={"inner"}>
-                    <form>
-                        {this.props.children}
-                    </form>
+                    {this.props.children}
                 </div>
            </section>
         );
