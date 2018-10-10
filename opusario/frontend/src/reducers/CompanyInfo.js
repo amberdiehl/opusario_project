@@ -3,7 +3,6 @@ import { getNamespace } from '../helpers';
 export const initialState = {
     namespace: getNamespace(),
     componentId: 'CompanyInformation',
-    companyNameIsError: false,
     childState: {},
     errorMessage: '',
     isError: false,

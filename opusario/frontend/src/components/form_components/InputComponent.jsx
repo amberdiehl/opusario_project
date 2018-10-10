@@ -25,6 +25,7 @@ export default class InputComponent extends Component {
         if (!isValid) {
             this.props.actions.showError(this.props.namespace, true, validationErrorMessage);
         } else {
+            this.props.actions.showError(this.props.namespace, false, validationErrorMessage);
             this.props.actions.setInputValue(this.props.namespace, this.state.currentValue);
         }
     }

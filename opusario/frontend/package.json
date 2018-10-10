@@ -101,6 +101,7 @@
     "extends": "react-app"
   },
   "devDependencies": {
+    "grunt": "^1.0.3",
     "redux-devtools-extension": "^2.13.5",
     "webpack-bundle-tracker": "^0.3.0"
   }

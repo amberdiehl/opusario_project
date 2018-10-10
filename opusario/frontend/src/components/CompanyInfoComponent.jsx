@@ -17,20 +17,21 @@ export default class CompanyInfoComponent extends Component {
     render() {
         return(
             <form>
-            <div className={"form-field-group"}>
-                <div className={"row gtr-uniform"}>
-                    <CompanyNameContainer/>
+                <h2>Company Information</h2>
+                <div className={"form-field-group"}>
+                    <div className={"row gtr-uniform"}>
+                        <CompanyNameContainer/>
+                    </div>
+                    <div className={"row gtr-uniform"}>
+                        <CityContainer/>
+                    </div>
+                    <div className={"row gtr-uniform"}>
+                        <StateContainer/>
+                    </div>
+                    <div className={"row gtr-uniform"}>
+                        <CountryContainer/>
+                    </div>
                 </div>
-                <div className={"row gtr-uniform"}>
-                    <CityContainer/>
-                </div>
-                <div className={"row gtr-uniform"}>
-                    <StateContainer/>
-                </div>
-                <div className={"row gtr-uniform"}>
-                    <CountryContainer/>
-                </div>
-            </div>
             </form>
         );
     }

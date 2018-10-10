@@ -4,15 +4,14 @@ import CompanyInfoComponent from '../components/CompanyInfoComponent';
 import * as CompanyInfoActions from '../actions/CompanyInfo';
 import * as GenericActions from '../actions/generic';
 import {setSelectValue} from "../actions/SingleSelect";
-import { getCompanySelectItemsState } from '../selectors';
+import { getCompanyChildState } from '../selectors';
 
 
 const mapStateToProps = state => {
     return {
         namespace: state.company_info.namespace,
         componentId: state.company_info.componentId,
-        companyNameIsError: state.company_info.companyNameIsError,
-        childState: getCompanySelectItemsState(state),
+        childState: getCompanyChildState(state),
         errorMessage: state.company_info.errorMessage,
         isError: state.company_info.isError,
         isLoading: state.company_info.isLoading,

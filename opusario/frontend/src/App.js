@@ -7,7 +7,7 @@ import OpusarioReducers from "./reducers";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-import WrapperComponent from './components/WrapperComponent';
+import PageWrapperComponent from './components/wrappers/PageWrapperComponent';
 import CompanyInfoContainer from './containers/CompanyInfoContainer';
 import FunctionalAreaContainer from './containers/single_selects/FunctionalAreaContainer';
 import IndustryContainer from './containers/single_selects/IndustryContainer';
@@ -32,15 +32,15 @@ class App extends Component {
                 <BrowserRouter>
                     <Switch>
                         <Route exact path={"/app/company"} render={()=>
-                            <WrapperComponent>
+                            <PageWrapperComponent>
                                 <CompanyInfoContainer/>
-                            </WrapperComponent>
+                            </PageWrapperComponent>
                         } />
                         <Route exact path="/app/components" render={()=>
-                            <WrapperComponent>
+                            <PageWrapperComponent>
                                 <FunctionalAreaContainer/>
                                 <IndustryContainer/>
-                            </WrapperComponent>
+                            </PageWrapperComponent>
                         } />
                         <Route path="/myself" component={Myself} />
                         <Route component={NotFound} />

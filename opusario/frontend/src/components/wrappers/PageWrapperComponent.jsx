@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export default class WrapperComponent extends Component {
+export default class PageWrapperComponent extends Component {
     render(){
         return(
            <section className={"wrapper style5"}>
