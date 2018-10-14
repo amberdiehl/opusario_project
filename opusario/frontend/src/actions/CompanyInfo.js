@@ -1,6 +1,6 @@
 import { csrfHeader } from "../helpers";
 import {setLoading, showError} from './generic';
-import {FETCH_ITEM, CHANGE_ITEM, server500ErrorMessage} from "../constants";
+import {FETCH_ITEM, SET_VALUE, server500ErrorMessage} from "../constants";
 
 
 export const fetchItem = (namespace, apiRoute) => {
@@ -20,16 +20,19 @@ export const fetchItem = (namespace, apiRoute) => {
                 dispatch(setLoading(namespace, false));
             })
             .catch( () => {
-                dispatch(showError(namespace, true, server500ErrorMessage));
+                dispatch(showError(namespace, true, [server500ErrorMessage]));
             });
     };
 };
 
-export const changeItem = (namespace, apiRoute, text) => {
+export const addItem = (namespace, apiRoute, companyName, city, state, country) => {
     return (dispatch) => {
 
         const body = JSON.stringify({
-            "name": text
+            "name": companyName,
+            city,
+            state,
+            country
         });
 
         return fetch(apiRoute, {headers: csrfHeader, method: "POST", body, })
@@ -42,19 +45,51 @@ export const changeItem = (namespace, apiRoute, text) => {
             .then( ({status, json}) => {
                 if (status >= 400) {
                     if (status === 400) {
-                        dispatch(showError(namespace, true, json.name[0]));
+                        console.log(json);
+                        dispatch(showError(namespace, true, json.non_field_errors));
                     }
                 } else {
                     dispatch({
-                        type: `${namespace}/${CHANGE_ITEM}`,
+                        type: `${namespace}/${SET_VALUE}`,
                         itemValue: json.id.toString()
                     });
-                    dispatch(showError(namespace, false, ''));
-                    dispatch(fetchItem(namespace, apiRoute));
+                    dispatch(showError(namespace, false, []));
                 }
             })
             .catch( () => {
-                dispatch(showError(namespace, true, server500ErrorMessage));
+                dispatch(showError(namespace, true, [server500ErrorMessage]));
+            });
+    };
+};
+
+export const changeItem = (namespace, apiRoute, companyName, city, state, country) => {
+    return (dispatch) => {
+
+        const body = JSON.stringify({
+            "name": companyName,
+            city,
+            state,
+            country
+        });
+
+        return fetch(apiRoute, {headers: csrfHeader, method: "PUT", body, })
+            .then( response =>
+                response.json().then(json => ({
+                status: response.status,
+                json
+                })
+            ))
+            .then( ({status, json}) => {
+                if (status >= 400) {
+                    if (status === 400) {
+                        dispatch(showError(namespace, true, json.non_field_errors));
+                    }
+                } else {
+                    dispatch(showError(namespace, false, []));
+                }
+            })
+            .catch( () => {
+                dispatch(showError(namespace, true, [server500ErrorMessage]));
             });
     };
 };

@@ -5,6 +5,8 @@ from .views import *
 urlpatterns = [
     url(r'^cities/$', CityList.as_view()),
     url(r'^cities/(?P<pk>[0-9]+)/$', CityDetail.as_view()),
+    url(r'^companies/$', CompanyList.as_view()),
+    url(r'^companies/(?P<pk>[0-9]+)/$', CompanyDetail.as_view()),
     url(r'^countries/$', CountryList.as_view()),
     url(r'^countries/(?P<pk>[0-9]+)/$', CountryDetail.as_view()),
     url(r'^functional-areas/$', FunctionalAreaList.as_view()),

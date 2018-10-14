@@ -11,8 +11,9 @@ const mapStateToProps = state => {
     return {
         namespace: state.company_info.namespace,
         componentId: state.company_info.componentId,
+        companyId: state.company_info.companyId,
         childState: getCompanyChildState(state),
-        errorMessage: state.company_info.errorMessage,
+        errorMessages: state.company_info.errorMessages,
         isError: state.company_info.isError,
         isLoading: state.company_info.isLoading,
         apiRoute: state.company_info.apiRoute

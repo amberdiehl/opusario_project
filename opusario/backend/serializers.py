@@ -18,6 +18,22 @@ class CitySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CompanySerializer(serializers.ModelSerializer):
+
+    def validate(self, data):
+        error_messages = []
+        if re.match("^[a-zA-Z0-9 ]*$", data['name']):
+            pass
+        else:
+            error_messages.append('Company name may only consist of letters, numbers and spaces.')
+            raise serializers.ValidationError(error_messages)
+        return data
+
+    class Meta:
+        model = Company
+        fields = '__all__'
+
+
 class CountrySerializer(serializers.ModelSerializer):
 
     def validate(self, data):

@@ -15,6 +15,16 @@ class CityDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CitySerializer
 
 
+class CompanyList(generics.ListCreateAPIView):
+    queryset = Company.objects.all()
+    serializer_class = CompanySerializer
+
+
+class CompanyDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Company.objects.all()
+    serializer_class = CompanySerializer
+
+
 class CountryList(generics.ListCreateAPIView):
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
