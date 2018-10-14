@@ -12,7 +12,7 @@ const initialState = {
     ],
     defaultValue: defaultValue,
     selectItem: '1',
-    apiRoute: '/api/countries/',
+    apiRoute: '/api/countries',
 };
 
 export default function country(state=initialState, action) {

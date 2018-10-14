@@ -11,7 +11,7 @@ const initialState = {
         defaultValue,
     ],
     defaultValue: defaultValue,
-    apiRoute: '/api/cities/',
+    apiRoute: '/api/cities',
 };
 
 export default function city(state=initialState, action) {

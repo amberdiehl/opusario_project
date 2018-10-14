@@ -16,6 +16,7 @@ const mapStateToProps = state => {
         errorMessages: state.company_info.errorMessages,
         isError: state.company_info.isError,
         isLoading: state.company_info.isLoading,
+        flashSuccess: state.company_info.flashSuccess,
         apiRoute: state.company_info.apiRoute
     };
 };

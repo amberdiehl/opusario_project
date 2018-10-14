@@ -20,23 +20,17 @@ export default class CompanyInfoComponent extends Component {
         e.preventDefault();
         let isValid = this.validateForm();
         if (isValid) {
-            if (this.props.companyId === '') {
-                this.props.actions.addItem(
-                    this.props.namespace,
-                    this.props.apiRoute,
-                    this.props.childState.companyName,
-                    this.props.childState.citySelectItem,
-                    this.props.childState.stateSelectItem,
-                    this.props.childState.countrySelectItem);
-            } else {
-                this.props.actions.changeItem(
-                    this.props.namespace,
-                    `${this.props.apiRoute}${this.props.companyId}`,
-                    this.props.childState.companyName,
-                    this.props.childState.citySelectItem,
-                    this.props.childState.stateSelectItem,
-                    this.props.childState.countrySelectItem);
-            }
+            const method = (this.props.companyId === '') ? 'POST' : 'PUT';
+            const apiRoute = (method === 'POST') ? this.props.apiRoute :
+                `${this.props.apiRoute}/${this.props.companyId}`;
+            this.props.actions.addOrUpdateItem(
+                this.props.namespace,
+                apiRoute,
+                method,
+                this.props.childState.companyName,
+                this.props.childState.citySelectItem,
+                this.props.childState.stateSelectItem,
+                this.props.childState.countrySelectItem);
         }
     }
     validateForm(){
@@ -87,8 +81,12 @@ export default class CompanyInfoComponent extends Component {
                     <div className={"row gtr-uniform"}>
                         <CountryContainer/>
                     </div>
+                    <button className={"button primary small"} onClick={this.buttonOnClick}>{buttonLabel}</button>
+                    <span className={"success-icon"}
+                          style={(this.props.flashSuccess) ? {display: "inline-block"} : {display: "none"}}>
+                        <i className="fa fa-thumbs-o-up icon-large"></i>
+                    </span>
                 </div>
-                <button className={"btn btn-primary"} onClick={this.buttonOnClick}>{buttonLabel}</button>
             </form>
         );
     }
@@ -102,6 +100,7 @@ CompanyInfoComponent.propTypes = {
     errorMessages: PropTypes.array.isRequired,
     isError: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,
+    flashSuccess: PropTypes.bool.isRequired,
     apiRoute: PropTypes.string.isRequired,
     actions: PropTypes.object.isRequired,
     childActions: PropTypes.object.isRequired,

@@ -11,7 +11,7 @@ const initialState = {
         defaultValue,
     ],
     defaultValue: defaultValue,
-    apiRoute: '/api/functional-areas/',
+    apiRoute: '/api/functional-areas',
 };
 
 export default function functional_area(state=initialState, action) {

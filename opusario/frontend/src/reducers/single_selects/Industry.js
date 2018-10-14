@@ -11,7 +11,7 @@ const initialState = {
         defaultValue,
     ],
     defaultValue: defaultValue,
-    apiRoute: '/api/industries/',
+    apiRoute: '/api/industries',
 };
 
 export default function industry(state=initialState, action) {

@@ -1,5 +1,5 @@
 import { csrfHeader } from "../helpers";
-import {setLoading, showError} from './generic';
+import {setFlashSuccess, setLoading, showError} from './generic';
 import {FETCH_ITEM, SET_VALUE, server500ErrorMessage} from "../constants";
 
 
@@ -25,7 +25,7 @@ export const fetchItem = (namespace, apiRoute) => {
     };
 };
 
-export const addItem = (namespace, apiRoute, companyName, city, state, country) => {
+export const addOrUpdateItem = (namespace, apiRoute, method, companyName, city, state, country) => {
     return (dispatch) => {
 
         const body = JSON.stringify({
@@ -35,44 +35,7 @@ export const addItem = (namespace, apiRoute, companyName, city, state, country) 
             country
         });
 
-        return fetch(apiRoute, {headers: csrfHeader, method: "POST", body, })
-            .then( response =>
-                response.json().then(json => ({
-                status: response.status,
-                json
-                })
-            ))
-            .then( ({status, json}) => {
-                if (status >= 400) {
-                    if (status === 400) {
-                        console.log(json);
-                        dispatch(showError(namespace, true, json.non_field_errors));
-                    }
-                } else {
-                    dispatch({
-                        type: `${namespace}/${SET_VALUE}`,
-                        itemValue: json.id.toString()
-                    });
-                    dispatch(showError(namespace, false, []));
-                }
-            })
-            .catch( () => {
-                dispatch(showError(namespace, true, [server500ErrorMessage]));
-            });
-    };
-};
-
-export const changeItem = (namespace, apiRoute, companyName, city, state, country) => {
-    return (dispatch) => {
-
-        const body = JSON.stringify({
-            "name": companyName,
-            city,
-            state,
-            country
-        });
-
-        return fetch(apiRoute, {headers: csrfHeader, method: "PUT", body, })
+        return fetch(apiRoute, {headers: csrfHeader, method, body, })
             .then( response =>
                 response.json().then(json => ({
                 status: response.status,
@@ -85,7 +48,16 @@ export const changeItem = (namespace, apiRoute, companyName, city, state, countr
                         dispatch(showError(namespace, true, json.non_field_errors));
                     }
                 } else {
+                    if (method === 'POST') {
+                        dispatch({
+                            type: `${namespace}/${SET_VALUE}`,
+                            itemValue: json.id.toString()
+                        });
+                    }
                     dispatch(showError(namespace, false, []));
+                    dispatch(setFlashSuccess(namespace, true));
+                    setTimeout(() => {
+                        dispatch(setFlashSuccess(namespace, false));}, 3000);
                 }
             })
             .catch( () => {
