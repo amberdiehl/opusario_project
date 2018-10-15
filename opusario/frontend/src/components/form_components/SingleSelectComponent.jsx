@@ -33,8 +33,6 @@ export default class SingleSelectComponent extends Component {
     }
     renderAddInput() {
         if (this.props.allowAdd) {
-            const formattedPlaceholder = getFormattedLabelText(this.props.componentId);
-            console.log(formattedPlaceholder);
             return (
                 <div className="col-3 col-3-xsmall">
                     <input type={"text"}

@@ -5,6 +5,8 @@ import CompanyNameContainer from '../containers/inputs/CompanyNameContainer';
 import CityContainer from '../containers/single_selects/CityContainer';
 import CountryContainer from '../containers/single_selects/CountryContainer';
 import StateContainer from '../containers/single_selects/StateContainer';
+import FlashSuccessIcon from './form_snippets/FlashSuccessIcon';
+import FormErrorMessages from './form_snippets/FormErrorMessages';
 
 
 export default class CompanyInfoComponent extends Component {
@@ -55,19 +57,10 @@ export default class CompanyInfoComponent extends Component {
     }
     render() {
         const buttonLabel = (this.props.companyId === '') ? 'Add' : 'Update';
-        const formErrorMessages = this.props.errorMessages.map((message) => {
-            return (
-                <p>{message}</p>
-            );
-        });
         return(
             <form>
                 <h2>Company Information</h2>
-                <div className={"row"} style={(this.props.isError) ? {display: "block"} : {display: "none"}}>
-                    <div className={"col-10 form-error-message"}>
-                        {formErrorMessages}
-                    </div>
-                </div>
+                <FormErrorMessages trueFalse={this.props.isError} messages={this.props.errorMessages}/>
                 <div className={"form-field-group"}>
                     <div className={"row gtr-uniform"}>
                         <CompanyNameContainer/>
@@ -82,11 +75,8 @@ export default class CompanyInfoComponent extends Component {
                         <CountryContainer/>
                     </div>
                     <button className={"button primary small"} onClick={this.buttonOnClick}>{buttonLabel}</button>
-                    <span className={"success-icon"}
-                          style={(this.props.flashSuccess) ? {display: "inline-block"} : {display: "none"}}>
-                        <i className="fa fa-thumbs-o-up icon-large"></i>
-                    </span>
-                </div>
+                    <FlashSuccessIcon trueFalse={this.props.flashSuccess} />
+               </div>
             </form>
         );
     }
