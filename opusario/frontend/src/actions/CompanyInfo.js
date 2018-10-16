@@ -1,4 +1,4 @@
-import { csrfHeader } from "../helpers";
+import { csrfHeader, getFlattenedErrors } from "../helpers";
 import {setFlashSuccess, setLoading, showError} from './generic';
 import {FETCH_ITEM, SET_VALUE, server500ErrorMessage} from "../constants";
 
@@ -25,14 +25,15 @@ export const fetchItem = (namespace, apiRoute) => {
     };
 };
 
-export const addOrUpdateItem = (namespace, apiRoute, method, companyName, city, state, country) => {
+export const addOrUpdateItem = (namespace, apiRoute, method, companyName, city, state, country, website) => {
     return (dispatch) => {
 
         const body = JSON.stringify({
             "name": companyName,
             city,
             state,
-            country
+            country,
+            "company_website": website
         });
 
         return fetch(apiRoute, {headers: csrfHeader, method, body, })
@@ -45,7 +46,7 @@ export const addOrUpdateItem = (namespace, apiRoute, method, companyName, city, 
             .then( ({status, json}) => {
                 if (status >= 400) {
                     if (status === 400) {
-                        dispatch(showError(namespace, true, json.non_field_errors));
+                        dispatch(showError(namespace, true, getFlattenedErrors(json)));
                     }
                 } else {
                     if (method === 'POST') {

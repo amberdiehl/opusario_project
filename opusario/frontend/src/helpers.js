@@ -23,9 +23,31 @@ export const csrfHeader = {
     "X-CSRFToken": getCookie('csrftoken')
 };
 
+// Flatten errors into simple array
+export function getFlattenedErrors(json) {
+    let errors = [];
+    for (let key in json) {
+        if (json.hasOwnProperty(key)) {
+            errors.push.apply(errors, json[key]);
+        }
+    }
+    return errors;
+}
+
 // Format label and placeholder text from ComponentID
 export function getFormattedLabelText(componentID) {
     return componentID.replace(/([A-Z])/g, ' $1').substring(1);
+}
+
+// Create object for mapStateToProps automatically
+export function getObjectForMapStateToProps(state, reducer) {
+    let stateObject = {};
+    for (let key in state[reducer]) {
+        if (state[reducer].hasOwnProperty(key)) {
+            stateObject[key] = state[reducer][key];
+        }
+    }
+    return stateObject;
 }
 
 // Generate two random numbers to form one string--used to setup a namespace for actions/reducers

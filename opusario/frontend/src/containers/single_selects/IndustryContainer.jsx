@@ -14,7 +14,7 @@ const mapStateToProps = state => {
         allowAdd: state.industry.allowAdd,
         validationRegEx: state.industry.validationRegEx,
         regExDescription: state.industry.regExDescription,
-        errorMessage: state.industry.errorMessage,
+        errorMessages: state.industry.errorMessages,
         isError: state.industry.isError,
         isLoading: state.industry.isLoading,
         apiRoute: state.industry.apiRoute

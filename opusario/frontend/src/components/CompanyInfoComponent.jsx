@@ -5,6 +5,7 @@ import CompanyNameContainer from '../containers/inputs/CompanyNameContainer';
 import CityContainer from '../containers/single_selects/CityContainer';
 import CountryContainer from '../containers/single_selects/CountryContainer';
 import StateContainer from '../containers/single_selects/StateContainer';
+import CompanyWebsiteContainer from '../containers/inputs/CompanyWebsiteContainer';
 import FlashSuccessIcon from './form_snippets/FlashSuccessIcon';
 import FormErrorMessages from './form_snippets/FormErrorMessages';
 
@@ -32,28 +33,32 @@ export default class CompanyInfoComponent extends Component {
                 this.props.childState.companyName,
                 this.props.childState.citySelectItem,
                 this.props.childState.stateSelectItem,
-                this.props.childState.countrySelectItem);
+                this.props.childState.countrySelectItem,
+                this.props.childState.companyWebsite);
         }
     }
     validateForm(){
-        let errorMessage = [];
+        let errorMessages = [];
         if (this.props.childState.companyName.length === 0) {
-            errorMessage.push('Enter a company name.');
+            errorMessages.push('Enter a company name.');
         }
         if (this.props.childState.companyNameIsError) {
-            errorMessage.push('Company name is not valid.');
+            errorMessages.push('Company name is not valid.');
         }
         if (this.props.childState.citySelectItem === '0') {
-            errorMessage.push('Select or add city.');
+            errorMessages.push('Select or add city.');
         }
         if (this.props.childState.stateSelectItem === '0') {
-            errorMessage.push('Select or add state.');
+            errorMessages.push('Select or add state.');
         }
         if (this.props.childState.countrySelectItem === '0') {
-            errorMessage.push('Select or add country.');
+            errorMessages.push('Select or add country.');
         }
-        this.props.actions.showError(this.props.namespace, (errorMessage.length !== 0), errorMessage);
-        return (errorMessage.length === 0);
+        if (this.props.childState.companyWebsiteIsError) {
+            errorMessages.push('Company website is not valid.');
+        }
+        this.props.actions.showError(this.props.namespace, (errorMessages.length !== 0), errorMessages);
+        return (errorMessages.length === 0);
     }
     render() {
         const buttonLabel = (this.props.companyId === '') ? 'Add' : 'Update';
@@ -73,6 +78,9 @@ export default class CompanyInfoComponent extends Component {
                     </div>
                     <div className={"row gtr-uniform"}>
                         <CountryContainer/>
+                    </div>
+                    <div className={"row gtr-uniform"}>
+                        <CompanyWebsiteContainer/>
                     </div>
                     <button className={"button primary small"} onClick={this.buttonOnClick}>{buttonLabel}</button>
                     <FlashSuccessIcon trueFalse={this.props.flashSuccess} />

@@ -9,7 +9,7 @@ class CityAdmin(admin.ModelAdmin):
 
 @admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'city', 'state')
+    list_display = ('id', 'name', 'city', 'state', 'company_website')
 
 
 @admin.register(Country)

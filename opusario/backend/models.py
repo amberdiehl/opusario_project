@@ -235,16 +235,22 @@ class Tool(models.Model):
         return self.name
 
 
-class City(models.Model):
+class Country(models.Model):
     name = models.CharField(
         max_length=50,
         unique=True,
-        help_text='Name of city.'
+        help_text='Name of country.'
+    )
+    abbreviation = models.CharField(
+        max_length=4,
+        null=True,
+        blank=True,
+        help_text='Optional internet country code assignment.'
     )
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name_plural = 'Cities'
+        verbose_name_plural = 'Countries'
         ordering = ['name', ]
 
     def __str__(self):
@@ -263,6 +269,12 @@ class State(models.Model):
         blank=True,
         help_text='For United States, two character abbreviation for state.'
     )
+    country = models.ForeignKey(
+        Country,
+        models.SET_NULL,
+        null=True,
+        help_text='Country where state is located.'
+    )
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -272,21 +284,22 @@ class State(models.Model):
         return self.name
 
 
-class Country(models.Model):
+class City(models.Model):
     name = models.CharField(
         max_length=50,
         unique=True,
-        help_text='Name of country.'
+        help_text='Name of city.'
     )
-    abbreviation = models.CharField(
-        max_length=4,
+    state = models.ForeignKey(
+        State,
+        models.SET_NULL,
         null=True,
-        blank=True,
-        help_text='Optional internet country code assignment.'
+        help_text='State where city is located.'
     )
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        verbose_name_plural = 'Cities'
         ordering = ['name', ]
 
     def __str__(self):

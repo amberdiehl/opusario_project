@@ -13,7 +13,7 @@ const mapStateToProps = state => {
         allowAdd: state.country.allowAdd,
         validationRegEx: state.country.validationRegEx,
         regExDescription: state.country.regExDescription,
-        errorMessage: state.country.errorMessage,
+        errorMessages: state.country.errorMessages,
         isError: state.country.isError,
         isLoading: state.country.isLoading,
         apiRoute: state.country.apiRoute

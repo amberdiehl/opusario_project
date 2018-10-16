@@ -14,7 +14,7 @@ const mapStateToProps = state => {
         inputValue: state.company_name.inputValue,
         validationRegEx: state.company_name.validationRegEx,
         regExDescription: state.company_name.regExDescription,
-        errorMessage: state.company_name.errorMessage,
+        errorMessages: state.company_name.errorMessages,
         isError: state.company_name.isError,
         isDisabled: state.company_name.isDisabled,
     };

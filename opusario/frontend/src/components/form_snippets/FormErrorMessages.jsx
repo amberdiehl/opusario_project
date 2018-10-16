@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 
 
 export default function FormErrorMessages({trueFalse, messages}) {
-    const errors = messages.map((message) => {
+    const errors = messages.map((message, ndx) => {
         return (
-            <p>{message}</p>
+            <p key={ndx}>{message}</p>
         );
     });
     return (

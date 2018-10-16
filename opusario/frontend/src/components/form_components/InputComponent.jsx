@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { getFormattedLabelText } from '../../helpers';
+import FormErrorMessages from '../form_snippets/FormErrorMessages';
 
 
 export default class InputComponent extends Component {
@@ -20,12 +21,15 @@ export default class InputComponent extends Component {
         }, this.validateValue);
     }
     validateValue() {
-        const validationErrorMessage = `${this.props.componentId} can only contain ${this.props.regExDescription}`;
+        let errorMessages = [];
+        const validationErrorMessage =
+            `${getFormattedLabelText(this.props.componentId)} can only contain ${this.props.regExDescription}`;
         let isValid = this.props.validationRegEx.test(this.state.currentValue);
         if (!isValid) {
-            this.props.actions.showError(this.props.namespace, true, validationErrorMessage);
+            errorMessages.push(validationErrorMessage);
+            this.props.actions.showError(this.props.namespace, true, errorMessages);
         } else {
-            this.props.actions.showError(this.props.namespace, false, validationErrorMessage);
+            this.props.actions.showError(this.props.namespace, false, errorMessages);
             this.props.actions.setInputValue(this.props.namespace, this.state.currentValue);
         }
     }
@@ -44,11 +48,7 @@ export default class InputComponent extends Component {
                         />
                     </div>
                 </div>
-                <div className={"row"} style={(this.props.isError) ? {display: "block"} : {display: "none"}}>
-                    <div className="col-10 component-error-message">
-                        {this.props.errorMessage}
-                    </div>
-                </div>
+                <FormErrorMessages trueFalse={this.props.isError} messages={this.props.errorMessages}/>
             </div>
         );
     }
@@ -62,7 +62,7 @@ InputComponent.propTypes = {
     inputValue: PropTypes.string.isRequired,
     validationRegEx: PropTypes.any.isRequired, // Not clear on how to indicate this is a RegEx.
     regExDescription: PropTypes.string.isRequired,
-    errorMessage: PropTypes.string.isRequired,
+    errorMessages: PropTypes.array.isRequired,
     isError: PropTypes.bool.isRequired,
     isDisabled: PropTypes.bool.isRequired,
 };

@@ -11,7 +11,9 @@ export const base_reducer_single_select_state = {
     allowAdd: true,
     validationRegEx: /^[a-zA-Z ]*$/,
     regExDescription: 'letters and spaces.',
-    errorMessage: '',
+    hasForeignKey: false,
+    foreignKeyValue: 0,
+    errorMessages: [],
     isError: false,
     isLoading: false,
     apiRoute: 'DEFINE',
@@ -30,7 +32,7 @@ export function base_reducer_single_select(state, action) {
         case `${state.namespace}/${SHOW_ERROR}`:
             return {...state,
                 "isError": action.trueFalse,
-                "errorMessage": action.message};
+                "errorMessages": action.message};
         case `${state.namespace}/${SHOW_LOADING}`:
             return {...state, "isLoading": action.value};
         default:

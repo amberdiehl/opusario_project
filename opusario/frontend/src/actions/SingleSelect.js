@@ -1,4 +1,4 @@
-import { csrfHeader } from '../helpers';
+import { csrfHeader, getFlattenedErrors } from '../helpers';
 import {setLoading, showError} from './generic';
 import {FETCH_ITEMS, ADD_ITEM, SET_VALUE, server500ErrorMessage} from '../constants';
 
@@ -20,7 +20,7 @@ export const fetchItems = (namespace, apiRoute) => {
                 dispatch(setLoading(namespace, false));
             })
             .catch( () => {
-                dispatch(showError(namespace, true, server500ErrorMessage));
+                dispatch(showError(namespace, true, [server500ErrorMessage]));
             });
     };
 };
@@ -42,19 +42,19 @@ export const addItem = (namespace, apiRoute, text) => {
             .then( ({status, json}) => {
                 if (status >= 400) {
                     if (status === 400) {
-                        dispatch(showError(namespace, true, json.name[0]));
+                        dispatch(showError(namespace, true, getFlattenedErrors(json)));
                     }
                 } else {
                     dispatch({
                         type: `${namespace}/${ADD_ITEM}`,
                         itemValue: json.id.toString()
                     });
-                    dispatch(showError(namespace, false, ''));
+                    dispatch(showError(namespace, false, []));
                     dispatch(fetchItems(namespace, apiRoute));
                 }
             })
             .catch( () => {
-                dispatch(showError(namespace, true, server500ErrorMessage));
+                dispatch(showError(namespace, true, [server500ErrorMessage]));
             });
     };
 };

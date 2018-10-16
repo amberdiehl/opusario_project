@@ -6,11 +6,12 @@ from .models import *
 class CitySerializer(serializers.ModelSerializer):
 
     def validate(self, data):
-        error_message1 = 'City may only consist of letters and spaces.'
+        error_messages = []
         if re.match("^[a-zA-Z ]*$", data['name']):
             pass
         else:
-            raise serializers.ValidationError({'name': error_message1})
+            error_messages.append('City may only consist of letters and spaces.')
+            raise serializers.ValidationError(error_messages)
         return data
 
     class Meta:
@@ -37,11 +38,12 @@ class CompanySerializer(serializers.ModelSerializer):
 class CountrySerializer(serializers.ModelSerializer):
 
     def validate(self, data):
-        error_message1 = 'Country may only consist of letters and spaces.'
+        error_messages = []
         if re.match("^[a-zA-Z ]*$", data['name']):
             pass
         else:
-            raise serializers.ValidationError({'name': error_message1})
+            error_messages.append('Country may only consist of letters and spaces.')
+            raise serializers.ValidationError(error_messages)
         return data
 
     class Meta:
@@ -52,11 +54,12 @@ class CountrySerializer(serializers.ModelSerializer):
 class FunctionalAreaSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
-        error_message1 = 'Functional area name may only consist of letters and spaces.'
+        error_messages = []
         if re.match("^[a-zA-Z ]*$", data['name']):
             pass
         else:
-            raise serializers.ValidationError({'name': error_message1})
+            error_messages.append('Functional area name may only consist of letters and spaces.')
+            raise serializers.ValidationError(error_messages)
         return data
 
     class Meta:
@@ -67,11 +70,12 @@ class FunctionalAreaSerializer(serializers.ModelSerializer):
 class IndustrySerializer(serializers.ModelSerializer):
 
     def validate(self, data):
-        error_message1 = 'Industry name may only consist of letters and spaces.'
+        error_messages = []
         if re.match("^[a-zA-Z ]*$", data['name']):
             pass
         else:
-            raise serializers.ValidationError({'name': error_message1})
+            error_messages.append('Industry name may only consist of letters and spaces.')
+            raise serializers.ValidationError(error_messages)
         return data
 
     class Meta:
@@ -82,11 +86,12 @@ class IndustrySerializer(serializers.ModelSerializer):
 class StateSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
-        error_message1 = 'State may only consist of letters and spaces.'
+        error_messages = []
         if re.match("^[a-zA-Z ]*$", data['name']):
             pass
         else:
-            raise serializers.ValidationError({'name': error_message1})
+            error_messages.append('State may only consist of letters and spaces.')
+            raise serializers.ValidationError(error_messages)
         return data
 
     class Meta:

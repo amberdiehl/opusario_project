@@ -10,7 +10,7 @@ export const base_reducer_input_state = {
     inputValue: '',
     validationRegEx: /^[a-zA-Z0-9 ]*$/,
     regExDescription: 'letters, numbers and spaces.',
-    errorMessage: '',
+    errorMessages: [],
     isError: false,
     isDisabled: false,
 };
@@ -23,7 +23,7 @@ export function base_reducer_input(state, action) {
         case `${state.namespace}/${SHOW_ERROR}`:
             return {...state,
                 "isError": action.trueFalse,
-                "errorMessage": action.message};
+                "errorMessages": action.message};
         default:
             return state;
     }

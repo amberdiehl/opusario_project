@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { getFormattedLabelText, getTextAsTitleCase } from '../../helpers';
+import FormErrorMessages from '../form_snippets/FormErrorMessages';
 
 
 export default class SingleSelectComponent extends Component {
@@ -22,11 +23,13 @@ export default class SingleSelectComponent extends Component {
                     disabled={this.props.isLoading}
                     value={this.props.selectItem}
                     onChange={(event) => {
-                        this.props.actions.setSelectValue(this.props.namespace, event.target.value);}
-                    }>
-                        {this.props.items.map(item => (
-                            <option key={`industry-${item.id}`} value={item.id}>{item.name}</option>
-                        ))}
+                        this.props.actions.setSelectValue(this.props.namespace, event.target.value);
+                        this.props.actions.showError(this.props.namespace, false, [])
+                    }
+                }>
+                    {this.props.items.map(item => (
+                        <option key={`industry-${item.id}`} value={item.id}>{item.name}</option>
+                    ))}
                 </select>
             </div>
         )
@@ -44,7 +47,9 @@ export default class SingleSelectComponent extends Component {
     }
     renderAddButton() {
         if (this.props.allowAdd) {
-            const validationErrorMessage = `${this.props.componentId} can only contain ${this.props.regExDescription}`;
+            let errorMessages = [];
+            const validationErrorMessage =
+                `${getFormattedLabelText(this.props.componentId)} can only contain ${this.props.regExDescription}`;
             return (
                 <div className="col-3 col-3-xsmall">
                     <button className={"button primary small"} onClick={
@@ -58,10 +63,11 @@ export default class SingleSelectComponent extends Component {
                                     getTextAsTitleCase(this.inputNewItem.current.value));
                                 this.inputNewItem.current.value = '';
                             } else {
+                                errorMessages.push(validationErrorMessage);
                                 this.props.actions.showError(
                                     this.props.namespace,
                                     true,
-                                    validationErrorMessage)
+                                    errorMessages)
                             }
                         }
                     }>
@@ -78,11 +84,7 @@ export default class SingleSelectComponent extends Component {
                     {this.renderAddInput()}
                     {this.renderAddButton()}
                 </div>
-                <div className={"row"} style={(this.props.isError) ? {display: "block"} : {display: "none"}}>
-                    <div className={"col-10 component-error-message"}>
-                        {this.props.errorMessage}
-                    </div>
-                </div>
+                <FormErrorMessages trueFalse={this.props.isError} messages={this.props.errorMessages}/>
             </div>
         );
     }
@@ -96,7 +98,7 @@ SingleSelectComponent.propTypes = {
     allowAdd: PropTypes.bool.isRequired,
     validationRegEx: PropTypes.any.isRequired, // Not clear on how to indicate this is a RegEx.
     regExDescription: PropTypes.string.isRequired,
-    errorMessage: PropTypes.string.isRequired,
+    errorMessages: PropTypes.array.isRequired,
     isError: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,
     apiRoute: PropTypes.string.isRequired,

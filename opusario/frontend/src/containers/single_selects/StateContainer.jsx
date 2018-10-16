@@ -14,7 +14,7 @@ const mapStateToProps = state => {
         allowAdd: state.state_name.allowAdd,
         validationRegEx: state.state_name.validationRegEx,
         regExDescription: state.state_name.regExDescription,
-        errorMessage: state.state_name.errorMessage,
+        errorMessages: state.state_name.errorMessages,
         isError: state.state_name.isError,
         isLoading: state.state_name.isLoading,
         apiRoute: state.state_name.apiRoute
