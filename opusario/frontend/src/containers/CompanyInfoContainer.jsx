@@ -3,7 +3,7 @@ import {bindActionCreators} from 'redux';
 import CompanyInfoComponent from '../components/CompanyInfoComponent';
 import * as CompanyInfoActions from '../actions/CompanyInfo';
 import * as GenericActions from '../actions/generic';
-import {setSelectValue} from "../actions/SingleSelect";
+import {setSelectValue, setForeignKeyValue} from "../actions/SingleSelect";
 import { getCompanyChildState } from '../selectors';
 
 
@@ -24,7 +24,7 @@ const mapStateToProps = state => {
 function mapDispatchToProps(dispatch) {
     return {
         actions: bindActionCreators({...CompanyInfoActions, ...GenericActions}, dispatch),
-        childActions: bindActionCreators({setSelectValue}, dispatch)
+        childActions: bindActionCreators({ setSelectValue, setForeignKeyValue }, dispatch)
     };
 }
 

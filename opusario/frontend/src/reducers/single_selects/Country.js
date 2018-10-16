@@ -11,7 +11,6 @@ const initialState = {
         defaultValue,
     ],
     defaultValue: defaultValue,
-    selectItem: '1',
     apiRoute: '/api/countries',
 };
 

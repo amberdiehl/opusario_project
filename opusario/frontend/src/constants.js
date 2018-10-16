@@ -4,6 +4,7 @@ export const ADD_ITEM = 'ADD_ITEM';
 export const FETCH_ITEM = 'FETCH_ITEM';
 export const FETCH_ITEMS = 'FETCH_ITEMS';
 export const FLASH_SUCCESS = 'FLASH_SUCCESS';
+export const SET_FOREIGN_KEY_VALUE = 'SET_FOREIGN_KEY_VALUE';
 export const SET_VALUE = 'SET_VALUE';
 export const SHOW_LOADING = 'SHOW_LOADING';
 export const SHOW_ERROR = 'SHOW_ERROR';

@@ -20,14 +20,15 @@ export const getCompanyChildState = createSelector(
       getCompanyName, getCompanyNameIsError,
       getCompanyWebsite, getCompanyWebsiteIsError
   ],
-  (city, cityNamespace, state, stateNamespace, country, countryNamespace, companyName, companyNameIsError,
+  (citySelectItem, cityNamespace, stateSelectItem, stateNamespace,
+   countrySelectItem, countryNamespace, companyName, companyNameIsError,
    companyWebsite, companyWebsiteIsError) => {
       return ({
-          citySelectItem: city,
+          citySelectItem,
           cityNamespace,
-          stateSelectItem: state,
+          stateSelectItem,
           stateNamespace,
-          countrySelectItem: country,
+          countrySelectItem,
           countryNamespace,
           companyName,
           companyNameIsError,

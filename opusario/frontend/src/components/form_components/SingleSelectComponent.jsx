@@ -14,7 +14,17 @@ export default class SingleSelectComponent extends Component {
         this.renderAddButton = this.renderAddButton.bind(this);
     }
     componentDidMount() {
-        this.props.actions.fetchItems(this.props.namespace, this.props.apiRoute);
+        let apiRoute = this.props.apiRoute;
+        if (this.props.hasForeignKey) {
+            apiRoute = `${apiRoute}?filter=${this.props.foreignKeyValue}`;
+        }
+        this.props.actions.fetchItems(this.props.namespace, apiRoute);
+    }
+    componentWillUpdate(nextProps, nextState, nextContext) {
+        if (nextProps.foreignKeyValue !== this.props.foreignKeyValue) {
+            let apiRoute = `${this.props.apiRoute}?filter=${nextProps.foreignKeyValue}`;
+            this.props.actions.fetchItems(this.props.namespace, apiRoute);
+        }
     }
     renderSelectField() {
         return (
@@ -60,7 +70,9 @@ export default class SingleSelectComponent extends Component {
                                 this.props.actions.addItem(
                                     this.props.namespace,
                                     this.props.apiRoute,
-                                    getTextAsTitleCase(this.inputNewItem.current.value));
+                                    getTextAsTitleCase(this.inputNewItem.current.value),
+                                    this.props.foreignKeyModel,
+                                    this.props.foreignKeyValue);
                                 this.inputNewItem.current.value = '';
                             } else {
                                 errorMessages.push(validationErrorMessage);
@@ -94,10 +106,14 @@ SingleSelectComponent.propTypes = {
     namespace: PropTypes.string.isRequired,
     componentId: PropTypes.string.isRequired,
     items: PropTypes.array.isRequired,
+    defaultValue: PropTypes.string.isRequired,
     selectItem: PropTypes.string.isRequired,
     allowAdd: PropTypes.bool.isRequired,
     validationRegEx: PropTypes.any.isRequired, // Not clear on how to indicate this is a RegEx.
     regExDescription: PropTypes.string.isRequired,
+    hasForeignKey: PropTypes.bool.isRequired,
+    foreignKeyModel: PropTypes.string.isRequired,
+    foreignKeyValue: PropTypes.string.isRequired,
     errorMessages: PropTypes.array.isRequired,
     isError: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,

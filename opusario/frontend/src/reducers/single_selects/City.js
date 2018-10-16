@@ -11,6 +11,8 @@ const initialState = {
         defaultValue,
     ],
     defaultValue: defaultValue,
+    hasForeignKey: true,
+    foreignKeyModel: 'state',
     apiRoute: '/api/cities',
 };
 

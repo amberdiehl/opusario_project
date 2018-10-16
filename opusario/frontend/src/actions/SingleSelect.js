@@ -1,6 +1,6 @@
 import { csrfHeader, getFlattenedErrors } from '../helpers';
 import {setLoading, showError} from './generic';
-import {FETCH_ITEMS, ADD_ITEM, SET_VALUE, server500ErrorMessage} from '../constants';
+import {FETCH_ITEMS, ADD_ITEM, SET_VALUE, SET_FOREIGN_KEY_VALUE, server500ErrorMessage} from '../constants';
 
 
 export const fetchItems = (namespace, apiRoute) => {
@@ -25,11 +25,12 @@ export const fetchItems = (namespace, apiRoute) => {
     };
 };
 
-export const addItem = (namespace, apiRoute, text) => {
+export const addItem = (namespace, apiRoute, text, model, fk) => {
     return (dispatch) => {
 
         const body = JSON.stringify({
-            "name": text
+            "name": text,
+            [model]: fk
         });
 
         return fetch(apiRoute, {headers: csrfHeader, method: "POST", body, })
@@ -62,6 +63,13 @@ export const addItem = (namespace, apiRoute, text) => {
 export const setSelectValue = (namespace, newValue) => {
     return {
         type: `${namespace}/${SET_VALUE}`,
+        newValue
+    };
+};
+
+export const setForeignKeyValue = (namespace, newValue) => {
+    return {
+        type: `${namespace}/${SET_FOREIGN_KEY_VALUE}`,
         newValue
     };
 };

@@ -4,7 +4,7 @@ from .models import *
 
 @admin.register(City)
 class CityAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', )
+    list_display = ('id', 'name', 'state', )
 
 
 @admin.register(Company)
@@ -23,4 +23,4 @@ admin.site.register(Industry)
 
 @admin.register(State)
 class StateAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'abbreviation', )
+    list_display = ('id', 'name', 'abbreviation', 'country', )

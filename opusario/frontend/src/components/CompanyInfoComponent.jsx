@@ -17,7 +17,19 @@ export default class CompanyInfoComponent extends Component {
         this.validateForm = this.validateForm.bind(this);
     }
     componentDidMount() {
-        this.props.childActions.setSelectValue(this.props.childState.cityNamespace, '5');
+        this.props.childActions.setSelectValue(this.props.childState.countryNamespace, '1');
+    }
+    componentWillUpdate(nextProps, nextState, nextContext) {
+        if (nextProps.childState.countrySelectItem !== this.props.childState.countrySelectItem) {
+            this.props.childActions.setForeignKeyValue(
+                this.props.childState.stateNamespace,
+                nextProps.childState.countrySelectItem);
+        }
+        if (nextProps.childState.stateSelectItem !== this.props.childState.stateSelectItem) {
+            this.props.childActions.setForeignKeyValue(
+                this.props.childState.cityNamespace,
+                nextProps.childState.stateSelectItem);
+        }
     }
     buttonOnClick(e) {
         e.preventDefault();
@@ -71,13 +83,13 @@ export default class CompanyInfoComponent extends Component {
                         <CompanyNameContainer/>
                     </div>
                     <div className={"row gtr-uniform"}>
-                        <CityContainer/>
+                        <CountryContainer/>
                     </div>
                     <div className={"row gtr-uniform"}>
                         <StateContainer/>
                     </div>
                     <div className={"row gtr-uniform"}>
-                        <CountryContainer/>
+                        <CityContainer/>
                     </div>
                     <div className={"row gtr-uniform"}>
                         <CompanyWebsiteContainer/>

@@ -1,4 +1,4 @@
-import { FETCH_ITEMS, ADD_ITEM, SET_VALUE, SHOW_LOADING, SHOW_ERROR } from "../../constants";
+import { FETCH_ITEMS, ADD_ITEM, SET_VALUE, SET_FOREIGN_KEY_VALUE, SHOW_LOADING, SHOW_ERROR } from "../../constants";
 
 // Defines STATE for the SingleSelect component and initial defaults. Any key with a value of 'DEFINE'
 // must be INITIALIZED in the model reducer. Remaining items can also be modified or left as initialized here.
@@ -12,7 +12,8 @@ export const base_reducer_single_select_state = {
     validationRegEx: /^[a-zA-Z ]*$/,
     regExDescription: 'letters and spaces.',
     hasForeignKey: false,
-    foreignKeyValue: 0,
+    foreignKeyModel: 'DEFINE',
+    foreignKeyValue: '0',
     errorMessages: [],
     isError: false,
     isLoading: false,
@@ -29,6 +30,8 @@ export function base_reducer_single_select(state, action) {
             return {...state, "selectItem": action.itemValue};
         case `${state.namespace}/${SET_VALUE}`:
             return {...state, "selectItem": action.newValue};
+        case `${state.namespace}/${SET_FOREIGN_KEY_VALUE}`:
+            return {...state, "foreignKeyValue": action.newValue};
         case `${state.namespace}/${SHOW_ERROR}`:
             return {...state,
                 "isError": action.trueFalse,

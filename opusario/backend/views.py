@@ -6,8 +6,14 @@ from .models import *
 
 
 class CityList(generics.ListCreateAPIView):
-    queryset = City.objects.all()
     serializer_class = CitySerializer
+
+    def get_queryset(self):
+        queryset = City.objects.all()
+        state = self.request.query_params.get('filter', None)
+        if state:
+            queryset = queryset.filter(state=state)
+        return queryset
 
 
 class CityDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -56,7 +62,6 @@ class IndustryDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class StateList(generics.ListCreateAPIView):
-    queryset = State.objects.all()
     serializer_class = StateSerializer
 
     def create(self, request, *args, **kwargs):
@@ -68,6 +73,13 @@ class StateList(generics.ListCreateAPIView):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def get_queryset(self):
+        queryset = State.objects.all()
+        country = self.request.query_params.get('filter', None)
+        if country:
+            queryset = queryset.filter(country=country)
+        return queryset
 
 
 class StateDetail(generics.RetrieveUpdateDestroyAPIView):
