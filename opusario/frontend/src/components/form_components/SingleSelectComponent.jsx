@@ -14,6 +14,7 @@ export default class SingleSelectComponent extends Component {
         this.renderAddButton = this.renderAddButton.bind(this);
     }
     componentDidMount() {
+        // Automatically load options; filter options by foreign key if present.
         let apiRoute = this.props.apiRoute;
         if (this.props.hasForeignKey) {
             apiRoute = `${apiRoute}?filter=${this.props.foreignKeyValue}`;
@@ -21,6 +22,7 @@ export default class SingleSelectComponent extends Component {
         this.props.actions.fetchItems(this.props.namespace, apiRoute);
     }
     componentWillUpdate(nextProps, nextState, nextContext) {
+        // When foreign key changes due to parent component control, fetch new values.
         if (nextProps.foreignKeyValue !== this.props.foreignKeyValue) {
             let apiRoute = `${this.props.apiRoute}?filter=${nextProps.foreignKeyValue}`;
             this.props.actions.fetchItems(this.props.namespace, apiRoute);
@@ -106,7 +108,7 @@ SingleSelectComponent.propTypes = {
     namespace: PropTypes.string.isRequired,
     componentId: PropTypes.string.isRequired,
     items: PropTypes.array.isRequired,
-    defaultValue: PropTypes.string.isRequired,
+    defaultValue: PropTypes.string.isRequired, // The default starting value (e.g. please select) to self populate.
     selectItem: PropTypes.string.isRequired,
     allowAdd: PropTypes.bool.isRequired,
     validationRegEx: PropTypes.any.isRequired, // Not clear on how to indicate this is a RegEx.

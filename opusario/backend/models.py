@@ -317,24 +317,23 @@ class Company(models.Model):
         null=True,
         help_text='City where company is located.'
     )
-    state = models.ForeignKey(
-        State,
-        models.SET_NULL,
+    size = models.IntegerField(
+        blank=True,
         null=True,
-        help_text='State where company is located.'
+        help_text='Number of employees.'
     )
-    country = models.ForeignKey(
-        Country,
+    industry = models.ForeignKey(
+        Industry,
         models.SET_NULL,
         null=True,
-        help_text='Country where company is located.'
+        help_text='Primary source of revenue.'
     )
     company_website = models.URLField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name_plural = 'Companies'
-        unique_together = ('name', 'city', 'state')
+        unique_together = ('name', 'city', )
         ordering = ['name', ]
 
     def __str__(self):

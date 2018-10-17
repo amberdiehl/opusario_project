@@ -38,6 +38,8 @@ export default class InputComponent extends Component {
             <div className={"form-field-group"}>
                 <div className={"row gtr-uniform"}>
                     <div className="col-3 col-3-xsmall">
+                        <div className={"input-container"}>
+                            <div className={"input-alphs"}>
                         <input
                             id={this.props.componentId}
                             type={this.props.inputType} style={{width: this.props.inputSize}}
@@ -46,6 +48,9 @@ export default class InputComponent extends Component {
                             disabled={this.props.isDisabled}
                             onChange={this.handleOnChange}
                         />
+                        <label>{getFormattedLabelText(this.props.componentId)}</label>
+                    </div>
+                        </div>
                     </div>
                 </div>
                 <FormErrorMessages trueFalse={this.props.isError} messages={this.props.errorMessages}/>

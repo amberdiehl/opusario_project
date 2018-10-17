@@ -129,7 +129,7 @@
 		font-size: 15pt;
 		font-weight: _font(weight);
 		letter-spacing: _size(letter-spacing);
-		line-height: 1.65em;
+		line-height: 1.5em;
 
 		@include breakpoint('<=xlarge') {
 			font-size: 13pt;
@@ -1302,11 +1302,17 @@
 	}
 
 	.wrapper {
-		@include padding(6em, 0);
+		@include padding(1em, 0);
 
 		> .inner {
+			background-color: #ffffff;
 			width: 60em;
-			margin: 0 auto;
+			border: 1px solid #ededff;
+			-webkit-border-radius: 5px;
+			-moz-border-radius: 5px;
+			border-radius: 5px;
+			margin: 1em auto;
+			padding: 1em;
 
 			@include breakpoint('<=large') {
 				width: 90%;
@@ -1473,7 +1479,6 @@
 			line-height: inherit;
 			position: absolute;
 			top: 0;
-
 			a {
 				border: 0;
 				display: block;
@@ -1483,6 +1488,18 @@
 				@include breakpoint('<=small') {
 					font-size: 0.8em;
 				}
+			}
+		}
+		h6 {
+			color: #FD3A0F;
+			height: inherit;
+			line-height: inherit;
+			position: absolute;
+			top: 0;
+			left: 13em;
+			text-transform: lowercase;
+			@include breakpoint('<=small') {
+				display: none;
 			}
 		}
 
@@ -1943,5 +1960,58 @@
 }
 .icon-large {
 	font-size: 25px;
-	color: teal;
+	color: #98CA32;
+}
+
+.input-container{
+  margin: 20px;
+}
+.input-alpha {
+	position: relative;
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	width: 100%;
+}
+.input-alpha label {
+	position: absolute;
+	left: 17px;
+	top: 15px;
+	font-size: 14px;
+	transition: all 0.1s ease-in-out;
+	pointer-events: none;
+	transform-origin: 0% 0%;
+}
+
+.input-alpha input {
+	border: solid 1px #e6e6ea;
+	height: 48px;
+	width: 100%;
+	padding: 16px;
+	border-radius: 2px;
+	box-shadow: inset 0px 0px 0px 0px #f00;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	font-size: 14px;
+	transition: all 0.1s ease-in-out;
+}
+
+.input-alpha input:focus {
+	outline: 0;
+	border: 1px solid #00f;
+}
+
+.input-alpha input:focus + label {
+	color: blue;
+}
+
+.input-alpha input:valid,
+.input-alpha input:-webkit-autofill {
+	padding: 26px 32px 10px 16px;
+}
+
+.input-alpha input:valid + label,
+.input-alpha input:-webkit-autofill + label {
+	top: 7px;
+	transform: scale(0.8);
 }
