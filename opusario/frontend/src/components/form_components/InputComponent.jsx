@@ -37,20 +37,19 @@ export default class InputComponent extends Component {
         return (
             <div className={"form-field-group"}>
                 <div className={"row gtr-uniform"}>
+                    <div className="col-6 col-6-xsmall">
+                        <label htmlFor={this.props.componentId}>
+                            {getFormattedLabelText(this.props.componentId)}
+                        </label>
+                    </div>
                     <div className="col-3 col-3-xsmall">
-                        <div className={"input-container"}>
-                            <div className={"input-alphs"}>
-                        <input
-                            id={this.props.componentId}
+                        <input id={this.props.componentId}
                             type={this.props.inputType} style={{width: this.props.inputSize}}
                             placeholder={getFormattedLabelText(this.props.componentId)}
                             value={this.state.currentValue}
                             disabled={this.props.isDisabled}
                             onChange={this.handleOnChange}
                         />
-                        <label>{getFormattedLabelText(this.props.componentId)}</label>
-                    </div>
-                        </div>
                     </div>
                 </div>
                 <FormErrorMessages trueFalse={this.props.isError} messages={this.props.errorMessages}/>

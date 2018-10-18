@@ -10,6 +10,7 @@ export default class SingleSelectComponent extends Component {
         super(props);
         this.inputNewItem = React.createRef();
         this.renderSelectField = this.renderSelectField.bind(this);
+        this.renderSelectLabel = this.renderSelectLabel.bind(this);
         this.renderAddInput = this.renderAddInput.bind(this);
         this.renderAddButton = this.renderAddButton.bind(this);
     }
@@ -28,32 +29,33 @@ export default class SingleSelectComponent extends Component {
             this.props.actions.fetchItems(this.props.namespace, apiRoute);
         }
     }
+    renderSelectLabel() {
+        return (
+            <label htmlFor={this.props.componentId}>
+                {getFormattedLabelText(this.props.componentId)}
+            </label>
+        );
+    }
     renderSelectField() {
         return (
-            <div className={"col-6 col-12-xsmall"}>
                 <select id={`select${this.props.componentId}`}
                     disabled={this.props.isLoading}
                     value={this.props.selectItem}
                     onChange={(event) => {
                         this.props.actions.setSelectValue(this.props.namespace, event.target.value);
                         this.props.actions.showError(this.props.namespace, false, [])
-                    }
-                }>
+                    }}>
                     {this.props.items.map(item => (
                         <option key={`industry-${item.id}`} value={item.id}>{item.name}</option>
                     ))}
                 </select>
-            </div>
         )
     }
     renderAddInput() {
         if (this.props.allowAdd) {
             return (
-                <div className="col-3 col-3-xsmall">
-                    <input type={"text"}
-                           ref={this.inputNewItem}
-                           placeholder={getFormattedLabelText(this.props.componentId)}/>
-                </div>
+                <input type={"text"} ref={this.inputNewItem}
+                    placeholder={getFormattedLabelText(this.props.componentId)}/>
             )
         }
     }
@@ -63,18 +65,17 @@ export default class SingleSelectComponent extends Component {
             const validationErrorMessage =
                 `${getFormattedLabelText(this.props.componentId)} can only contain ${this.props.regExDescription}`;
             return (
-                <div className="col-3 col-3-xsmall">
-                    <button className={"button primary small"} onClick={
-                        (e) => {
-                            e.preventDefault();
-                            let isValid = this.props.validationRegEx.test(this.inputNewItem.current.value);
-                            if (isValid) {
-                                this.props.actions.addItem(
-                                    this.props.namespace,
-                                    this.props.apiRoute,
-                                    getTextAsTitleCase(this.inputNewItem.current.value),
-                                    this.props.foreignKeyModel,
-                                    this.props.foreignKeyValue);
+                <button className={"button primary small"} onClick={
+                    (e) => {
+                        e.preventDefault();
+                        let isValid = this.props.validationRegEx.test(this.inputNewItem.current.value);
+                        if (isValid) {
+                            this.props.actions.addItem(
+                                this.props.namespace,
+                                this.props.apiRoute,
+                                getTextAsTitleCase(this.inputNewItem.current.value),
+                                this.props.foreignKeyModel,
+                                this.props.foreignKeyValue);
                                 this.inputNewItem.current.value = '';
                             } else {
                                 errorMessages.push(validationErrorMessage);
@@ -83,20 +84,28 @@ export default class SingleSelectComponent extends Component {
                                     true,
                                     errorMessages)
                             }
-                        }
-                    }>
-                        Add {getFormattedLabelText(this.props.componentId)}</button>
-                </div>
+                        }}>
+                    Add {getFormattedLabelText(this.props.componentId)}
+                </button>
             )
         }
     }
     render() {
         return (
             <div className={"form-field-group"}>
-                <div className={"row gtr-uniform"}>
-                    {this.renderSelectField()}
-                    {this.renderAddInput()}
-                    {this.renderAddButton()}
+                <div className={"row"}>
+                    <div className={"col-3"}>
+                        {this.renderSelectLabel()}
+                    </div>
+                    <div className={"col-3"}>
+                        {this.renderSelectField()}
+                    </div>
+                    <div className={"col-3"}>
+                        {this.renderAddInput()}
+                    </div>
+                    <div className={"col-3"}>
+                        {this.renderAddButton()}
+                    </div>
                 </div>
                 <FormErrorMessages trueFalse={this.props.isError} messages={this.props.errorMessages}/>
             </div>
