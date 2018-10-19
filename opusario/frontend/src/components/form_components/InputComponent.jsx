@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { getFormattedLabelText } from '../../helpers';
+import FormFieldLabel from '../form_snippets/FormFieldLabel';
 import FormErrorMessages from '../form_snippets/FormErrorMessages';
 
 
@@ -11,6 +12,7 @@ export default class InputComponent extends Component {
         this.state = {
             currentValue: this.props.inputValue
         };
+        this.renderInputByType = this.renderInputByType.bind(this);
         this.handleOnChange = this.handleOnChange.bind(this);
         this.validateValue = this.validateValue.bind(this);
     }
@@ -33,16 +35,23 @@ export default class InputComponent extends Component {
             this.props.actions.setInputValue(this.props.namespace, this.state.currentValue);
         }
     }
-    render() {
-        return (
-            <div className={"form-field-group"}>
-                <div className={"row gtr-uniform"}>
+    renderInputByType() {
+        switch(this.props.inputType) {
+            case 'textarea': {
+                return (
                     <div className="col-6 col-6-xsmall">
-                        <label htmlFor={this.props.componentId}>
-                            {getFormattedLabelText(this.props.componentId)}
-                        </label>
+                        <textarea id={this.props.componentId} cols={this.props.inputSize}
+                            placeholder={getFormattedLabelText(this.props.componentId)}
+                            readOnly={this.props.isDisabled}
+                            onChange={this.handleOnChange}>
+                            {this.state.currentValue}
+                        </textarea>
                     </div>
-                    <div className="col-3 col-3-xsmall">
+                );
+            }
+            default: {
+                return (
+                    <div className="col-6 col-6-xsmall">
                         <input id={this.props.componentId}
                             type={this.props.inputType} style={{width: this.props.inputSize}}
                             placeholder={getFormattedLabelText(this.props.componentId)}
@@ -51,7 +60,15 @@ export default class InputComponent extends Component {
                             onChange={this.handleOnChange}
                         />
                     </div>
-                </div>
+                );
+            }
+        }
+    }
+    render() {
+        return (
+            <div className={"row gtr-uniform"}>
+                <FormFieldLabel componentId={this.props.componentId}/>
+                {this.renderInputByType()}
                 <FormErrorMessages trueFalse={this.props.isError} messages={this.props.errorMessages}/>
             </div>
         );

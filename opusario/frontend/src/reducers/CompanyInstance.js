@@ -4,7 +4,7 @@ import {FLASH_SUCCESS, SET_VALUE, SHOW_ERROR} from "../constants";
 export const initialState = {
     namespace: getNamespace(),
     componentId: 'CompanyInformation',
-    companyId: '',
+    instanceId: '',
     childState: {},
     errorMessages: [],
     isError: false,
@@ -13,11 +13,11 @@ export const initialState = {
     apiRoute: '/api/companies',
 };
 
-export default function company_info(state=initialState, action) {
+export default function company_instance(state=initialState, action) {
     switch (action.type) {
         case `${state.namespace}/${SET_VALUE}`:
             return {...state,
-                "companyId": action.itemValue};
+                "instanceId": action.itemValue};
         case `${state.namespace}/${FLASH_SUCCESS}`:
             return {...state,
                 "flashSuccess": action.trueFalse};

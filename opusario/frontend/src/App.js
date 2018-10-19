@@ -8,9 +8,8 @@ import thunk from "redux-thunk";
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import PageWrapperComponent from './components/wrappers/PageWrapperComponent';
-import CompanyInfoContainer from './containers/CompanyInfoContainer';
-import FunctionalAreaContainer from './containers/single_selects/FunctionalAreaContainer';
-import IndustryContainer from './containers/single_selects/IndustryContainer';
+import CompanyInstanceContainer from './containers/CompanyInstanceContainer';
+import RoleInstanceContainer from './containers/RoleInstanceContainer';
 import Myself from './components/Myself';
 import NotFound from './components/NotFound';
 
@@ -33,13 +32,12 @@ class App extends Component {
                     <Switch>
                         <Route exact path={"/app/company"} render={()=>
                             <PageWrapperComponent>
-                                <CompanyInfoContainer/>
+                                <CompanyInstanceContainer/>
                             </PageWrapperComponent>
                         } />
-                        <Route exact path="/app/components" render={()=>
+                        <Route exact path={"/app/role"} render={()=>
                             <PageWrapperComponent>
-                                <FunctionalAreaContainer/>
-                                <IndustryContainer/>
+                                <RoleInstanceContainer/>
                             </PageWrapperComponent>
                         } />
                         <Route path="/myself" component={Myself} />

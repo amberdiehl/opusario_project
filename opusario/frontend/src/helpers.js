@@ -44,7 +44,7 @@ export function getObjectForMapStateToProps(state, reducer) {
     let stateObject = {};
     for (let key in state[reducer]) {
         if (state[reducer].hasOwnProperty(key)) {
-            stateObject[key] = key;
+            stateObject[key] = state[reducer][key];
         }
     }
     return stateObject;

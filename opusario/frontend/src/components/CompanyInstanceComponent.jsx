@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import CompanyNameContainer from '../containers/inputs/CompanyNameContainer';
 import CityContainer from '../containers/single_selects/CityContainer';
-import CountryContainer from '../containers/single_selects/CountryContainer';
-import StateContainer from '../containers/single_selects/StateContainer';
+import CompanyNameContainer from '../containers/inputs/CompanyNameContainer';
+import CompanySizeContainer from '../containers/inputs/CompanySizeContainer';
 import CompanyWebsiteContainer from '../containers/inputs/CompanyWebsiteContainer';
+import CountryContainer from '../containers/single_selects/CountryContainer';
+import IndustryContainer from '../containers/single_selects/IndustryContainer';
+import StateContainer from '../containers/single_selects/StateContainer';
 import FlashSuccessIcon from './form_snippets/FlashSuccessIcon';
 import FormErrorMessages from './form_snippets/FormErrorMessages';
 
 
-export default class CompanyInfoComponent extends Component {
+export default class CompanyInstanceComponent extends Component {
     constructor(props) {
         super(props);
         this.buttonOnClick = this.buttonOnClick.bind(this);
@@ -36,18 +38,17 @@ export default class CompanyInfoComponent extends Component {
         e.preventDefault();
         let isValid = this.validateForm();
         if (isValid) {
-            const method = (this.props.companyId === '') ? 'POST' : 'PUT';
+            const method = (this.props.instanceId === '') ? 'POST' : 'PUT';
             const apiRoute = (method === 'POST') ? this.props.apiRoute :
-                `${this.props.apiRoute}/${this.props.companyId}`;
-            this.props.actions.addOrUpdateItem(
-                this.props.namespace,
-                apiRoute,
-                method,
-                this.props.childState.companyName,
-                this.props.childState.citySelectItem,
-                this.props.childState.stateSelectItem,
-                this.props.childState.countrySelectItem,
-                this.props.childState.companyWebsite);
+                `${this.props.apiRoute}/${this.props.instanceId}`;
+            const data = {
+                "name": this.props.childState.companyName,
+                "city": this.props.childState.citySelectItem,
+                "company_size": this.props.childState.companySize,
+                "industry": this.props.childState.industrySelectItem,
+                "company_website": this.props.childState.companyWebsite
+            };
+            this.props.actions.addOrUpdateItem(this.props.namespace, apiRoute, method, data);
         }
     }
     validateForm(){
@@ -67,6 +68,9 @@ export default class CompanyInfoComponent extends Component {
         if (this.props.childState.countrySelectItem === '0') {
             errorMessages.push('Select or add country.');
         }
+        if (this.props.childState.industrySelectItem === '0') {
+            errorMessages.push('Select or add industry.');
+        }
         if (this.props.childState.companyWebsiteIsError) {
             errorMessages.push('Company website is not valid.');
         }
@@ -74,39 +78,32 @@ export default class CompanyInfoComponent extends Component {
         return (errorMessages.length === 0);
     }
     render() {
-        const buttonLabel = (this.props.companyId === '') ? 'Add' : 'Update';
+        const buttonLabel = (this.props.instanceId === '') ? 'Add' : 'Update';
         return(
             <form>
                 <h2>Company Information</h2>
                 <FormErrorMessages trueFalse={this.props.isError} messages={this.props.errorMessages}/>
                 <div className={"form-field-group"}>
-                    <div className={"row gtr-uniform"}>
-                        <CompanyNameContainer/>
-                    </div>
-                    <div className={"row gtr-uniform"}>
-                        <CountryContainer/>
-                    </div>
-                    <div className={"row gtr-uniform"}>
-                        <StateContainer/>
-                    </div>
-                    <div className={"row gtr-uniform"}>
-                        <CityContainer/>
-                    </div>
-                    <div className={"row gtr-uniform"}>
-                        <CompanyWebsiteContainer/>
-                    </div>
+                    <CompanyNameContainer/>
+                    <CountryContainer/>
+                    <StateContainer/>
+                    <CityContainer/>
+                    <CompanySizeContainer/>
+                    <IndustryContainer/>
+                    <CompanyWebsiteContainer/>
+                    <br/><br/>
                     <button className={"button primary small"} onClick={this.buttonOnClick}>{buttonLabel}</button>
                     <FlashSuccessIcon trueFalse={this.props.flashSuccess} />
-               </div>
+                </div>
             </form>
         );
     }
 }
 
-CompanyInfoComponent.propTypes = {
+CompanyInstanceComponent.propTypes = {
     namespace: PropTypes.string.isRequired,
     componentId: PropTypes.string.isRequired,
-    companyId: PropTypes.string.isRequired,
+    instanceId: PropTypes.string.isRequired,
     childState: PropTypes.object.isRequired,
     errorMessages: PropTypes.array.isRequired,
     isError: PropTypes.bool.isRequired,

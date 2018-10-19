@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { getFormattedLabelText, getTextAsTitleCase } from '../../helpers';
+import FormFieldLabel from '../form_snippets/FormFieldLabel';
 import FormErrorMessages from '../form_snippets/FormErrorMessages';
 
 
@@ -10,7 +11,6 @@ export default class SingleSelectComponent extends Component {
         super(props);
         this.inputNewItem = React.createRef();
         this.renderSelectField = this.renderSelectField.bind(this);
-        this.renderSelectLabel = this.renderSelectLabel.bind(this);
         this.renderAddInput = this.renderAddInput.bind(this);
         this.renderAddButton = this.renderAddButton.bind(this);
     }
@@ -29,13 +29,6 @@ export default class SingleSelectComponent extends Component {
             this.props.actions.fetchItems(this.props.namespace, apiRoute);
         }
     }
-    renderSelectLabel() {
-        return (
-            <label htmlFor={this.props.componentId}>
-                {getFormattedLabelText(this.props.componentId)}
-            </label>
-        );
-    }
     renderSelectField() {
         return (
                 <select id={`select${this.props.componentId}`}
@@ -46,7 +39,8 @@ export default class SingleSelectComponent extends Component {
                         this.props.actions.showError(this.props.namespace, false, [])
                     }}>
                     {this.props.items.map(item => (
-                        <option key={`industry-${item.id}`} value={item.id}>{item.name}</option>
+                        <option key={`select${this.props.componentId}-${item.id}`}
+                                value={item.id}>{item.name}</option>
                     ))}
                 </select>
         )
@@ -93,17 +87,15 @@ export default class SingleSelectComponent extends Component {
     render() {
         return (
             <div className={"form-field-group"}>
-                <div className={"row"}>
-                    <div className={"col-3"}>
-                        {this.renderSelectLabel()}
-                    </div>
-                    <div className={"col-3"}>
+                <div className={"row gtr-uniform"}>
+                    <FormFieldLabel componentId={this.props.componentId}/>
+                    <div className={"col-3 col-3-fixed-width"}>
                         {this.renderSelectField()}
                     </div>
-                    <div className={"col-3"}>
+                    <div className={"col-3 col-3-fixed-width"}>
                         {this.renderAddInput()}
                     </div>
-                    <div className={"col-3"}>
+                    <div className={"col-3 col-3-fixed-width"}>
                         {this.renderAddButton()}
                     </div>
                 </div>
@@ -117,7 +109,7 @@ SingleSelectComponent.propTypes = {
     namespace: PropTypes.string.isRequired,
     componentId: PropTypes.string.isRequired,
     items: PropTypes.array.isRequired,
-    defaultValue: PropTypes.string.isRequired, // The default starting value (e.g. please select) to self populate.
+    defaultValue: PropTypes.object.isRequired, // The default starting value (e.g. please select) to self populate.
     selectItem: PropTypes.string.isRequired,
     allowAdd: PropTypes.bool.isRequired,
     validationRegEx: PropTypes.any.isRequired, // Not clear on how to indicate this is a RegEx.
