@@ -49,7 +49,7 @@ export default class SingleSelectComponent extends Component {
         if (this.props.allowAdd) {
             return (
                 <input type={"text"} ref={this.inputNewItem}
-                    placeholder={getFormattedLabelText(this.props.componentId)}/>
+                    placeholder={`New ${getFormattedLabelText(this.props.componentId)}`}/>
             )
         }
     }

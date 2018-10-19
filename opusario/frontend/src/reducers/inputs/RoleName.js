@@ -6,6 +6,7 @@ const initialState = {
     ...base_reducer_input_state,
     namespace: getNamespace(),
     componentId: 'RoleName',
+    inputSize: 300,
 };
 
 export default function role_name(state=initialState, action) {
