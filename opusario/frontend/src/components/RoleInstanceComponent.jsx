@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import FunctionalAreaContainer from '../containers/single_selects/FunctionalAreaContainer';
 import RoleDescriptionContainer from '../containers/inputs/RoleDescriptionContainer';
+import RoleManagementContainer from '../containers/checkbox_radios/RoleManagementContainer';
 import RoleNameContainer from '../containers/inputs/RoleNameContainer';
 import FlashSuccessIcon from './form_snippets/FlashSuccessIcon';
 import FormErrorMessages from './form_snippets/FormErrorMessages';
@@ -45,6 +46,7 @@ export default class RoleInstanceComponent extends Component {
                     <FunctionalAreaContainer/>
                     <RoleNameContainer/>
                     <RoleDescriptionContainer/>
+                    <RoleManagementContainer/>
                     <br/><br/>
                     <button className={"button primary small"} onClick={this.buttonOnClick}>{buttonLabel}</button>
                     <FlashSuccessIcon trueFalse={this.props.flashSuccess} />

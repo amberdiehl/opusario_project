@@ -9,35 +9,44 @@ import FormErrorMessages from '../form_snippets/FormErrorMessages';
 export default class CheckBoxRadioComponent extends Component {
     constructor(props) {
         super(props);
-        this.renderItems = this.renderItems.bind(this);
+        this.renderItem = this.renderItem.bind(this);
+        this.handleOnClick = this.handleOnClick.bind(this);
     }
     componentDidMount() {
     }
     componentWillUpdate(nextProps, nextState, nextContext) {
     }
-    renderItems() {
+    handleOnClick(e) {
+        if (this.props.inputType === 'checkbox') {
+            this.props.actions.setSelectValue(this.props.namespace, (e.target.checked) ? 'yes' : 'no');
+        } else {
+            this.props.actions.setSelectValue(this.props.namespace, e.target.value);
+        }
+    }
+    renderItem(item, index) {
         return (
-            <span>
-                {this.props.items.map(item => (
-                    <input type={this.props.inputType}
-                           id={this.props.componentId}
-                           name={this.props.componentId}
-                           value={item.value} />
-                ))}
-            </span>
+            <React.Fragment>
+                <input type={this.props.inputType} id={`${this.props.componentId}-${item.value}`}
+                       name={this.props.componentId}
+                       key={index}
+                       value={item.value}
+                       onClick={this.handleOnClick}
+                />
+                <label htmlFor={`${this.props.componentId}-${item.value}`}>{item.label}</label>
+            </React.Fragment>
         )
     }
     render() {
         return (
-            <div className={"form-field-group"}>
                 <div className={"row gtr-uniform"}>
                     <FormFieldLabel componentId={this.props.componentId}/>
                     <div className={"col-6"}>
-                        {this.renderItems()}
+                        {this.props.items.map((item, index) => (
+                            this.renderItem(item, index)
+                        ))}
                     </div>
+                    <FormErrorMessages trueFalse={this.props.isError} messages={this.props.errorMessages}/>
                  </div>
-                <FormErrorMessages trueFalse={this.props.isError} messages={this.props.errorMessages}/>
-            </div>
         );
     }
 }

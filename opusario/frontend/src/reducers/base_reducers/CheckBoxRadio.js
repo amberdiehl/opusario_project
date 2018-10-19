@@ -6,7 +6,7 @@ export const base_reducer_state = {
     namespace: 'DEFINE',
     componentId: 'DEFINE',
     inputType: 'checkbox',  // checkbox or radio
-    items: [  // If checkbox, should have only one element. If radio, at least two.
+    items: [
         {"label": "DEFINE", "value": "DEFINE"},
     ],
     valueChecked: '',
