@@ -17,6 +17,8 @@ const getIndustrySelectItem = (state) => state.industry.selectItem;
 const getIndustryNamespace = (state) => state.industry.namespace;
 const getRoleDescription = (state) => state.role_description.inputValue;
 const getRoleDescriptionIsError = (state) => state.role_description.isError;
+const getRoleLeadership = (state) => state.role_leadership.valueChecked;
+const getRoleManagement = (state) => state.role_management.valueChecked;
 const getRoleName = (state) => state.role_name.inputValue;
 const getRoleNameIsError = (state) => state.role_name.isError;
 const getStateSelectItem = (state) => state.state_name.selectItem;
@@ -54,16 +56,18 @@ export const getCompanyChildState = createSelector(
 
 export const getRoleChildState = createSelector(
     [ getFunctionalAreaSelectItem, getFunctionalAreaNamespace, getRoleName, getRoleNameIsError,
-    getRoleDescription, getRoleDescriptionIsError],
+    getRoleDescription, getRoleDescriptionIsError, getRoleLeadership, getRoleManagement],
     (functionalAreaSelectItem, functionalAreaNamespace, roleName, roleNameIsError,
-     roleDescription, roleDescriptionIsError) => {
+     roleDescription, roleDescriptionIsError, roleLeadership, roleManagement) => {
         return ({
             functionalAreaSelectItem,
             functionalAreaNamespace,
             roleName,
             roleNameIsError,
             roleDescription,
-            roleDescriptionIsError
+            roleDescriptionIsError,
+            roleLeadership,
+            roleManagement
         });
     }
 );

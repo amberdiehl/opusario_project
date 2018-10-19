@@ -61,6 +61,16 @@ class IndustryDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = IndustrySerializer
 
 
+class RoleList(generics.ListCreateAPIView):
+    queryset = Role.objects.all()
+    serializer_class = RoleSerializer
+
+
+class RoleDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Role.objects.all()
+    serializer_class = RoleSerializer
+
+
 class StateList(generics.ListCreateAPIView):
     serializer_class = StateSerializer
 

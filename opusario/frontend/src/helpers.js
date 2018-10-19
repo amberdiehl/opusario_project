@@ -39,17 +39,6 @@ export function getFormattedLabelText(componentID) {
     return componentID.replace(/([A-Z])/g, ' $1').substring(1);
 }
 
-// Create object for mapStateToProps automatically
-export function getObjectForMapStateToProps(state, reducer) {
-    let stateObject = {};
-    for (let key in state[reducer]) {
-        if (state[reducer].hasOwnProperty(key)) {
-            stateObject[key] = state[reducer][key];
-        }
-    }
-    return stateObject;
-}
-
 // Generate two random numbers to form one string--used to setup a namespace for actions/reducers
 export function getNamespace() {
     let randomString = '';

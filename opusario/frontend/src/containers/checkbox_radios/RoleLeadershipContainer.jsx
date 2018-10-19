@@ -7,7 +7,7 @@ import * as GenericActions from '../../actions/generic';
 
 const mapStateToProps = state => {
     return {
-        ...state.role_management
+        ...state.role_leadership
     };
 };
 
@@ -15,9 +15,9 @@ function mapDispatchToProps(dispatch) {
     return {actions: bindActionCreators({...CheckBoxRadioActions, ...GenericActions}, dispatch)};
 }
 
-const RoleManagementContainer = connect(
+const RoleLeadershipContainer = connect(
     mapStateToProps,
     mapDispatchToProps
 )(CheckboxRadioComponent);
 
-export default RoleManagementContainer;
+export default RoleLeadershipContainer;

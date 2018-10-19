@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import FunctionalAreaContainer from '../containers/single_selects/FunctionalAreaContainer';
 import RoleDescriptionContainer from '../containers/inputs/RoleDescriptionContainer';
+import RoleLeadershipContainer from '../containers/checkbox_radios/RoleLeadershipContainer';
 import RoleManagementContainer from '../containers/checkbox_radios/RoleManagementContainer';
 import RoleNameContainer from '../containers/inputs/RoleNameContainer';
 import FlashSuccessIcon from './form_snippets/FlashSuccessIcon';
@@ -27,12 +28,24 @@ export default class RoleInstanceComponent extends Component {
             const apiRoute = (method === 'POST') ? this.props.apiRoute :
                 `${this.props.apiRoute}/${this.props.instanceId}`;
             const data = {
+                "at_functional_area": this.props.childState.functionalAreaSelectItem,
+                "name": this.props.childState.roleName,
+                "description": this.props.childState.roleDescription,
+                "management": (this.props.childState.roleManagement === 'yes'),
+                "leadership": (this.props.childState.roleLeadership === 'yes')
             };
             this.props.actions.addOrUpdateItem(this.props.namespace, apiRoute, method, data);
         }
     }
     validateForm(){
         let errorMessages = [];
+        if (this.props.childState.functionalAreaSelectItem === '0') {
+            errorMessages.push('Add or select a functional area.');
+        }
+        if (this.props.childState.roleName.length === 0) {
+            errorMessages.push('Enter a name for this role; e.g. Software Engineer, Product Manager, Copy Writer, ' +
+                'Customer Service Associate.');
+        }
         this.props.actions.showError(this.props.namespace, (errorMessages.length !== 0), errorMessages);
         return (errorMessages.length === 0);
     }
@@ -47,6 +60,7 @@ export default class RoleInstanceComponent extends Component {
                     <RoleNameContainer/>
                     <RoleDescriptionContainer/>
                     <RoleManagementContainer/>
+                    <RoleLeadershipContainer/>
                     <br/><br/>
                     <button className={"button primary small"} onClick={this.buttonOnClick}>{buttonLabel}</button>
                     <FlashSuccessIcon trueFalse={this.props.flashSuccess} />

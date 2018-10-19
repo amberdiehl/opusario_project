@@ -86,18 +86,16 @@ export default class SingleSelectComponent extends Component {
     }
     render() {
         return (
-            <div className={"form-field-group"}>
-                <div className={"row gtr-uniform"}>
-                    <FormFieldLabel componentId={this.props.componentId}/>
-                    <div className={"col-3 col-3-fixed-width"}>
-                        {this.renderSelectField()}
-                    </div>
-                    <div className={"col-3 col-3-fixed-width"}>
-                        {this.renderAddInput()}
-                    </div>
-                    <div className={"col-3 col-3-fixed-width"}>
-                        {this.renderAddButton()}
-                    </div>
+            <div className={"row gtr-0 gtr-uniform"}>
+                <FormFieldLabel componentId={this.props.componentId}/>
+                <div className={"col-3 col-3-fixed-width"}>
+                    {this.renderSelectField()}
+                </div>
+                <div className={"col-3 col-3-fixed-width"}>
+                    {this.renderAddInput()}
+                </div>
+                <div className={"col-3 col-3-fixed-width"}>
+                    {this.renderAddButton()}
                 </div>
                 <FormErrorMessages trueFalse={this.props.isError} messages={this.props.errorMessages}/>
             </div>

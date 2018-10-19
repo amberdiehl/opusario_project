@@ -53,6 +53,7 @@
 			// Gutters.
 				&.gtr-uniform {
 					> * {
+						margin: .3em;
 						> :last-child {
 							margin-bottom: 0;
 						}

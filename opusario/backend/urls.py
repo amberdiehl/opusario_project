@@ -13,6 +13,8 @@ urlpatterns = [
     url(r'^functional-areas/(?P<pk>[0-9]+)$', FunctionalAreaDetail.as_view()),
     url(r'^industries$', IndustryList.as_view()),
     url(r'^industries/(?P<pk>[0-9]+)$', IndustryDetail.as_view()),
+    url(r'^roles$', RoleList.as_view()),
+    url(r'^roles/(?P<pk>[0-9]+)$', RoleDetail.as_view()),
     url(r'^states$', StateList.as_view()),
     url(r'^states/(?P<pk>[0-9]+)$', StateDetail.as_view()),
 ]

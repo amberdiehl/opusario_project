@@ -10,6 +10,7 @@ import industry from './single_selects/Industry';
 import myself from './myself';
 import role_instance from './RoleInstance';
 import role_description from './inputs/RoleDescription';
+import role_leadership from './checkbox_radios/RoleLeadership';
 import role_management from './checkbox_radios/RoleManagement';
 import role_name from './inputs/RoleName';
 import state_name from './single_selects/State';
@@ -27,6 +28,7 @@ const OpusarioReducers = combineReducers({
     myself,
     role_instance,
     role_description,
+    role_leadership,
     role_management,
     role_name,
     state_name,

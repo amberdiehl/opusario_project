@@ -5,12 +5,12 @@ import { getNamespace } from '../../helpers';
 const initialState = {
     ...base_reducer_state,
     namespace: getNamespace(),
-    componentId: 'ManagesPeople',
+    componentId: 'ExecutiveLeadership',
     items: [
-        {"label": "Has oversight of fellow team members?", "value": "yes"},
+        {"label": "Has executive leadership?", "value": "yes"},
     ],
  };
 
-export default function role_management(state=initialState, action) {
+export default function role_leadership(state=initialState, action) {
     return base_reducer(state, action);
 }

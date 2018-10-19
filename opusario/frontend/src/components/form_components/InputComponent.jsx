@@ -66,7 +66,7 @@ export default class InputComponent extends Component {
     }
     render() {
         return (
-            <div className={"row gtr-uniform"}>
+            <div className={"row gtr-0 gtr-uniform"}>
                 <FormFieldLabel componentId={this.props.componentId}/>
                 {this.renderInputByType()}
                 <FormErrorMessages trueFalse={this.props.isError} messages={this.props.errorMessages}/>

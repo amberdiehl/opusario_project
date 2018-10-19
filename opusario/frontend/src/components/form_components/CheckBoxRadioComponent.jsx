@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { getFormattedLabelText, getTextAsTitleCase } from '../../helpers';
 import FormFieldLabel from '../form_snippets/FormFieldLabel';
 import FormErrorMessages from '../form_snippets/FormErrorMessages';
 
@@ -38,7 +37,7 @@ export default class CheckBoxRadioComponent extends Component {
     }
     render() {
         return (
-                <div className={"row gtr-uniform"}>
+                <div className={"row gtr-0 gtr-uniform"}>
                     <FormFieldLabel componentId={this.props.componentId}/>
                     <div className={"col-6"}>
                         {this.props.items.map((item, index) => (

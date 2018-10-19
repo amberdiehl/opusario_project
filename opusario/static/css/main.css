@@ -219,8 +219,10 @@ pre {
   align-items: stretch; }
   .row > * {
     box-sizing: border-box; }
-  .row.gtr-uniform > * > :last-child {
-    margin-bottom: 0; }
+  .row.gtr-uniform > * {
+    margin: .3em; }
+    .row.gtr-uniform > * > :last-child {
+      margin-bottom: 0; }
   .row.aln-left {
     justify-content: flex-start; }
   .row.aln-center {
@@ -345,8 +347,10 @@ pre {
       align-items: stretch; }
       .row > * {
         box-sizing: border-box; }
-      .row.gtr-uniform > * > :last-child {
-        margin-bottom: 0; }
+      .row.gtr-uniform > * {
+        margin: .3em; }
+        .row.gtr-uniform > * > :last-child {
+          margin-bottom: 0; }
       .row.aln-left {
         justify-content: flex-start; }
       .row.aln-center {
@@ -471,8 +475,10 @@ pre {
       align-items: stretch; }
       .row > * {
         box-sizing: border-box; }
-      .row.gtr-uniform > * > :last-child {
-        margin-bottom: 0; }
+      .row.gtr-uniform > * {
+        margin: .3em; }
+        .row.gtr-uniform > * > :last-child {
+          margin-bottom: 0; }
       .row.aln-left {
         justify-content: flex-start; }
       .row.aln-center {
@@ -597,8 +603,10 @@ pre {
       align-items: stretch; }
       .row > * {
         box-sizing: border-box; }
-      .row.gtr-uniform > * > :last-child {
-        margin-bottom: 0; }
+      .row.gtr-uniform > * {
+        margin: .3em; }
+        .row.gtr-uniform > * > :last-child {
+          margin-bottom: 0; }
       .row.aln-left {
         justify-content: flex-start; }
       .row.aln-center {
@@ -723,8 +731,10 @@ pre {
       align-items: stretch; }
       .row > * {
         box-sizing: border-box; }
-      .row.gtr-uniform > * > :last-child {
-        margin-bottom: 0; }
+      .row.gtr-uniform > * {
+        margin: .3em; }
+        .row.gtr-uniform > * > :last-child {
+          margin-bottom: 0; }
       .row.aln-left {
         justify-content: flex-start; }
       .row.aln-center {
@@ -849,8 +859,10 @@ pre {
       align-items: stretch; }
       .row > * {
         box-sizing: border-box; }
-      .row.gtr-uniform > * > :last-child {
-        margin-bottom: 0; }
+      .row.gtr-uniform > * {
+        margin: .3em; }
+        .row.gtr-uniform > * > :last-child {
+          margin-bottom: 0; }
       .row.aln-left {
         justify-content: flex-start; }
       .row.aln-center {
@@ -1422,9 +1434,9 @@ button,
   display: inline-block;
   font-size: 0.8em;
   font-weight: 600;
-  height: 3.125em;
+  height: 2.8em;
   letter-spacing: 0.225em;
-  line-height: 3.125em;
+  line-height: 2.25em;
   max-width: 30em;
   padding: 0 2.75em;
   text-align: center;

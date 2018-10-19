@@ -9,15 +9,8 @@ import { getCompanyChildState } from '../selectors';
 
 const mapStateToProps = state => {
     return {
-        namespace: state.company_instance.namespace,
-        componentId: state.company_instance.componentId,
-        instanceId: state.company_instance.instanceId,
-        childState: getCompanyChildState(state),
-        errorMessages: state.company_instance.errorMessages,
-        isError: state.company_instance.isError,
-        isLoading: state.company_instance.isLoading,
-        flashSuccess: state.company_instance.flashSuccess,
-        apiRoute: state.company_instance.apiRoute
+        ...state.company_instance,
+        childState: getCompanyChildState(state)
     };
 };
 

@@ -9,15 +9,8 @@ import { getRoleChildState } from '../selectors';
 
 const mapStateToProps = state => {
     return {
-        namespace: state.role_instance.namespace,
-        componentId: state.role_instance.componentId,
-        instanceId: state.role_instance.instanceId,
-        childState: getRoleChildState(state),
-        errorMessages: state.role_instance.errorMessages,
-        isError: state.role_instance.isError,
-        isLoading: state.role_instance.isLoading,
-        flashSuccess: state.role_instance.flashSuccess,
-        apiRoute: state.role_instance.apiRoute
+        ...state.role_instance,
+        childState: getRoleChildState(state)
     };
 };
 
