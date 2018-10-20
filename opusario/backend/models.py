@@ -180,10 +180,6 @@ class Role(models.Model):
 
 
 class Skill(models.Model):
-    at_functional_area = models.ManyToManyField(
-        FunctionalArea,
-        help_text='Functional area this skill is associated with.'
-    )
     at_role = models.ManyToManyField(
         Role,
         help_text='Role this skill is associated with.'
@@ -208,10 +204,6 @@ class Skill(models.Model):
 
 
 class Tool(models.Model):
-    at_functional_area = models.ManyToManyField(
-        FunctionalArea,
-        help_text='Functional area this tool is associated with.'
-    )
     at_role = models.ManyToManyField(
         Role,
         help_text='Role this tool is associated with.'
