@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import FunctionalAreaContainer from '../containers/single_selects/FunctionalAreaContainer';
-import RoleDescriptionContainer from '../containers/inputs/RoleDescriptionContainer';
-import RoleLeadershipContainer from '../containers/checkbox_radios/RoleLeadershipContainer';
-import RoleManagementContainer from '../containers/checkbox_radios/RoleManagementContainer';
-import RoleNameContainer from '../containers/inputs/RoleNameContainer';
-import FlashSuccessIcon from './form_snippets/FlashSuccessIcon';
-import FormErrorMessages from './form_snippets/FormErrorMessages';
+import SkillNameContainer from '../../containers/inputs/SkillNameContainer';
+import SkillVersionContainer from '../../containers/inputs/SkillVersionContainer';
+import FlashSuccessIcon from '../form_snippets/FlashSuccessIcon';
+import FormErrorMessages from '../form_snippets/FormErrorMessages';
 
 
-export default class RoleInstanceComponent extends Component {
+export default class SkillInstanceComponent extends Component {
     constructor(props) {
         super(props);
         this.buttonOnClick = this.buttonOnClick.bind(this);
@@ -28,23 +25,23 @@ export default class RoleInstanceComponent extends Component {
             const apiRoute = (method === 'POST') ? this.props.apiRoute :
                 `${this.props.apiRoute}/${this.props.instanceId}`;
             const data = {
-                "at_functional_area": this.props.childState.functionalAreaSelectItem,
-                "name": this.props.childState.roleName,
-                "description": this.props.childState.roleDescription,
-                "management": (this.props.childState.roleManagement === 'yes'),
-                "leadership": (this.props.childState.roleLeadership === 'yes')
+                "name": this.props.childState.skillName,
+                "version": this.props.childState.skillVersion
             };
             this.props.actions.addOrUpdateItem(this.props.namespace, apiRoute, method, data);
         }
     }
     validateForm(){
         let errorMessages = [];
-        if (this.props.childState.functionalAreaSelectItem === '0') {
-            errorMessages.push('Add or select a functional area.');
+        if (this.props.childState.skillNameIsError) {
+            errorMessages.push('Skill name is not valid.')
+        } else {
+            if (this.props.childState.skillName.length === 0) {
+                errorMessages.push('Skill name is required.')
+            }
         }
-        if (this.props.childState.roleName.length === 0) {
-            errorMessages.push('Enter a name for this role; e.g. Software Engineer, Product Manager, Copy Writer, ' +
-                'Customer Service Associate.');
+        if (this.props.childState.skillVersionIsError) {
+            errorMessages.push('Skill version is not valid.')
         }
         this.props.actions.showError(this.props.namespace, (errorMessages.length !== 0), errorMessages);
         return (errorMessages.length === 0);
@@ -53,14 +50,11 @@ export default class RoleInstanceComponent extends Component {
         const buttonLabel = (this.props.instanceId === '') ? 'Add' : 'Update';
         return(
             <form>
-                <h2>Role</h2>
+                <h2>Skill</h2>
                 <FormErrorMessages trueFalse={this.props.isError} messages={this.props.errorMessages}/>
                 <div className={"form-field-group"}>
-                    <FunctionalAreaContainer/>
-                    <RoleNameContainer/>
-                    <RoleDescriptionContainer/>
-                    <RoleManagementContainer/>
-                    <RoleLeadershipContainer/>
+                    <SkillNameContainer/>
+                    <SkillVersionContainer/>
                     <br/><br/>
                     <button className={"button primary small"} onClick={this.buttonOnClick}>{buttonLabel}</button>
                     <FlashSuccessIcon trueFalse={this.props.flashSuccess} />
@@ -70,7 +64,7 @@ export default class RoleInstanceComponent extends Component {
     }
 }
 
-RoleInstanceComponent.propTypes = {
+SkillInstanceComponent.propTypes = {
     namespace: PropTypes.string.isRequired,
     componentId: PropTypes.string.isRequired,
     instanceId: PropTypes.string.isRequired,

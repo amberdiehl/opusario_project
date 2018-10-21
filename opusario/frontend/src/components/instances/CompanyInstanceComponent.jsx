@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import CityContainer from '../containers/single_selects/CityContainer';
-import CompanyNameContainer from '../containers/inputs/CompanyNameContainer';
-import CompanySizeContainer from '../containers/inputs/CompanySizeContainer';
-import CompanyWebsiteContainer from '../containers/inputs/CompanyWebsiteContainer';
-import CountryContainer from '../containers/single_selects/CountryContainer';
-import IndustryContainer from '../containers/single_selects/IndustryContainer';
-import StateContainer from '../containers/single_selects/StateContainer';
-import FlashSuccessIcon from './form_snippets/FlashSuccessIcon';
-import FormErrorMessages from './form_snippets/FormErrorMessages';
+import CityContainer from '../../containers/single_selects/CityContainer';
+import CompanyNameContainer from '../../containers/inputs/CompanyNameContainer';
+import CompanySizeContainer from '../../containers/inputs/CompanySizeContainer';
+import CompanyWebsiteContainer from '../../containers/inputs/CompanyWebsiteContainer';
+import CountryContainer from '../../containers/single_selects/CountryContainer';
+import IndustryContainer from '../../containers/single_selects/IndustryContainer';
+import StateContainer from '../../containers/single_selects/StateContainer';
+import FlashSuccessIcon from '../form_snippets/FlashSuccessIcon';
+import FormErrorMessages from '../form_snippets/FormErrorMessages';
 
 
 export default class CompanyInstanceComponent extends Component {

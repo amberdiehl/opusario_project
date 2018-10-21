@@ -1,5 +1,5 @@
-import { getNamespace } from '../helpers';
-import {FLASH_SUCCESS, SET_VALUE, SHOW_ERROR} from "../constants";
+import { getNamespace } from '../../helpers';
+import {FLASH_SUCCESS, SET_VALUE, SHOW_ERROR} from "../../constants";
 
 export const initialState = {
     namespace: getNamespace(),

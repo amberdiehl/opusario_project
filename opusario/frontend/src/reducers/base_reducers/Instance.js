@@ -1,19 +1,22 @@
-import { getNamespace } from '../helpers';
-import {FLASH_SUCCESS, SET_VALUE, SHOW_ERROR} from "../constants";
+import {FLASH_SUCCESS, SET_VALUE, SHOW_ERROR} from "../../constants";
 
-export const initialState = {
-    namespace: getNamespace(),
-    componentId: 'CompanyInformation',
+/*
+Defines STATE for the model instance components and initial defaults. Any key with a value of 'DEFINE'
+must be initialized in the model reducer. Remaining items can also be modified or left as initialized here.
+*/
+export const base_reducer_state = {
+    namespace: 'DEFINE',
+    componentId: 'DEFINE',
     instanceId: '',
     childState: {},
     errorMessages: [],
     isError: false,
     isLoading: false,
     flashSuccess: false,
-    apiRoute: '/api/companies',
+    apiRoute: 'DEFINE',
 };
 
-export default function company_instance(state=initialState, action) {
+export function base_reducer(state, action) {
     switch (action.type) {
         case `${state.namespace}/${SET_VALUE}`:
             return {...state,

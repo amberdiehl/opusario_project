@@ -106,6 +106,27 @@ class RoleSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class SkillSerializer(serializers.ModelSerializer):
+
+    def validate(self, data):
+        error_messages = []
+
+        if not re.match("^[a-zA-Z0-9 ]*$", data['name']):
+            error_messages.append('Skill name may only contain letters, numbers and spaces.')
+
+        if not re.match("^[a-zA-Z0-9. ]*$", data['version']):
+            error_messages.append('Skill version may only contain letters, numbers, periods, and spaces.')
+
+        if error_messages:
+            raise serializers.ValidationError(error_messages)
+
+        return data
+
+    class Meta:
+        model = Skill
+        fields = '__all__'
+
+
 class StateSerializer(serializers.ModelSerializer):
 
     def validate(self, data):

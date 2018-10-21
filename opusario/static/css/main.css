@@ -2495,4 +2495,20 @@ body.is-mobile.landing #footer {
   font-size: 25px;
   color: #98CA32; }
 
+.icon-add {
+  font-size: 15px;
+  color: #98CA32;
+  vertical-align: middle; }
+
+.button-many-select {
+  font-size: 10px;
+  color: #091D34 !important;
+  text-transform: lowercase;
+  text-align: center;
+  padding: 0 .5em 0 .5em;
+  margin-right: .75em;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px; }
+
 /*# sourceMappingURL=main.css.map */

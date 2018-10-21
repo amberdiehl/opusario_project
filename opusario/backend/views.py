@@ -62,13 +62,29 @@ class IndustryDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class RoleList(generics.ListCreateAPIView):
-    queryset = Role.objects.all()
     serializer_class = RoleSerializer
+
+    def get_queryset(self):
+        queryset = Role.objects.all()
+        functional_area = self.request.query_params.get('filter', None)
+        if functional_area:
+            queryset = queryset.filter(at_functional_area=functional_area)
+        return queryset
 
 
 class RoleDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Role.objects.all()
     serializer_class = RoleSerializer
+
+
+class SkillList(generics.ListCreateAPIView):
+    queryset = Skill.objects.all()
+    serializer_class = SkillSerializer
+
+
+class SkillDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Skill.objects.all()
+    serializer_class = SkillSerializer
 
 
 class StateList(generics.ListCreateAPIView):

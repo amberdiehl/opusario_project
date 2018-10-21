@@ -23,7 +23,12 @@ admin.site.register(Industry)
 
 @admin.register(Role)
 class RoleAdmin(admin.ModelAdmin):
-    list_display = ('id', 'at_functional_area', 'name', 'management', 'leadership', )
+    list_display = ('id', 'functional_area', 'name', 'management', 'leadership', )
+
+
+@admin.register(Skill)
+class SkillAdmin(admin.ModelAdmin):
+    list_display = ('id', 'get_roles', 'name', 'version')
 
 
 @admin.register(State)

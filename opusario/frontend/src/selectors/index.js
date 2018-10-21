@@ -21,6 +21,12 @@ const getRoleLeadership = (state) => state.role_leadership.valueChecked;
 const getRoleManagement = (state) => state.role_management.valueChecked;
 const getRoleName = (state) => state.role_name.inputValue;
 const getRoleNameIsError = (state) => state.role_name.isError;
+// const getRoleSelectItem = (state) => state.role_select.selectItem;
+// const getRoleSelectNamespace = (state) => state.role_select.namespace;
+const getSkillName = (state) => state.skill_name.inputValue;
+const getSkillNameIsError = (state) => state.skill_name.isError;
+const getSkillVersion = (state) => state.skill_version.inputValue;
+const getSkillVersionIsError = (state) => state.skill_version.isError;
 const getStateSelectItem = (state) => state.state_name.selectItem;
 const getStateNamespace = (state) => state.state_name.namespace;
 
@@ -68,6 +74,18 @@ export const getRoleChildState = createSelector(
             roleDescriptionIsError,
             roleLeadership,
             roleManagement
+        });
+    }
+);
+
+export const getSkillChildState = createSelector(
+    [getSkillName, getSkillNameIsError, getSkillVersion, getSkillVersionIsError],
+    (skillName, skillNameIsError, skillVersion, skillVersionIsError) => {
+        return ({
+            skillName,
+            skillNameIsError,
+            skillVersion,
+            skillVersionIsError
         });
     }
 );

@@ -88,3 +88,7 @@
 @function _size($keys...) {
 	@return val($size, $keys...);
 }
+
+@function _colors($keys...) {
+	@return val($colors, $keys...);
+}

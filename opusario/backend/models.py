@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import ValidationError
 
 INVOLVEMENT_LEVEL_CHOICES = (
     ('core', 'Core project team member'),
@@ -148,8 +149,54 @@ class FunctionalArea(models.Model):
         return self.name
 
 
+class Skill(models.Model):
+    name = models.CharField(
+        max_length=100,
+        help_text='Name of skill. E.g. Python, Javascript, SEO, Requirements Analysis.'
+    )
+    version = models.CharField(
+        max_length=25,
+        blank=True,
+        null=True,
+        help_text='Version, if applicable. E.g. Python 3.4.'
+    )
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('name', 'version')
+        ordering = ['name', 'version', ]
+
+    def __str__(self):
+        return self.name
+
+    def get_roles(self):
+        qs = Role.objects.filter(skills=self.pk)
+        return "\n".join([r.name for r in qs])
+
+
+class Tool(models.Model):
+    name = models.CharField(
+        max_length=100,
+        help_text='Name of tool. E.g. PyCharm, GIMP, Adobe Premiere Pro, MS Office.'
+    )
+    version = models.CharField(
+        max_length=25,
+        blank=True,
+        null=True,
+        help_text='Version, if applicable. E.g. V19.1.6, or Community versus Professional.'
+    )
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('name', 'version')
+        ordering = ['name', ]
+
+    def __str__(self):
+        return self.name
+
+
 class Role(models.Model):
-    at_functional_area = models.ForeignKey(
+    functional_area = models.ForeignKey(
         FunctionalArea,
         models.SET_NULL,
         null=True,
@@ -170,53 +217,13 @@ class Role(models.Model):
     leadership = models.BooleanField(
         help_text='Has executive leadership.'
     )
-    created = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['name', ]
-
-    def __str__(self):
-        return self.name
-
-
-class Skill(models.Model):
-    at_role = models.ManyToManyField(
-        Role,
-        help_text='Role this skill is associated with.'
+    skills = models.ManyToManyField(
+        Skill,
+        help_text='Skills associated with this role.'
     )
-    name = models.CharField(
-        max_length=100,
-        help_text='Name of skill. E.g. Python, Javascript, SEO, Requirements Analysis.'
-    )
-    version = models.CharField(
-        max_length=25,
-        blank=True,
-        null=True,
-        help_text='Version, if applicable. E.g. Python 3.4.'
-    )
-    created = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['name', ]
-
-    def __str__(self):
-        return self.name
-
-
-class Tool(models.Model):
-    at_role = models.ManyToManyField(
-        Role,
-        help_text='Role this tool is associated with.'
-    )
-    name = models.CharField(
-        max_length=100,
-        help_text='Name of tool. E.g. PyCharm, GIMP, Adobe Premiere Pro, MS Office.'
-    )
-    version = models.CharField(
-        max_length=25,
-        blank=True,
-        null=True,
-        help_text='Version, if applicable. E.g. V19.1.6, or Community versus Professional.'
+    tools = models.ManyToManyField(
+        Tool,
+        help_text='Tools associated with this role.'
     )
     created = models.DateTimeField(auto_now_add=True)
 

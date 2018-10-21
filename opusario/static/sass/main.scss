@@ -1966,5 +1966,21 @@
 }
 .icon-large {
 	font-size: 25px;
-	color: #98CA32;
+	color: _colors(success-notification);
+}
+.icon-add {
+	font-size: 15px;
+	color: _colors(success-notification);
+	vertical-align: middle;
+}
+.button-many-select {
+	font-size: 10px;
+	color: _colors(many-select-item) !important;
+	text-transform: lowercase;
+	text-align: center;
+	padding: 0 .5em 0 .5em;
+	margin-right: .75em;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
 }

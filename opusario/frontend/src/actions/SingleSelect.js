@@ -1,6 +1,7 @@
 import { csrfHeader, getFlattenedErrors } from '../helpers';
-import {setLoading, showError} from './generic';
-import {FETCH_ITEMS, ADD_ITEM, SET_VALUE, SET_FOREIGN_KEY_VALUE, server500ErrorMessage} from '../constants';
+import { setLoading, showError } from './generic';
+import { FETCH_ITEMS, ADD_ITEM, SET_VALUE, SET_FOREIGN_KEY_VALUE, ALLOW_ADD,
+    server500ErrorMessage } from '../constants';
 
 
 export const fetchItems = (namespace, apiRoute) => {
@@ -70,6 +71,13 @@ export const setSelectValue = (namespace, newValue) => {
 export const setForeignKeyValue = (namespace, newValue) => {
     return {
         type: `${namespace}/${SET_FOREIGN_KEY_VALUE}`,
+        newValue
+    };
+};
+
+export const setAllowAdd = (namespace, newValue) => {
+    return {
+        type: `${namespace}/${ALLOW_ADD}`,
         newValue
     };
 };

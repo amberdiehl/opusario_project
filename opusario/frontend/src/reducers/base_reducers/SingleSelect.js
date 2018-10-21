@@ -1,7 +1,14 @@
-import { FETCH_ITEMS, ADD_ITEM, SET_VALUE, SET_FOREIGN_KEY_VALUE, SHOW_LOADING, SHOW_ERROR } from "../../constants";
+import { FETCH_ITEMS, ADD_ITEM, SET_VALUE, SET_FOREIGN_KEY_VALUE, SHOW_LOADING, SHOW_ERROR,
+    ALLOW_ADD } from "../../constants";
 
-// Defines STATE for the SingleSelect component and initial defaults. Any key with a value of 'DEFINE'
-// must be INITIALIZED in the model reducer. Remaining items can also be modified or left as initialized here.
+/*
+Defines STATE for the SingleSelect component and initial defaults. Any key with a value of 'DEFINE'
+must be initialized in the model reducer. Remaining items can also be modified or left as initialized here.
+
+Values for addMethod are 'inline' and 'modal'. 'inline' is used for simple models such as State where nothing else
+but the name of the state is needed. 'modal' is used to open up an instance of the model so that all items can be
+entered; an example of this is Company.
+*/
 export const base_reducer_single_select_state = {
     namespace: 'DEFINE',
     componentId: 'DEFINE',
@@ -9,6 +16,7 @@ export const base_reducer_single_select_state = {
     defaultValue: 'DEFINE',
     selectItem: '0',
     allowAdd: true,
+    addMethod: 'inline',
     validationRegEx: /^[a-zA-Z ]*$/,
     regExDescription: 'letters and spaces.',
     hasForeignKey: false,
@@ -28,6 +36,8 @@ export function base_reducer_single_select(state, action) {
             return {...state, "items": action.items};
         case `${state.namespace}/${ADD_ITEM}`:
             return {...state, "selectItem": action.itemValue};
+        case `${state.namespace}/${ALLOW_ADD}`:
+            return {...state, "allowAdd": action.newValue};
         case `${state.namespace}/${SET_VALUE}`:
             return {...state, "selectItem": action.newValue};
         case `${state.namespace}/${SET_FOREIGN_KEY_VALUE}`:
