@@ -53,7 +53,7 @@ export default class CheckBoxRadioComponent extends Component {
 CheckBoxRadioComponent.propTypes = {
     namespace: PropTypes.string.isRequired,
     componentId: PropTypes.string.isRequired,
-    inputType: PropTypes.oneOf('checkbox', 'radio'),
+    inputType: PropTypes.string.isRequired,  // should only be 'checkbox' or 'radio'
     items: PropTypes.array.isRequired,
     valueChecked: PropTypes.string.isRequired,
     errorMessages: PropTypes.array.isRequired,

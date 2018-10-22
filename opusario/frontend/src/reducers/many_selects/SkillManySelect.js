@@ -6,7 +6,10 @@ const initialState = {
     ...base_reducer_state,
     namespace: getNamespace(),
     componentId: 'SelectSkills',
-    m2mModel: 'Role',
+    items: [
+        {id: 0, name: "name value here", version: "version value here", "roles": []}
+    ],
+    m2mModelField: 'roles',
     apiRoute: '/api/skills',
 };
 

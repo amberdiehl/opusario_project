@@ -1963,14 +1963,19 @@
 }
 .success-icon {
 	margin-left: 10px;
+	color: _colors(success-notification);
 }
 .icon-large {
 	font-size: 25px;
-	color: _colors(success-notification);
 }
-.icon-add {
+.icon-plus {
 	font-size: 15px;
-	color: _colors(success-notification);
+	color: _colors(brand-green);
+	vertical-align: middle;
+}
+.icon-minus {
+	font-size: 15px;
+	color: _colors(brand-red);
 	vertical-align: middle;
 }
 .button-many-select {
@@ -1983,4 +1988,26 @@
 	-webkit-border-radius: 15px;
 	-moz-border-radius: 15px;
 	border-radius: 15px;
+}
+.button-many-select-alphabet {
+	font-size: .6em;
+	color: _colors(many-select-item) !important;
+	text-transform: none;
+	text-align: center;
+	height: 2.25em;
+	width: 2.25em;
+  	display: inline-flex;
+  	flex-direction: column;
+  	justify-content: center;
+  	align-items: center;
+	padding: 0 0 0 0;
+	margin-right: .4em;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+
+	&:hover {
+		color: whitesmoke !important;
+		background-color: _colors(brand-black) !important;
+	}
 }

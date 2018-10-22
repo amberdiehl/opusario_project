@@ -43,9 +43,8 @@ export default class InputComponent extends Component {
                         <textarea id={this.props.componentId} cols={this.props.inputSize}
                             placeholder={getFormattedLabelText(this.props.componentId)}
                             readOnly={this.props.isDisabled}
-                            onChange={this.handleOnChange}>
-                            {this.state.currentValue}
-                        </textarea>
+                            onChange={this.handleOnChange}
+                            value={this.state.currentValue} />
                     </div>
                 );
             }

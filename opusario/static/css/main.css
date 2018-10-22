@@ -2489,15 +2489,20 @@ body.is-mobile.landing #footer {
   flex: 1 0 200px !important; }
 
 .success-icon {
-  margin-left: 10px; }
-
-.icon-large {
-  font-size: 25px;
+  margin-left: 10px;
   color: #98CA32; }
 
-.icon-add {
+.icon-large {
+  font-size: 25px; }
+
+.icon-plus {
   font-size: 15px;
   color: #98CA32;
+  vertical-align: middle; }
+
+.icon-minus {
+  font-size: 15px;
+  color: #FD3A0F;
   vertical-align: middle; }
 
 .button-many-select {
@@ -2510,5 +2515,25 @@ body.is-mobile.landing #footer {
   -webkit-border-radius: 15px;
   -moz-border-radius: 15px;
   border-radius: 15px; }
+
+.button-many-select-alphabet {
+  font-size: .6em;
+  color: #091D34 !important;
+  text-transform: none;
+  text-align: center;
+  height: 2.25em;
+  width: 2.25em;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 0 0 0;
+  margin-right: .4em;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%; }
+  .button-many-select-alphabet:hover {
+    color: whitesmoke !important;
+    background-color: #091D34 !important; }
 
 /*# sourceMappingURL=main.css.map */

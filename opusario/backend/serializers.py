@@ -108,6 +108,8 @@ class RoleSerializer(serializers.ModelSerializer):
 
 class SkillSerializer(serializers.ModelSerializer):
 
+    roles = serializers.SerializerMethodField()
+
     def validate(self, data):
         error_messages = []
 
@@ -125,6 +127,9 @@ class SkillSerializer(serializers.ModelSerializer):
     class Meta:
         model = Skill
         fields = '__all__'
+
+    def get_roles(self, object):
+        return object.get_roles()
 
 
 class StateSerializer(serializers.ModelSerializer):

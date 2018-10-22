@@ -78,8 +78,14 @@ class RoleDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class SkillList(generics.ListCreateAPIView):
-    queryset = Skill.objects.all()
     serializer_class = SkillSerializer
+
+    def get_queryset(self):
+        queryset = Skill.objects.all()
+        select_by = self.request.query_params.get('filter', None)
+        if select_by:
+            queryset = queryset.filter(name__istartswith=select_by)
+        return queryset
 
 
 class SkillDetail(generics.RetrieveUpdateDestroyAPIView):
