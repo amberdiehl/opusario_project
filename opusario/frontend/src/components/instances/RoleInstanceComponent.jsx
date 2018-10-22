@@ -18,9 +18,16 @@ export default class RoleInstanceComponent extends Component {
         this.validateForm = this.validateForm.bind(this);
     }
     componentDidMount() {
-
+        this.props.childActions.setM2MForeignKeyValue(
+            this.props.childState.skillNamespace,
+            this.props.instanceId)
     }
     componentWillUpdate(nextProps, nextState, nextContext) {
+        if (nextProps.instanceId !== this.props.instanceId) {
+            this.props.childActions.setM2MForeignKeyValue(
+                this.props.childState.skillNamespace,
+                nextProps.instanceId)
+        }
     }
     buttonOnClick(e) {
         e.preventDefault();
@@ -30,11 +37,13 @@ export default class RoleInstanceComponent extends Component {
             const apiRoute = (method === 'POST') ? this.props.apiRoute :
                 `${this.props.apiRoute}/${this.props.instanceId}`;
             const data = {
-                "at_functional_area": this.props.childState.functionalAreaSelectItem,
+                "functional_area": this.props.childState.functionalAreaSelectItem,
                 "name": this.props.childState.roleName,
                 "description": this.props.childState.roleDescription,
                 "management": (this.props.childState.roleManagement === 'yes'),
-                "leadership": (this.props.childState.roleLeadership === 'yes')
+                "leadership": (this.props.childState.roleLeadership === 'yes'),
+                "skills": this.props.childState.skillSelectItems,
+                "tools": [1]
             };
             this.props.actions.addOrUpdateItem(this.props.namespace, apiRoute, method, data);
         }

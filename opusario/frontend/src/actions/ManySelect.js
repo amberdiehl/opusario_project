@@ -1,9 +1,10 @@
 import { csrfHeader } from '../helpers';
 import { setLoading, showError } from './generic';
-import {FETCH_ITEMS, SET_FILTER, ADD_ITEM, REMOVE_ITEM, server500ErrorMessage} from '../constants';
+import {FETCH_ITEMS, SET_FILTER, ADD_ITEM, REMOVE_ITEM, SET_M2M_FOREIGN_KEY_VALUE,
+    server500ErrorMessage} from '../constants';
 
 
-export const fetchItems = (namespace, apiRoute) => {
+export const fetchItems = (namespace, apiRoute, initializeSelectItems=false) => {
     return (dispatch) => {
 
         dispatch(setLoading(namespace, true));
@@ -13,7 +14,8 @@ export const fetchItems = (namespace, apiRoute) => {
             .then(items => {
                 return dispatch({
                     type: `${namespace}/${FETCH_ITEMS}`,
-                    items
+                    items,
+                    initializeSelectItems
                 });
             })
             .then( () => {
@@ -43,5 +45,12 @@ export const removeSelectItem = (namespace, itemValue) => {
     return {
         type: `${namespace}/${REMOVE_ITEM}`,
         itemValue
+    };
+};
+
+export const setM2MForeignKeyValue = (namespace, newValue) => {
+    return {
+        type: `${namespace}/${SET_M2M_FOREIGN_KEY_VALUE}`,
+        newValue
     };
 };

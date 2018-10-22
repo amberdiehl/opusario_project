@@ -28,9 +28,14 @@ class RoleAdmin(admin.ModelAdmin):
 
 @admin.register(Skill)
 class SkillAdmin(admin.ModelAdmin):
-    list_display = ('id', 'get_roles', 'name', 'version')
+    list_display = ('id', 'get_roles', 'name', 'version', )
 
 
 @admin.register(State)
 class StateAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'abbreviation', 'country', )
+
+
+@admin.register(Tool)
+class ToolAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'version', )

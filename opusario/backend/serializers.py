@@ -87,7 +87,7 @@ class RoleSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         error_messages = []
-        if data['at_functional_area'] == '0':
+        if data['functional_area'] == '0':
             error_messages.append('Add or select a functional area.')
 
         if not re.match("^[a-zA-Z0-9 ]*$", data['name']):

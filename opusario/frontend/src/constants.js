@@ -8,6 +8,7 @@ export const FLASH_SUCCESS = 'FLASH_SUCCESS';
 export const REMOVE_ITEM = 'REMOVE_ITEM';
 export const SET_FILTER = 'SET_FILTER';
 export const SET_FOREIGN_KEY_VALUE = 'SET_FOREIGN_KEY_VALUE';
+export const SET_M2M_FOREIGN_KEY_VALUE = 'SET_M2M_FOREIGN_KEY_VALUE';
 export const SET_VALUE = 'SET_VALUE';
 export const SHOW_LOADING = 'SHOW_LOADING';
 export const SHOW_ERROR = 'SHOW_ERROR';

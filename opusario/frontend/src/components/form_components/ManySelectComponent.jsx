@@ -19,7 +19,7 @@ export default class ManySelectComponent extends Component {
         if (this.props.filter) {
             apiRoute = `${apiRoute}?filter=${this.props.filter}`;
         }
-        this.props.actions.fetchItems(this.props.namespace, apiRoute);
+        this.props.actions.fetchItems(this.props.namespace, apiRoute, true);
     }
     componentWillUpdate(nextProps, nextState, nextContext) {
         if (nextProps.filter !== this.props.filter) {

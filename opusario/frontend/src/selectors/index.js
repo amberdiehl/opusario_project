@@ -25,6 +25,8 @@ const getRoleNameIsError = (state) => state.role_name.isError;
 // const getRoleSelectNamespace = (state) => state.role_select.namespace;
 const getSkillName = (state) => state.skill_name.inputValue;
 const getSkillNameIsError = (state) => state.skill_name.isError;
+const getSkillNamespace = (state) => state.skill_name.namespace;
+const getSkillSelectItems = (state) => state.skill_select.selectItems;
 const getSkillVersion = (state) => state.skill_version.inputValue;
 const getSkillVersionIsError = (state) => state.skill_version.isError;
 const getStateSelectItem = (state) => state.state_name.selectItem;
@@ -62,9 +64,11 @@ export const getCompanyChildState = createSelector(
 
 export const getRoleChildState = createSelector(
     [ getFunctionalAreaSelectItem, getFunctionalAreaNamespace, getRoleName, getRoleNameIsError,
-    getRoleDescription, getRoleDescriptionIsError, getRoleLeadership, getRoleManagement],
+    getRoleDescription, getRoleDescriptionIsError, getRoleLeadership, getRoleManagement,
+    getSkillNamespace, getSkillSelectItems],
     (functionalAreaSelectItem, functionalAreaNamespace, roleName, roleNameIsError,
-     roleDescription, roleDescriptionIsError, roleLeadership, roleManagement) => {
+     roleDescription, roleDescriptionIsError, roleLeadership, roleManagement,
+     skillNamespace, skillSelectItems) => {
         return ({
             functionalAreaSelectItem,
             functionalAreaNamespace,
@@ -73,7 +77,9 @@ export const getRoleChildState = createSelector(
             roleDescription,
             roleDescriptionIsError,
             roleLeadership,
-            roleManagement
+            roleManagement,
+            skillNamespace,
+            skillSelectItems
         });
     }
 );

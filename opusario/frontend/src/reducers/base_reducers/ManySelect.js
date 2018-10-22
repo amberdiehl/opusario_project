@@ -1,4 +1,5 @@
-import { FETCH_ITEMS, SET_FILTER, ADD_ITEM, REMOVE_ITEM, SHOW_LOADING, SHOW_ERROR } from "../../constants";
+import { FETCH_ITEMS, SET_FILTER, ADD_ITEM, REMOVE_ITEM, SET_M2M_FOREIGN_KEY_VALUE,
+    SHOW_LOADING, SHOW_ERROR } from "../../constants";
 
 /*
 Defines STATE for the ManySelect component and initial defaults. Any key with a value of 'DEFINE'
@@ -7,7 +8,7 @@ must be initialized in the model reducer. Remaining items can also be modified o
 A placeholder item must be defined for ITEMS with the correct keys for the given model or component will fail
 to load. For example, the following is defined for mutli-selecting Skills in association with a Role:
 
-items: [ { "id": 0, "name": "placeholder", "version": "placeholder", "roles": [] }, ],
+items: [ { id: 0, name: "placeholder", version: "placeholder", roles: [] }, ],
 m2mModelField: "roles",
 
 In this example, item.roles is an array of Role pks that have the given item (skill) as a m2m foreign key. The
@@ -15,10 +16,11 @@ value for the m2mModelField key must match the key within items. The m2mInstance
 specific instance of Role has this given item; i.e. if m2mInstanceId is found in item.roles, then the Role has
 this skill (item).
 
-Each time items (skills) are fetched, the m2m relationship is processed. The pk for each item where m2mInstanceId
-is found in item.roles is placed in selectedItems. From there, if a user adds or removes an item
-(skill), the pk is simply added or removed from the selectItems using ADD_ITEM and REMOVE_ITEM. When Role is saved
-the current value of selectItems is used to update the m2m relationship.
+Each time items (skills) are fetched, the m2m relationship is processed. However, only when the component is first
+loaded are the values returned from the end point used to initialize selectItems with the id for each item where
+m2mInstanceId is found in item.roles. From there, if a user adds or removes an item (skill), the pk is simply
+added or removed from the selectItems using ADD_ITEM and REMOVE_ITEM. When Role is saved the current value of
+selectItems is used to update the m2m relationship.
 */
 export const base_reducer_state = {
     namespace: 'DEFINE',
@@ -40,15 +42,16 @@ export const base_reducer_state = {
 export function base_reducer(state, action) {
     switch (action.type) {
         case `${state.namespace}/${FETCH_ITEMS}`:
-            let preSelected = [];
-            for (let i = 0; i < action.items.length; i++) {
-                const item = action.items[i];
-                let foundKey = item[state.m2mModelField].indexOf(state.m2mInstanceId);
-                if (foundKey !== -1) { preSelected.push(item.id) }
+            let alreadySelected = state.selectItems.slice(0);
+            if (action.initializeSelectItems) {
+                for (let i = 0; i < action.items.length; i++) {
+                    let foundKey = action.items[i][state.m2mModelField].indexOf(state.m2mInstanceId);
+                    if (foundKey !== -1) { alreadySelected.push(action.items[i].id) }
+                }
             }
             return {...state,
                 "items": action.items,
-                "selectItems": preSelected
+                "selectItems": alreadySelected
             };
         case `${state.namespace}/${ADD_ITEM}`:
             let addedToPreSelected = state.selectItems.slice(0);
@@ -61,6 +64,9 @@ export function base_reducer(state, action) {
             if (index !== -1) {removedFromPreSelected.splice(index, 1);}
             return {...state,
                 "selectItems": removedFromPreSelected};
+        case `${state.namespace}/${SET_M2M_FOREIGN_KEY_VALUE}`:
+            return {...state,
+                "m2mInstanceId": action.newValue};
         case `${state.namespace}/${SET_FILTER}`:
             return {...state,
                 "filter": action.newValue};
