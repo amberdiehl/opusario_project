@@ -197,6 +197,13 @@ class Tool(models.Model):
     def __str__(self):
         return self.name
 
+    def get_roles(self):
+        qs = Role.objects.filter(tools=self.pk)
+        if len(qs):
+            return "\n".join([r.name for r in qs])
+        else:
+            return []
+
 
 class Role(models.Model):
     functional_area = models.ForeignKey(

@@ -38,7 +38,7 @@ export default class CompanyInstanceComponent extends Component {
         e.preventDefault();
         let isValid = this.validateForm();
         if (isValid) {
-            const method = (this.props.instanceId === '') ? 'POST' : 'PUT';
+            const method = (this.props.instanceId === 0) ? 'POST' : 'PUT';
             const apiRoute = (method === 'POST') ? this.props.apiRoute :
                 `${this.props.apiRoute}/${this.props.instanceId}`;
             const data = {
@@ -78,7 +78,7 @@ export default class CompanyInstanceComponent extends Component {
         return (errorMessages.length === 0);
     }
     render() {
-        const buttonLabel = (this.props.instanceId === '') ? 'Add' : 'Update';
+        const buttonLabel = (this.props.instanceId === 0) ? 'Add' : 'Update';
         return(
             <form>
                 <h2>Company Information</h2>

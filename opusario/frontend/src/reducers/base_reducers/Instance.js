@@ -7,7 +7,7 @@ must be initialized in the model reducer. Remaining items can also be modified o
 export const base_reducer_state = {
     namespace: 'DEFINE',
     componentId: 'DEFINE',
-    instanceId: '',
+    instanceId: 0,
     childState: {},
     errorMessages: [],
     isError: false,
@@ -20,7 +20,7 @@ export function base_reducer(state, action) {
     switch (action.type) {
         case `${state.namespace}/${SET_VALUE}`:
             return {...state,
-                "instanceId": action.itemValue};
+                "instanceId": parseInt(action.itemValue, 10)};
         case `${state.namespace}/${FLASH_SUCCESS}`:
             return {...state,
                 "flashSuccess": action.trueFalse};

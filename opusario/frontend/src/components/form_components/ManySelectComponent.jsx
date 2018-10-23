@@ -22,6 +22,9 @@ export default class ManySelectComponent extends Component {
         this.props.actions.fetchItems(this.props.namespace, apiRoute, true);
     }
     componentWillUpdate(nextProps, nextState, nextContext) {
+        if (nextProps.m2mInstanceId !== this.props.m2mInstanceId) {
+            this.props.actions.fetchItems(this.props.namespace, this.props.apiRoute, true);
+        }
         if (nextProps.filter !== this.props.filter) {
             this.props.actions.fetchItems(
                 this.props.namespace,

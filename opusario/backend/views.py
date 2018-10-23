@@ -117,3 +117,19 @@ class StateList(generics.ListCreateAPIView):
 class StateDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = State.objects.all()
     serializer_class = StateSerializer
+
+
+class ToolList(generics.ListCreateAPIView):
+    serializer_class = ToolSerializer
+
+    def get_queryset(self):
+        queryset = Tool.objects.all()
+        select_by = self.request.query_params.get('filter', None)
+        if select_by:
+            queryset = queryset.filter(name__istartswith=select_by)
+        return queryset
+
+
+class ToolDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Tool.objects.all()
+    serializer_class = ToolSerializer

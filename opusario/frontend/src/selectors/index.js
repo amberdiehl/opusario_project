@@ -25,12 +25,14 @@ const getRoleNameIsError = (state) => state.role_name.isError;
 // const getRoleSelectNamespace = (state) => state.role_select.namespace;
 const getSkillName = (state) => state.skill_name.inputValue;
 const getSkillNameIsError = (state) => state.skill_name.isError;
-const getSkillNamespace = (state) => state.skill_name.namespace;
 const getSkillSelectItems = (state) => state.skill_select.selectItems;
+const getSkillSelectNamespace = (state) => state.skill_select.namespace;
 const getSkillVersion = (state) => state.skill_version.inputValue;
 const getSkillVersionIsError = (state) => state.skill_version.isError;
 const getStateSelectItem = (state) => state.state_name.selectItem;
 const getStateNamespace = (state) => state.state_name.namespace;
+const getToolSelectItems = (state) => state.tool_select.selectItems;
+const getToolSelectNamespace = (state) => state.tool_select.namespace;
 
 // reselect functions
 export const getCompanyChildState = createSelector(
@@ -65,10 +67,10 @@ export const getCompanyChildState = createSelector(
 export const getRoleChildState = createSelector(
     [ getFunctionalAreaSelectItem, getFunctionalAreaNamespace, getRoleName, getRoleNameIsError,
     getRoleDescription, getRoleDescriptionIsError, getRoleLeadership, getRoleManagement,
-    getSkillNamespace, getSkillSelectItems],
+    getSkillSelectNamespace, getSkillSelectItems, getToolSelectNamespace, getToolSelectItems],
     (functionalAreaSelectItem, functionalAreaNamespace, roleName, roleNameIsError,
      roleDescription, roleDescriptionIsError, roleLeadership, roleManagement,
-     skillNamespace, skillSelectItems) => {
+     skillNamespace, skillSelectItems, toolNamespace, toolSelectItems) => {
         return ({
             functionalAreaSelectItem,
             functionalAreaNamespace,
@@ -79,7 +81,9 @@ export const getRoleChildState = createSelector(
             roleLeadership,
             roleManagement,
             skillNamespace,
-            skillSelectItems
+            skillSelectItems,
+            toolNamespace,
+            toolSelectItems
         });
     }
 );

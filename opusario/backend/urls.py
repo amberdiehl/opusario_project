@@ -19,6 +19,8 @@ urlpatterns = [
     url(r'^skills/(?P<pk>[0-9]+)$', SkillDetail.as_view()),
     url(r'^states$', StateList.as_view()),
     url(r'^states/(?P<pk>[0-9]+)$', StateDetail.as_view()),
+    url(r'^tools$', ToolList.as_view()),
+    url(r'^tools/(?P<pk>[0-9]+)$', ToolDetail.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

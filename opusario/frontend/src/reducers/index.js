@@ -20,6 +20,7 @@ import skill_name from './inputs/SkillName';
 import skill_select from './many_selects/SkillManySelect';
 import skill_version from './inputs/SkillVersion';
 import state_name from './single_selects/State';
+import tool_select from './many_selects/ToolManySelect'
 
 
 const OpusarioReducers = combineReducers({
@@ -43,6 +44,7 @@ const OpusarioReducers = combineReducers({
     role_management,
     role_name,
     state_name,
+    tool_select
 });
 
 export default OpusarioReducers;

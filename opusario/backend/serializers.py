@@ -128,8 +128,8 @@ class SkillSerializer(serializers.ModelSerializer):
         model = Skill
         fields = '__all__'
 
-    def get_roles(self, object):
-        return object.get_roles()
+    def get_roles(self, obj):
+        return obj.get_roles()
 
 
 class StateSerializer(serializers.ModelSerializer):
@@ -146,3 +146,29 @@ class StateSerializer(serializers.ModelSerializer):
     class Meta:
         model = State
         fields = '__all__'
+
+
+class ToolSerializer(serializers.ModelSerializer):
+
+    roles = serializers.SerializerMethodField()
+
+    def validate(self, data):
+        error_messages = []
+
+        if not re.match("^[a-zA-Z0-9 ]*$", data['name']):
+            error_messages.append('Tool name may only contain letters, numbers and spaces.')
+
+        if not re.match("^[a-zA-Z0-9. ]*$", data['version']):
+            error_messages.append('Tool version may only contain letters, numbers, periods, and spaces.')
+
+        if error_messages:
+            raise serializers.ValidationError(error_messages)
+
+        return data
+
+    class Meta:
+        model = Tool
+        fields = '__all__'
+
+    def get_roles(self, obj):
+        return obj.get_roles()
