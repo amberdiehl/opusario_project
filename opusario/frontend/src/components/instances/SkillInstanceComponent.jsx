@@ -67,7 +67,8 @@ export default class SkillInstanceComponent extends Component {
 SkillInstanceComponent.propTypes = {
     namespace: PropTypes.string.isRequired,
     componentId: PropTypes.string.isRequired,
-    instanceId: PropTypes.string.isRequired,
+    instanceId: PropTypes.number.isRequired,
+    instanceItem: PropTypes.object.isRequired,
     childState: PropTypes.object.isRequired,
     errorMessages: PropTypes.array.isRequired,
     isError: PropTypes.bool.isRequired,

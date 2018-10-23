@@ -19,12 +19,11 @@ export default class RoleInstanceComponent extends Component {
         this.validateForm = this.validateForm.bind(this);
     }
     componentDidMount() {
-        this.props.childActions.setM2MForeignKeyValue(
-            this.props.childState.skillNamespace,
-            this.props.instanceId);
-        this.props.childActions.setM2MForeignKeyValue(
-            this.props.childState.toolNamespace,
-            this.props.instanceId)
+        if (this.props.instanceId !== 0) {
+            this.props.actions.fetchItem(
+                this.props.namespace,
+                `${this.props.apiRoute}/${this.props.instanceId}`)
+        }
     }
     componentWillUpdate(nextProps, nextState, nextContext) {
         if (nextProps.instanceId !== this.props.instanceId) {
@@ -35,6 +34,9 @@ export default class RoleInstanceComponent extends Component {
                 this.props.childState.toolNamespace,
                 nextProps.instanceId)
         }
+    }
+    componentWillUnmount() {
+        console.log('RoleInstance componentWillUnmount');
     }
     buttonOnClick(e) {
         e.preventDefault();
@@ -99,7 +101,8 @@ export default class RoleInstanceComponent extends Component {
 RoleInstanceComponent.propTypes = {
     namespace: PropTypes.string.isRequired,
     componentId: PropTypes.string.isRequired,
-    instanceId: PropTypes.string.isRequired,
+    instanceId: PropTypes.number.isRequired,
+    instanceItem: PropTypes.object.isRequired,
     childState: PropTypes.object.isRequired,
     errorMessages: PropTypes.array.isRequired,
     isError: PropTypes.bool.isRequired,

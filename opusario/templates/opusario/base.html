@@ -22,7 +22,7 @@
             <header id="header">
                 <h1><a href="/">OPUSARIO</a></h1><h6>work amplified</h6>
                 {% if user.is_authenticated %}
-                    <p style="margin-left: 500px;">Hi, {{ user.username }}</p>
+                    <div style="text-align: right; margin-right: 160px;">{{ user.username }}</div>
                 {% endif %}
                 <nav id="nav">
                     <ul>

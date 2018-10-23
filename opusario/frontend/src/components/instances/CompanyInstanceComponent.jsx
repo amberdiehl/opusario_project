@@ -20,7 +20,6 @@ export default class CompanyInstanceComponent extends Component {
     }
     componentDidMount() {
         this.props.childActions.setSelectValue(this.props.childState.countryNamespace, '1');
-        this.props.childActions.setForeignKeyValue(this.props.childState.stateNamespace, '1');
     }
     componentWillUpdate(nextProps, nextState, nextContext) {
         if (nextProps.childState.countrySelectItem !== this.props.childState.countrySelectItem) {
@@ -103,7 +102,8 @@ export default class CompanyInstanceComponent extends Component {
 CompanyInstanceComponent.propTypes = {
     namespace: PropTypes.string.isRequired,
     componentId: PropTypes.string.isRequired,
-    instanceId: PropTypes.string.isRequired,
+    instanceId: PropTypes.number.isRequired,
+    instanceItem: PropTypes.object.isRequired,
     childState: PropTypes.object.isRequired,
     errorMessages: PropTypes.array.isRequired,
     isError: PropTypes.bool.isRequired,

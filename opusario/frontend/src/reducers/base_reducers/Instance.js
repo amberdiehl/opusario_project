@@ -1,4 +1,4 @@
-import {FLASH_SUCCESS, SET_VALUE, SHOW_ERROR} from "../../constants";
+import {FETCH_ITEM, FLASH_SUCCESS, SET_VALUE, SHOW_ERROR} from "../../constants";
 
 /*
 Defines STATE for the model instance components and initial defaults. Any key with a value of 'DEFINE'
@@ -8,6 +8,7 @@ export const base_reducer_state = {
     namespace: 'DEFINE',
     componentId: 'DEFINE',
     instanceId: 0,
+    instanceItem: {},
     childState: {},
     errorMessages: [],
     isError: false,
@@ -18,6 +19,9 @@ export const base_reducer_state = {
 
 export function base_reducer(state, action) {
     switch (action.type) {
+        case `${state.namespace}/${FETCH_ITEM}`:
+            return {...state,
+                "instanceItem": action.item};
         case `${state.namespace}/${SET_VALUE}`:
             return {...state,
                 "instanceId": parseInt(action.itemValue, 10)};
