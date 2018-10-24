@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import InputComponent from '../form_components/InputComponent';
 import FunctionalAreaContainer from '../../containers/single_selects/FunctionalAreaContainer';
-import RoleDescriptionContainer from '../../containers/inputs/RoleDescriptionContainer';
 import RoleLeadershipContainer from '../../containers/checkbox_radios/RoleLeadershipContainer';
 import RoleManagementContainer from '../../containers/checkbox_radios/RoleManagementContainer';
-import RoleNameContainer from '../../containers/inputs/RoleNameContainer';
 import SkillSelectContainer from '../../containers/many_selects/SkillSelectContainer';
 import ToolSelectContainer from '../../containers/many_selects/ToolSelectContainer';
 import FlashSuccessIcon from '../form_snippets/FlashSuccessIcon';
@@ -83,8 +82,26 @@ export default class RoleInstanceComponent extends Component {
                 <FormErrorMessages trueFalse={this.props.isError} messages={this.props.errorMessages}/>
                 <div className={"form-field-group"}>
                     <FunctionalAreaContainer/>
-                    <RoleNameContainer/>
-                    <RoleDescriptionContainer/>
+                    <InputComponent
+                        componentId={"RoleName"}
+                        inputType={"text"}
+                        inputSize={"250"}
+                        inputValue={""}
+                        validationRegEx={/^[a-zA-Z ]*$/}
+                        regExDescription={"letters and spaces."}
+                        errorMessages={[]}
+                        isError={false}
+                        isDisabled={false}/>
+                    <InputComponent
+                        componentId={"RoleDescription"}
+                        inputType={"textarea"}
+                        inputSize={"250"}
+                        inputValue={""}
+                        validationRegEx={/^[a-zA-Z ]*$/}
+                        regExDescription={"letters and spaces."}
+                        errorMessages={[]}
+                        isError={false}
+                        isDisabled={false}/>
                     <RoleManagementContainer/>
                     <RoleLeadershipContainer/>
                     <SkillSelectContainer/>

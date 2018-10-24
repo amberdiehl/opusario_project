@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import InputComponent from '../form_components/InputComponent';
 import CityContainer from '../../containers/single_selects/CityContainer';
-import CompanyNameContainer from '../../containers/inputs/CompanyNameContainer';
-import CompanySizeContainer from '../../containers/inputs/CompanySizeContainer';
-import CompanyWebsiteContainer from '../../containers/inputs/CompanyWebsiteContainer';
 import CountryContainer from '../../containers/single_selects/CountryContainer';
 import IndustryContainer from '../../containers/single_selects/IndustryContainer';
 import StateContainer from '../../containers/single_selects/StateContainer';
@@ -83,13 +81,40 @@ export default class CompanyInstanceComponent extends Component {
                 <h2>Company Information</h2>
                 <FormErrorMessages trueFalse={this.props.isError} messages={this.props.errorMessages}/>
                 <div className={"form-field-group"}>
-                    <CompanyNameContainer/>
+                    <InputComponent
+                        componentId={"CompanyName"}
+                        inputType={"text"}
+                        inputSize={"250"}
+                        inputValue={""}
+                        validationRegEx={/^[a-zA-Z ]*$/}
+                        regExDescription={"letters and spaces."}
+                        errorMessages={[]}
+                        isError={false}
+                        isDisabled={false}/>
                     <CountryContainer/>
                     <StateContainer/>
                     <CityContainer/>
-                    <CompanySizeContainer/>
+                    <InputComponent
+                        componentId={"CompanySize"}
+                        inputType={"text"}
+                        inputSize={"250"}
+                        inputValue={""}
+                        validationRegEx={/^[0-9]*$/}
+                        regExDescription={"whole numbers."}
+                        errorMessages={[]}
+                        isError={false}
+                        isDisabled={false}/>
                     <IndustryContainer/>
-                    <CompanyWebsiteContainer/>
+                    <InputComponent
+                        componentId={"CompanyWebsite"}
+                        inputType={"text"}
+                        inputSize={"250"}
+                        inputValue={""}
+                        validationRegEx={/^[a-zA-Z ]*$/}
+                        regExDescription={"letters and spaces."}
+                        errorMessages={[]}
+                        isError={false}
+                        isDisabled={false}/>
                     <br/><br/>
                     <button className={"button primary small"} onClick={this.buttonOnClick}>{buttonLabel}</button>
                     <FlashSuccessIcon trueFalse={this.props.flashSuccess} />

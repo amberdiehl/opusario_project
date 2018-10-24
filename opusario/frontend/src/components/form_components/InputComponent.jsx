@@ -10,7 +10,17 @@ export default class InputComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentValue: this.props.inputValue
+            componentId: this.props.componentId,
+            inputType: (typeof this.props.inputType === "undefined") ? 'text' : this.props.inputType,
+            inputSize: (typeof this.props.inputSize === "undefined") ? 250 : this.props.inputSize,
+            inputValue: this.props.inputValue,
+            validationRegEx: (typeof this.props.validationRegEx === "undefined")
+                ? /^[a-zA-Z ]*$/ : this.props.validationRegEx,
+            regExDescription: (typeof this.props.regExDescription === "undefined")
+                ? "letters and spaces." : this.props.regExDescription,
+            errorMessages: (typeof this.props.errorMessages === "undefined") ? [] : this.props.errorMessages,
+            isError: (typeof this.props.isError === "undefined") ? false : this.props.isError,
+            isDisabled: (typeof this.props.isDisabled === "undefined") ? false : this.props.isDisabled,
         };
         this.renderInputByType = this.renderInputByType.bind(this);
         this.handleOnChange = this.handleOnChange.bind(this);
@@ -19,43 +29,40 @@ export default class InputComponent extends Component {
     handleOnChange(e) {
         e.preventDefault();
         this.setState({
-            currentValue: e.target.value,
+            inputValue: e.target.value,
         }, this.validateValue);
     }
     validateValue() {
         let errorMessages = [];
         const validationErrorMessage =
-            `${getFormattedLabelText(this.props.componentId)} can only contain ${this.props.regExDescription}`;
-        let isValid = this.props.validationRegEx.test(this.state.currentValue);
+            `${getFormattedLabelText(this.state.componentId)} can only contain ${this.state.regExDescription}`;
+        let isValid = this.state.validationRegEx.test(this.state.inputValue);
         if (!isValid) {
             errorMessages.push(validationErrorMessage);
-            this.props.actions.showError(this.props.namespace, true, errorMessages);
-        } else {
-            this.props.actions.showError(this.props.namespace, false, errorMessages);
-            this.props.actions.setInputValue(this.props.namespace, this.state.currentValue);
         }
+        this.setState({...this.state, errorMessages: errorMessages});
     }
     renderInputByType() {
-        switch(this.props.inputType) {
+        switch(this.state.inputType) {
             case 'textarea': {
                 return (
                     <div className="col-6 col-6-xsmall">
-                        <textarea id={this.props.componentId} cols={this.props.inputSize}
-                            placeholder={getFormattedLabelText(this.props.componentId)}
-                            readOnly={this.props.isDisabled}
+                        <textarea id={this.state.componentId} cols={this.state.inputSize}
+                            placeholder={getFormattedLabelText(this.state.componentId)}
+                            readOnly={this.state.isDisabled}
                             onChange={this.handleOnChange}
-                            value={this.state.currentValue} />
+                            value={this.state.inputValue} />
                     </div>
                 );
             }
             default: {
                 return (
                     <div className="col-6 col-6-xsmall">
-                        <input id={this.props.componentId}
-                            type={this.props.inputType} style={{width: this.props.inputSize}}
-                            placeholder={getFormattedLabelText(this.props.componentId)}
-                            value={this.state.currentValue}
-                            disabled={this.props.isDisabled}
+                        <input id={this.state.componentId}
+                            type={this.state.inputType} style={{width: this.state.inputSize}}
+                            placeholder={getFormattedLabelText(this.state.componentId)}
+                            value={this.state.inputValue}
+                            disabled={this.state.isDisabled}
                             onChange={this.handleOnChange}
                         />
                     </div>
@@ -66,23 +73,22 @@ export default class InputComponent extends Component {
     render() {
         return (
             <div className={"row gtr-0 gtr-uniform"}>
-                <FormFieldLabel componentId={this.props.componentId}/>
+                <FormFieldLabel componentId={this.state.componentId}/>
                 {this.renderInputByType()}
-                <FormErrorMessages trueFalse={this.props.isError} messages={this.props.errorMessages}/>
+                <FormErrorMessages trueFalse={this.state.isError} messages={this.state.errorMessages}/>
             </div>
         );
     }
 }
 
 InputComponent.propTypes = {
-    namespace: PropTypes.string.isRequired,
     componentId: PropTypes.string.isRequired,
-    inputType: PropTypes.string.isRequired,
-    inputSize: PropTypes.number.isRequired,
+    inputType: PropTypes.string,
+    inputSize: PropTypes.number,
     inputValue: PropTypes.string.isRequired,
-    validationRegEx: PropTypes.any.isRequired, // Not clear on how to indicate this is a RegEx.
-    regExDescription: PropTypes.string.isRequired,
-    errorMessages: PropTypes.array.isRequired,
-    isError: PropTypes.bool.isRequired,
-    isDisabled: PropTypes.bool.isRequired,
+    validationRegEx: PropTypes.any, // Not clear on how to indicate this is a RegEx.
+    regExDescription: PropTypes.string,
+    errorMessages: PropTypes.array,
+    isError: PropTypes.bool,
+    isDisabled: PropTypes.bool,
 };

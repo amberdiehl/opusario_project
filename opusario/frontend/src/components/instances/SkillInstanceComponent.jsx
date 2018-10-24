@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import SkillNameContainer from '../../containers/inputs/SkillNameContainer';
-import SkillVersionContainer from '../../containers/inputs/SkillVersionContainer';
+import InputComponent from '../form_components/InputComponent';
 import FlashSuccessIcon from '../form_snippets/FlashSuccessIcon';
 import FormErrorMessages from '../form_snippets/FormErrorMessages';
 
@@ -25,25 +24,14 @@ export default class SkillInstanceComponent extends Component {
             const apiRoute = (method === 'POST') ? this.props.apiRoute :
                 `${this.props.apiRoute}/${this.props.instanceId}`;
             const data = {
-                "name": this.props.childState.skillName,
-                "version": this.props.childState.skillVersion
+                "name": this.props.instanceItem.name,
+                "version": this.props.instanceItem.version
             };
             this.props.actions.addOrUpdateItem(this.props.namespace, apiRoute, method, data);
         }
     }
     validateForm(){
         let errorMessages = [];
-        if (this.props.childState.skillNameIsError) {
-            errorMessages.push('Skill name is not valid.')
-        } else {
-            if (this.props.childState.skillName.length === 0) {
-                errorMessages.push('Skill name is required.')
-            }
-        }
-        if (this.props.childState.skillVersionIsError) {
-            errorMessages.push('Skill version is not valid.')
-        }
-        this.props.actions.showError(this.props.namespace, (errorMessages.length !== 0), errorMessages);
         return (errorMessages.length === 0);
     }
     render() {
@@ -53,8 +41,15 @@ export default class SkillInstanceComponent extends Component {
                 <h2>Skill</h2>
                 <FormErrorMessages trueFalse={this.props.isError} messages={this.props.errorMessages}/>
                 <div className={"form-field-group"}>
-                    <SkillNameContainer/>
-                    <SkillVersionContainer/>
+                    <InputComponent
+                        componentId={"Name"}
+                        inputValue={this.props.instanceItem.name}
+                        regExDescription={"letters and spaces."} />
+                   <InputComponent
+                        componentId={"Version"}
+                        inputValue={this.props.instanceItem.version}
+                        validationRegEx={/^[a-zA-Z0-9. ]*$/}
+                        regExDescription={"letters, numbers, periods, and spaces."} />
                     <br/><br/>
                     <button className={"button primary small"} onClick={this.buttonOnClick}>{buttonLabel}</button>
                     <FlashSuccessIcon trueFalse={this.props.flashSuccess} />
