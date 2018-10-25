@@ -6,6 +6,7 @@ export const initialState = {
     ...base_reducer_state,
     namespace: getNamespace(),
     componentId: 'CompanyInformation',
+    instanceId: 10,
     apiRoute: '/api/companies',
 };
 

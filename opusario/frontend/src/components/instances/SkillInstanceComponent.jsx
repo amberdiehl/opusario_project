@@ -39,15 +39,9 @@ export default class SkillInstanceComponent extends Component {
     }
     render() {
         const buttonLabel = (this.props.instanceId === 0) ? 'Add' : 'Update';
-        const nameAction = {
+        const childAction = {
             setItemValue: this.props.actions.setItemValue,
-            namespace: this.props.namespace,
-            key: "name"
-        };
-        const versionAction = {
-            setItemValue: this.props.actions.setItemValue,
-            namespace: this.props.namespace,
-            key: "version"
+            namespace: this.props.namespace
         };
         return(
             <form>
@@ -57,16 +51,16 @@ export default class SkillInstanceComponent extends Component {
                     <InputComponent
                         componentId={"Name"}
                         inputValue={this.props.instanceItem.name}
-                        validationRegEx={/^[a-zA-Z0-9\+ ]*$/}
+                        validationRegEx={/^[a-zA-Z0-9+ ]*$/}
                         regExDescription={"letters, numbers, plus signs, and spaces."}
-                        action={nameAction}
+                        action={{...childAction, key: "name"}}
                     />
                    <InputComponent
                         componentId={"Version"}
                         inputValue={this.props.instanceItem.version}
                         validationRegEx={/^[a-zA-Z0-9. ]*$/}
                         regExDescription={"letters, numbers, periods, and spaces."}
-                        action={versionAction}
+                        action={{...childAction, key: "version"}}
                    />
                     <br/><br/>
                     <button className={"button primary small"} onClick={this.buttonOnClick}>{buttonLabel}</button>

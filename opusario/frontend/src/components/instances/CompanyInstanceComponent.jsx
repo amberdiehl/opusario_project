@@ -17,17 +17,43 @@ export default class CompanyInstanceComponent extends Component {
         this.validateForm = this.validateForm.bind(this);
     }
     componentDidMount() {
-        this.props.childActions.setSelectValue(this.props.childState.countryNamespace, '1');
+        if (this.props.instanceId !== 0) {
+            this.props.actions.fetchItem(this.props.namespace, `${this.props.apiRoute}/${this.props.instanceId}`);
+        } else {
+            this.props.childActions.setSelectValue(this.props.childState.countryNamespace, '1');
+        }
     }
     componentWillUpdate(nextProps, nextState, nextContext) {
+        // When instanceID has been provided, the instance is fetched (above) to get current values.
+        // Child select components need to have their values set here, after instanceItem has been updated.
+        if (nextProps.instanceItem.country !== this.props.instanceItem.country) {
+            this.props.childActions.setSelectValue(
+                this.props.childState.countryNamespace, nextProps.instanceItem.country);
+        }
+        if (nextProps.instanceItem.state !== this.props.instanceItem.state) {
+            this.props.childActions.setSelectValue(this.props.childState.stateNamespace,
+                nextProps.instanceItem.state);
+            this.props.childActions.setForeignKeyValue(this.props.childState.stateNamespace,
+                nextProps.instanceItem.country);
+        }
+        if (nextProps.instanceItem.city !== this.props.instanceItem.city) {
+            this.props.childActions.setSelectValue(
+                this.props.childState.cityNamespace, nextProps.instanceItem.city);
+            this.props.childActions.setForeignKeyValue(this.props.childState.cityNamespace,
+                nextProps.instanceItem.state);
+        }
+        if (nextProps.instanceItem.industry !== this.props.instanceItem.industry) {
+            this.props.childActions.setSelectValue(
+                this.props.childState.industryNamespace, nextProps.instanceItem.industry);
+        }
+        // Country, State, City are interdependent selects; as selections change, update foreign key values
+        // to filter/change selections based on relationship
         if (nextProps.childState.countrySelectItem !== this.props.childState.countrySelectItem) {
-            this.props.childActions.setForeignKeyValue(
-                this.props.childState.stateNamespace,
+            this.props.childActions.setForeignKeyValue(this.props.childState.stateNamespace,
                 nextProps.childState.countrySelectItem);
         }
         if (nextProps.childState.stateSelectItem !== this.props.childState.stateSelectItem) {
-            this.props.childActions.setForeignKeyValue(
-                this.props.childState.cityNamespace,
+            this.props.childActions.setForeignKeyValue(this.props.childState.cityNamespace,
                 nextProps.childState.stateSelectItem);
         }
     }
@@ -39,22 +65,17 @@ export default class CompanyInstanceComponent extends Component {
             const apiRoute = (method === 'POST') ? this.props.apiRoute :
                 `${this.props.apiRoute}/${this.props.instanceId}`;
             const data = {
-                "name": this.props.childState.companyName,
+                ...this.props.instanceItem,
                 "city": this.props.childState.citySelectItem,
-                "company_size": this.props.childState.companySize,
                 "industry": this.props.childState.industrySelectItem,
-                "company_website": this.props.childState.companyWebsite
             };
             this.props.actions.addOrUpdateItem(this.props.namespace, apiRoute, method, data);
         }
     }
     validateForm(){
         let errorMessages = [];
-        if (this.props.childState.companyName.length === 0) {
+        if (this.props.instanceItem.name.length === 0) {
             errorMessages.push('Enter a company name.');
-        }
-        if (this.props.childState.companyNameIsError) {
-            errorMessages.push('Company name is not valid.');
         }
         if (this.props.childState.citySelectItem === '0') {
             errorMessages.push('Select or add city.');
@@ -68,15 +89,12 @@ export default class CompanyInstanceComponent extends Component {
         if (this.props.childState.industrySelectItem === '0') {
             errorMessages.push('Select or add industry.');
         }
-        if (this.props.childState.companyWebsiteIsError) {
-            errorMessages.push('Company website is not valid.');
-        }
         this.props.actions.showError(this.props.namespace, (errorMessages.length !== 0), errorMessages);
         return (errorMessages.length === 0);
     }
     render() {
         const buttonLabel = (this.props.instanceId === 0) ? 'Add' : 'Update';
-        const baseAction = {
+        const childAction = {
             setItemValue: this.props.actions.setItemValue,
             namespace: this.props.namespace
         };
@@ -88,7 +106,7 @@ export default class CompanyInstanceComponent extends Component {
                     <InputComponent
                         componentId={"CompanyName"}
                         inputValue={this.props.instanceItem.name}
-                        action={{...baseAction, key: "name"}}
+                        action={{...childAction, key: "name"}}
                     />
                     <CountryContainer/>
                     <StateContainer/>
@@ -98,15 +116,15 @@ export default class CompanyInstanceComponent extends Component {
                         inputValue={this.props.instanceItem.size}
                         validationRegEx={/^[0-9]*$/}
                         regExDescription={"whole numbers."}
-                        action={{...baseAction, key: "size"}}
+                        action={{...childAction, key: "size"}}
                     />
                     <IndustryContainer/>
                     <InputComponent
                         componentId={"CompanyWebsite"}
                         inputValue={this.props.instanceItem.company_website}
-                        validationRegEx={/^[a-zA-Z ]*$/}
-                        regExDescription={"letters and spaces."}
-                        action={{...baseAction, key: "company_website"}}
+                        validationRegEx={/^(https:\/\/www.)[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$/}
+                        regExDescription={"a complete URL such as www.opusario.com."}
+                        action={{...childAction, key: "company_website"}}
                     />
                     <br/><br/>
                     <button className={"button primary small"} onClick={this.buttonOnClick}>{buttonLabel}</button>
