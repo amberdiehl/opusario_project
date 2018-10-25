@@ -1,8 +1,8 @@
 import { createSelector } from 'reselect';
 
 // selectors
-const getCitySelectItem = (state) => state.city.selectItem;
-const getCityNamespace = (state) => state.city.namespace;
+const getCitySelectItem = (state) => state.city_select.selectItem;
+const getCityNamespace = (state) => state.city_select.namespace;
 const getCountrySelectItem = (state) => state.country.selectItem;
 const getCountryNamespace = (state) => state.country.namespace;
 const getFunctionalAreaSelectItem = (state) => state.functional_area.selectItem;

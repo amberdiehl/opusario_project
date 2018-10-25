@@ -13,7 +13,7 @@ export default class InputComponent extends Component {
             componentId: this.props.componentId,
             inputType: (typeof this.props.inputType === "undefined") ? 'text' : this.props.inputType,
             inputSize: (typeof this.props.inputSize === "undefined") ? 250 : this.props.inputSize,
-            inputValue: this.props.inputValue,
+            inputValue: (typeof this.props.inputSize === "undefined") ? '' : this.props.inputValue,
             validationRegEx: (typeof this.props.validationRegEx === "undefined")
                 ? /^[a-zA-Z ]*$/ : this.props.validationRegEx,
             regExDescription: (typeof this.props.regExDescription === "undefined")
@@ -26,9 +26,18 @@ export default class InputComponent extends Component {
         this.handleOnChange = this.handleOnChange.bind(this);
         this.validateValue = this.validateValue.bind(this);
     }
+    componentWillUpdate(nextProps, nextState, nextContext) {
+        if (nextProps.inputValue !== this.props.inputValue) {
+            this.setState({
+                ...this.state,
+                inputValue: nextProps.inputValue
+            })
+        }
+    }
     handleOnChange(e) {
         e.preventDefault();
         this.setState({
+            ...this.state,
             inputValue: e.target.value,
         }, this.validateValue);
     }
@@ -39,8 +48,13 @@ export default class InputComponent extends Component {
         let isValid = this.state.validationRegEx.test(this.state.inputValue);
         if (!isValid) {
             errorMessages.push(validationErrorMessage);
+        } else {
+            this.props.action.setItemValue(this.props.action.namespace, this.props.action.key, this.state.inputValue)
         }
-        this.setState({...this.state, errorMessages: errorMessages});
+        this.setState({
+            ...this.state,
+            isError: (errorMessages.length !== 0),
+            errorMessages: errorMessages});
     }
     renderInputByType() {
         switch(this.state.inputType) {
@@ -91,4 +105,5 @@ InputComponent.propTypes = {
     errorMessages: PropTypes.array,
     isError: PropTypes.bool,
     isDisabled: PropTypes.bool,
+    action: PropTypes.object.isRequired
 };

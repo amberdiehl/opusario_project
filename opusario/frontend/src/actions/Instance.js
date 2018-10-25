@@ -1,6 +1,6 @@
 import { csrfHeader, getFlattenedErrors } from "../helpers";
 import {setFlashSuccess, setLoading, showError} from './generic';
-import {FETCH_ITEM, SET_VALUE, server500ErrorMessage} from "../constants";
+import {FETCH_ITEM, SET_INSTANCE_ID, SET_ITEM_VALUE, server500ErrorMessage} from "../constants";
 
 
 export const fetchItem = (namespace, apiRoute) => {
@@ -45,8 +45,8 @@ export const addOrUpdateItem = (namespace, apiRoute, method, data) => {
                 } else {
                     if (method === 'POST') {
                         dispatch({
-                            type: `${namespace}/${SET_VALUE}`,
-                            itemValue: json.id.toString()
+                            type: `${namespace}/${SET_INSTANCE_ID}`,
+                            itemValue: json.id
                         });
                     }
                     dispatch(showError(namespace, false, []));
@@ -58,5 +58,13 @@ export const addOrUpdateItem = (namespace, apiRoute, method, data) => {
             .catch( () => {
                 dispatch(showError(namespace, true, [server500ErrorMessage]));
             });
+    };
+};
+
+export const setItemValue = (namespace, itemKey, newValue) => {
+    return {
+        type: `${namespace}/${SET_ITEM_VALUE}`,
+        itemKey,
+        newValue
     };
 };

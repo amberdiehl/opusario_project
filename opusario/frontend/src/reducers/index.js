@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 
-import city from './single_selects/City';
+import city_select from './single_selects/CitySingleSelect';
 import company_instance from './instances/CompanyInstance';
 import country from './single_selects/Country';
 import functional_area from './single_selects/FunctionalArea';
@@ -17,7 +17,7 @@ import tool_select from './many_selects/ToolManySelect'
 
 
 const OpusarioReducers = combineReducers({
-    city,
+    city_select,
     company_instance,
     country,
     functional_area,

@@ -13,6 +13,9 @@ export default class SkillInstanceComponent extends Component {
         this.validateForm = this.validateForm.bind(this);
     }
     componentDidMount() {
+        if (this.props.instanceId !== 0) {
+            this.props.actions.fetchItem(this.props.namespace, `${this.props.apiRoute}/${this.props.instanceId}`);
+        }
     }
     componentWillUpdate(nextProps, nextState, nextContext) {
     }
@@ -36,6 +39,16 @@ export default class SkillInstanceComponent extends Component {
     }
     render() {
         const buttonLabel = (this.props.instanceId === 0) ? 'Add' : 'Update';
+        const nameAction = {
+            setItemValue: this.props.actions.setItemValue,
+            namespace: this.props.namespace,
+            key: "name"
+        };
+        const versionAction = {
+            setItemValue: this.props.actions.setItemValue,
+            namespace: this.props.namespace,
+            key: "version"
+        };
         return(
             <form>
                 <h2>Skill</h2>
@@ -44,12 +57,17 @@ export default class SkillInstanceComponent extends Component {
                     <InputComponent
                         componentId={"Name"}
                         inputValue={this.props.instanceItem.name}
-                        regExDescription={"letters and spaces."} />
+                        validationRegEx={/^[a-zA-Z0-9\+ ]*$/}
+                        regExDescription={"letters, numbers, plus signs, and spaces."}
+                        action={nameAction}
+                    />
                    <InputComponent
                         componentId={"Version"}
                         inputValue={this.props.instanceItem.version}
                         validationRegEx={/^[a-zA-Z0-9. ]*$/}
-                        regExDescription={"letters, numbers, periods, and spaces."} />
+                        regExDescription={"letters, numbers, periods, and spaces."}
+                        action={versionAction}
+                   />
                     <br/><br/>
                     <button className={"button primary small"} onClick={this.buttonOnClick}>{buttonLabel}</button>
                     <FlashSuccessIcon trueFalse={this.props.flashSuccess} />
@@ -64,12 +82,12 @@ SkillInstanceComponent.propTypes = {
     componentId: PropTypes.string.isRequired,
     instanceId: PropTypes.number.isRequired,
     instanceItem: PropTypes.object.isRequired,
-    childState: PropTypes.object.isRequired,
+    childState: PropTypes.object,
     errorMessages: PropTypes.array.isRequired,
     isError: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,
     flashSuccess: PropTypes.bool.isRequired,
     apiRoute: PropTypes.string.isRequired,
     actions: PropTypes.object.isRequired,
-    childActions: PropTypes.object.isRequired,
+    childActions: PropTypes.object
 };

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import InputComponent from '../form_components/InputComponent';
-import CityContainer from '../../containers/single_selects/CityContainer';
+import CitySelectContainer from '../../containers/single_selects/CitySelectContainer';
 import CountryContainer from '../../containers/single_selects/CountryContainer';
 import IndustryContainer from '../../containers/single_selects/IndustryContainer';
 import StateContainer from '../../containers/single_selects/StateContainer';
@@ -76,6 +76,10 @@ export default class CompanyInstanceComponent extends Component {
     }
     render() {
         const buttonLabel = (this.props.instanceId === 0) ? 'Add' : 'Update';
+        const baseAction = {
+            setItemValue: this.props.actions.setItemValue,
+            namespace: this.props.namespace
+        };
         return(
             <form>
                 <h2>Company Information</h2>
@@ -83,38 +87,27 @@ export default class CompanyInstanceComponent extends Component {
                 <div className={"form-field-group"}>
                     <InputComponent
                         componentId={"CompanyName"}
-                        inputType={"text"}
-                        inputSize={"250"}
-                        inputValue={""}
-                        validationRegEx={/^[a-zA-Z ]*$/}
-                        regExDescription={"letters and spaces."}
-                        errorMessages={[]}
-                        isError={false}
-                        isDisabled={false}/>
+                        inputValue={this.props.instanceItem.name}
+                        action={{...baseAction, key: "name"}}
+                    />
                     <CountryContainer/>
                     <StateContainer/>
-                    <CityContainer/>
+                    <CitySelectContainer/>
                     <InputComponent
                         componentId={"CompanySize"}
-                        inputType={"text"}
-                        inputSize={"250"}
-                        inputValue={""}
+                        inputValue={this.props.instanceItem.size}
                         validationRegEx={/^[0-9]*$/}
                         regExDescription={"whole numbers."}
-                        errorMessages={[]}
-                        isError={false}
-                        isDisabled={false}/>
+                        action={{...baseAction, key: "size"}}
+                    />
                     <IndustryContainer/>
                     <InputComponent
                         componentId={"CompanyWebsite"}
-                        inputType={"text"}
-                        inputSize={"250"}
-                        inputValue={""}
+                        inputValue={this.props.instanceItem.company_website}
                         validationRegEx={/^[a-zA-Z ]*$/}
                         regExDescription={"letters and spaces."}
-                        errorMessages={[]}
-                        isError={false}
-                        isDisabled={false}/>
+                        action={{...baseAction, key: "company_website"}}
+                    />
                     <br/><br/>
                     <button className={"button primary small"} onClick={this.buttonOnClick}>{buttonLabel}</button>
                     <FlashSuccessIcon trueFalse={this.props.flashSuccess} />
