@@ -2536,4 +2536,49 @@ body.is-mobile.landing #footer {
     color: whitesmoke !important;
     background-color: #091D34 !important; }
 
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  max-width: 100%;
+  height: 400px;
+  max-height: 100%;
+  z-index: 1010;
+  display: flex;
+  background: white;
+  box-shadow: 0 0 40px 10px rgba(0, 0, 0, 0.9); }
+  .modal .modal-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 40px; }
+    .modal .modal-header .modal-close-button {
+      position: fixed;
+      right: 0;
+      top: 0;
+      margin: 1em 1em 0 0;
+      color: #091D34 !important; }
+  .modal .modal-guts {
+    position: absolute;
+    top: 41px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 20px 50px 20px 20px;
+    overflow: auto; }
+
+.closed {
+  display: none; }
+
+.modal-overlay {
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; }
+
 /*# sourceMappingURL=main.css.map */

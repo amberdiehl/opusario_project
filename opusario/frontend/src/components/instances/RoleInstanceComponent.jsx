@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component, Fragment} from 'react';
 import PropTypes from 'prop-types';
 import { getFormattedInputComponentErrors } from '../../helpers';
 
@@ -10,6 +10,8 @@ import SkillSelectContainer from '../../containers/many_selects/SkillSelectConta
 import ToolSelectContainer from '../../containers/many_selects/ToolSelectContainer';
 import FlashSuccessIcon from '../form_snippets/FlashSuccessIcon';
 import FormErrorMessages from '../form_snippets/FormErrorMessages';
+import ModalWrapperComponent from '../wrappers/ModalWrapperComponent';
+import SkillInstanceContainer from '../../containers/instances/SkillInstanceContainer';
 
 
 export default class RoleInstanceComponent extends Component {
@@ -86,31 +88,36 @@ export default class RoleInstanceComponent extends Component {
             namespace: this.props.namespace
         };
         return(
-            <form>
-                <h2>Role</h2>
-                <FormErrorMessages trueFalse={this.props.isError} messages={this.props.errorMessages}/>
-                <div className={"form-field-group"}>
-                    <FunctionalAreaContainer/>
-                    <InputComponent
-                        componentId={"RoleName"}
-                        inputValue={this.props.instanceItem.name}
-                        action={{...childAction, key: "name"}}
-                    />
-                    <InputComponent
-                        componentId={"RoleDescription"}
-                        inputType={"textarea"}
-                        inputValue={this.props.instanceItem.description}
-                        action={{...childAction, key: "description"}}
-                    />
-                    <RoleManagementContainer/>
-                    <RoleLeadershipContainer/>
-                    <SkillSelectContainer/>
-                    <ToolSelectContainer/>
-                    <br/><br/>
-                    <button className={"button primary small"} onClick={this.buttonOnClick}>{buttonLabel}</button>
-                    <FlashSuccessIcon trueFalse={this.props.flashSuccess} />
-                </div>
-            </form>
+            <Fragment>
+                <form>
+                    <h2>Role</h2>
+                    <FormErrorMessages trueFalse={this.props.isError} messages={this.props.errorMessages}/>
+                    <div className={"form-field-group"}>
+                        <FunctionalAreaContainer/>
+                        <InputComponent
+                            componentId={"RoleName"}
+                            inputValue={this.props.instanceItem.name}
+                            action={{...childAction, key: "name"}}
+                        />
+                        <InputComponent
+                            componentId={"RoleDescription"}
+                            inputType={"textarea"}
+                            inputValue={this.props.instanceItem.description}
+                            action={{...childAction, key: "description"}}
+                        />
+                        <RoleManagementContainer/>
+                        <RoleLeadershipContainer/>
+                        <SkillSelectContainer/>
+                        <ToolSelectContainer/>
+                        <br/><br/>
+                        <button className={"button primary small"} onClick={this.buttonOnClick}>{buttonLabel}</button>
+                        <FlashSuccessIcon trueFalse={this.props.flashSuccess} />
+                    </div>
+                </form>
+                <ModalWrapperComponent showModal={true}>
+                    <SkillInstanceContainer/>
+                </ModalWrapperComponent>
+            </Fragment>
         );
     }
 }
