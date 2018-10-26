@@ -19,19 +19,20 @@ export default class RoleInstanceComponent extends Component {
     }
     componentDidMount() {
         if (this.props.instanceId !== 0) {
-            this.props.actions.fetchItem(
-                this.props.namespace,
-                `${this.props.apiRoute}/${this.props.instanceId}`)
+            // Get Role information associated with this instance.
+            this.props.actions.fetchItem(this.props.namespace, `${this.props.apiRoute}/${this.props.instanceId}`)
         }
     }
     componentWillUpdate(nextProps, nextState, nextContext) {
+        // When instanceID has been provided or changed, update stateful child components.
         if (nextProps.instanceId !== this.props.instanceId) {
+            this.props.childActions.setSelectValue(
+                this.props.childState.functionalAreaNamespace, nextProps.instanceItem.functional_area);
+            this.props.childActions.setSelectValue()
             this.props.childActions.setM2MForeignKeyValue(
-                this.props.childState.skillNamespace,
-                nextProps.instanceId);
+                this.props.childState.skillNamespace, nextProps.instanceId);
             this.props.childActions.setM2MForeignKeyValue(
-                this.props.childState.toolNamespace,
-                nextProps.instanceId)
+                this.props.childState.toolNamespace, nextProps.instanceId)
         }
     }
     componentWillUnmount() {
@@ -45,9 +46,8 @@ export default class RoleInstanceComponent extends Component {
             const apiRoute = (method === 'POST') ? this.props.apiRoute :
                 `${this.props.apiRoute}/${this.props.instanceId}`;
             const data = {
+                ...this.props.instanceItem,
                 "functional_area": this.props.childState.functionalAreaSelectItem,
-                "name": this.props.childState.roleName,
-                "description": this.props.childState.roleDescription,
                 "management": (this.props.childState.roleManagement === 'yes'),
                 "leadership": (this.props.childState.roleLeadership === 'yes'),
                 "skills": this.props.childState.skillSelectItems,
@@ -76,6 +76,10 @@ export default class RoleInstanceComponent extends Component {
     }
     render() {
         const buttonLabel = (this.props.instanceId === 0) ? 'Add' : 'Update';
+        const childAction = {
+            setItemValue: this.props.actions.setItemValue,
+            namespace: this.props.namespace
+        };
         return(
             <form>
                 <h2>Role</h2>
@@ -84,24 +88,15 @@ export default class RoleInstanceComponent extends Component {
                     <FunctionalAreaContainer/>
                     <InputComponent
                         componentId={"RoleName"}
-                        inputType={"text"}
-                        inputSize={"250"}
-                        inputValue={""}
-                        validationRegEx={/^[a-zA-Z ]*$/}
-                        regExDescription={"letters and spaces."}
-                        errorMessages={[]}
-                        isError={false}
-                        isDisabled={false}/>
+                        inputValue={this.props.instanceItem.name}
+                        action={{...childAction, key: "name"}}
+                    />
                     <InputComponent
                         componentId={"RoleDescription"}
                         inputType={"textarea"}
-                        inputSize={"250"}
-                        inputValue={""}
-                        validationRegEx={/^[a-zA-Z ]*$/}
-                        regExDescription={"letters and spaces."}
-                        errorMessages={[]}
-                        isError={false}
-                        isDisabled={false}/>
+                        inputValue={this.props.instanceItem.description}
+                        action={{...childAction, key: "description"}}
+                    />
                     <RoleManagementContainer/>
                     <RoleLeadershipContainer/>
                     <SkillSelectContainer/>

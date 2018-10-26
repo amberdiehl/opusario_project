@@ -6,10 +6,10 @@ export const initialState = {
     ...base_reducer_state,
     namespace: getNamespace(),
     componentId: 'Skill',
-    instanceId: 0,
     instanceItem: {
         name: '',
-        version: ''
+        version: '',
+        inputErrors: {}
     },
     apiRoute: '/api/skills',
 };

@@ -43,19 +43,23 @@ export const getCompanyChildState = createSelector(
 );
 
 export const getRoleChildState = createSelector(
-    [ getFunctionalAreaSelectItem, getFunctionalAreaNamespace, getRoleLeadership, getRoleManagement,
-    getSkillSelectNamespace, getSkillSelectItems, getToolSelectNamespace, getToolSelectItems],
-    (functionalAreaSelectItem, functionalAreaNamespace, roleLeadership, roleManagement,
-     skillNamespace, skillSelectItems, toolNamespace, toolSelectItems) => {
+    [ getFunctionalAreaSelectItem, getFunctionalAreaNamespace, getRoleLeadership, getRoleLeadershipNamespace,
+        getRoleManagement, getRoleManagementNamespace, getSkillSelectItems, getSkillSelectNamespace,
+        getToolSelectItems, getToolSelectNamespace],
+    (functionalAreaSelectItem, functionalAreaNamespace, roleLeadership, roleLeadershipNamespace,
+     roleManagement, roleManagementNamespace, skillSelectItems, skillNamespace,
+     toolSelectItems, toolNamespace) => {
         return ({
             functionalAreaSelectItem,
             functionalAreaNamespace,
             roleLeadership,
+            roleLeadershipNamespace,
             roleManagement,
-            skillNamespace,
+            roleManagementNamespace,
             skillSelectItems,
+            skillNamespace,
+            toolSelectItems,
             toolNamespace,
-            toolSelectItems
         });
     }
 );

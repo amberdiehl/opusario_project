@@ -8,7 +8,12 @@ export const base_reducer_state = {
     namespace: 'DEFINE',
     componentId: 'DEFINE',
     instanceId: 0,
-    instanceItem: {},
+    instanceItem: {
+        // DEFINE default values for each model field that will be handled using an InputComponent, e.g.:
+        // name: '',
+        // version: '',
+        inputErrors: {}
+    },
     childState: {},
     errorMessages: [],
     isError: false,
@@ -24,11 +29,26 @@ export function base_reducer(state, action) {
                 "instanceItem": action.item
             };
         case `${state.namespace}/${SET_ITEM_VALUE}`:
-            let newInstanceItem = state.instanceItem;
-            newInstanceItem[action.itemKey] = action.newValue;
-            return {...state,
-                instanceItem: newInstanceItem
-            };
+            if (action.itemKey === 'inputErrors') {
+                return {
+                    ...state,
+                    instanceItem: {
+                        ...state.instanceItem,
+                        inputErrors: {
+                            ...state.instanceItem.inputErrors,
+                            ...action.newValue
+                        }
+                    }
+                }
+            } else {
+                return {
+                    ...state,
+                    instanceItem: {
+                        ...state.instanceItem,
+                        [action.itemKey]: action.newValue
+                    }
+                }
+            }
         case `${state.namespace}/${SET_INSTANCE_ID}`:
             return {...state,
                 "instanceId": action.itemValue

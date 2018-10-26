@@ -13,7 +13,7 @@ export default class InputComponent extends Component {
             componentId: this.props.componentId,
             inputType: (typeof this.props.inputType === "undefined") ? 'text' : this.props.inputType,
             inputSize: (typeof this.props.inputSize === "undefined") ? 250 : this.props.inputSize,
-            inputValue: (typeof this.props.inputSize === "undefined") ? '' : this.props.inputValue,
+            inputValue: this.props.inputValue,
             validationRegEx: (typeof this.props.validationRegEx === "undefined")
                 ? /^[a-zA-Z ]*$/ : this.props.validationRegEx,
             regExDescription: (typeof this.props.regExDescription === "undefined")
@@ -21,6 +21,7 @@ export default class InputComponent extends Component {
             errorMessages: (typeof this.props.errorMessages === "undefined") ? [] : this.props.errorMessages,
             isError: (typeof this.props.isError === "undefined") ? false : this.props.isError,
             isDisabled: (typeof this.props.isDisabled === "undefined") ? false : this.props.isDisabled,
+            isRequired: (typeof this.props.isRequired === "undefined") ? false : this.props.isRequired
         };
         this.renderInputByType = this.renderInputByType.bind(this);
         this.handleOnChange = this.handleOnChange.bind(this);
@@ -43,18 +44,23 @@ export default class InputComponent extends Component {
     }
     validateValue() {
         let errorMessages = [];
-        const validationErrorMessage =
-            `${getFormattedLabelText(this.state.componentId)} can only contain ${this.state.regExDescription}`;
+        const msg1 = `${getFormattedLabelText(this.state.componentId)} can only contain ${this.state.regExDescription}`;
         let isValid = this.state.validationRegEx.test(this.state.inputValue);
         if (!isValid) {
-            errorMessages.push(validationErrorMessage);
-        } else {
-            this.props.action.setItemValue(this.props.action.namespace, this.props.action.key, this.state.inputValue)
+            errorMessages.push(msg1);
         }
+        // Update local and parent state with result of validation; i.e. throw error, keep status quo, or clear error.
         this.setState({
             ...this.state,
             isError: (errorMessages.length !== 0),
-            errorMessages: errorMessages});
+            errorMessages: errorMessages
+        });
+        this.props.action.setItemValue(this.props.action.namespace,
+            "inputErrors", {[this.props.action.key]: (errorMessages.length !== 0)});
+        // Update parent state with current value only when valid
+        if (errorMessages.length === 0) {
+            this.props.action.setItemValue(this.props.action.namespace, this.props.action.key, this.state.inputValue);
+        }
     }
     renderInputByType() {
         switch(this.state.inputType) {
@@ -105,5 +111,6 @@ InputComponent.propTypes = {
     errorMessages: PropTypes.array,
     isError: PropTypes.bool,
     isDisabled: PropTypes.bool,
+    isRequired: PropTypes.bool,
     action: PropTypes.object.isRequired
 };

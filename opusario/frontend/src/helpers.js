@@ -34,12 +34,24 @@ export function getFlattenedErrors(json) {
     return errors;
 }
 
+// Get errors to display associated with the InputComponent
+export function getFormattedInputComponentErrors(inputErrors, errorMessages) {
+    for (let key in inputErrors) {
+        if (inputErrors.hasOwnProperty(key)) {
+            if (inputErrors[key]) {
+                errorMessages.push(`Value for ${key.replace(/_/g, ' ')} needs to be corrected.` )
+            }
+        }
+    }
+    return errorMessages;
+}
+
 // Format label and placeholder text from ComponentID
 export function getFormattedLabelText(componentID) {
     return componentID.replace(/([A-Z])/g, ' $1').substring(1);
 }
 
-// Generate two random numbers to form one string--used to setup a namespace for actions/reducers
+// Generate random string to setup a namespace for actions/reducers
 export function getNamespace() {
     let randomString = '';
     const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

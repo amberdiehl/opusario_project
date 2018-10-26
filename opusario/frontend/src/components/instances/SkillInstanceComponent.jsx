@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { getFormattedInputComponentErrors } from '../../helpers';
 
 import InputComponent from '../form_components/InputComponent';
 import FlashSuccessIcon from '../form_snippets/FlashSuccessIcon';
@@ -35,6 +36,11 @@ export default class SkillInstanceComponent extends Component {
     }
     validateForm(){
         let errorMessages = [];
+        if (this.props.instanceItem.name.length === 0) {
+            errorMessages.push('Enter a skill name.');
+        }
+        errorMessages = getFormattedInputComponentErrors(this.props.instanceItem.inputErrors, errorMessages);
+        this.props.actions.showError(this.props.namespace, (errorMessages.length !== 0), errorMessages);
         return (errorMessages.length === 0);
     }
     render() {
@@ -55,13 +61,13 @@ export default class SkillInstanceComponent extends Component {
                         regExDescription={"letters, numbers, plus signs, and spaces."}
                         action={{...childAction, key: "name"}}
                     />
-                   <InputComponent
+                    <InputComponent
                         componentId={"Version"}
                         inputValue={this.props.instanceItem.version}
                         validationRegEx={/^[a-zA-Z0-9. ]*$/}
                         regExDescription={"letters, numbers, periods, and spaces."}
                         action={{...childAction, key: "version"}}
-                   />
+                    />
                     <br/><br/>
                     <button className={"button primary small"} onClick={this.buttonOnClick}>{buttonLabel}</button>
                     <FlashSuccessIcon trueFalse={this.props.flashSuccess} />

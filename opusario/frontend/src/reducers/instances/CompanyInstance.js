@@ -6,7 +6,12 @@ export const initialState = {
     ...base_reducer_state,
     namespace: getNamespace(),
     componentId: 'CompanyInformation',
-    instanceId: 10,
+    instanceItem: {
+        name: '',
+        size: '',
+        company_website: '',
+        inputErrors: {}
+    },
     apiRoute: '/api/companies',
 };
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { getFormattedInputComponentErrors } from '../../helpers';
 
 import InputComponent from '../form_components/InputComponent';
 import CitySelectContainer from '../../containers/single_selects/CitySelectContainer';
@@ -18,8 +19,11 @@ export default class CompanyInstanceComponent extends Component {
     }
     componentDidMount() {
         if (this.props.instanceId !== 0) {
+            // Get Company information associated with this instance.
             this.props.actions.fetchItem(this.props.namespace, `${this.props.apiRoute}/${this.props.instanceId}`);
         } else {
+            // For a new company, default country selection to United States
+            // TODO: Get United States key dynamically (low)
             this.props.childActions.setSelectValue(this.props.childState.countryNamespace, '1');
         }
     }
@@ -89,6 +93,7 @@ export default class CompanyInstanceComponent extends Component {
         if (this.props.childState.industrySelectItem === '0') {
             errorMessages.push('Select or add industry.');
         }
+        errorMessages = getFormattedInputComponentErrors(this.props.instanceItem.inputErrors, errorMessages);
         this.props.actions.showError(this.props.namespace, (errorMessages.length !== 0), errorMessages);
         return (errorMessages.length === 0);
     }
@@ -122,8 +127,8 @@ export default class CompanyInstanceComponent extends Component {
                     <InputComponent
                         componentId={"CompanyWebsite"}
                         inputValue={this.props.instanceItem.company_website}
-                        validationRegEx={/^(https:\/\/www.)[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$/}
-                        regExDescription={"a complete URL such as www.opusario.com."}
+                        validationRegEx={/^[a-zA-Z.:/ ]*$/}
+                        regExDescription={"a complete URL such as https://www.opusario.com."}
                         action={{...childAction, key: "company_website"}}
                     />
                     <br/><br/>
