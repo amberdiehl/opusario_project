@@ -9,7 +9,7 @@ export const base_reducer_state = {
     componentId: 'DEFINE',
     instanceId: 0,
     instanceItem: {
-        // DEFINE default values for each model field that will be handled using an InputComponent, e.g.:
+        // YOU MUST DEFINE default values for each model field that will be handled using an InputComponent, e.g.:
         // name: '',
         // version: '',
         inputErrors: {}

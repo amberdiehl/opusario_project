@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { getFormattedInputComponentErrors } from '../../helpers';
 
 import InputComponent from '../form_components/InputComponent';
 import FunctionalAreaContainer from '../../containers/single_selects/FunctionalAreaContainer';
@@ -25,10 +26,13 @@ export default class RoleInstanceComponent extends Component {
     }
     componentWillUpdate(nextProps, nextState, nextContext) {
         // When instanceID has been provided or changed, update stateful child components.
-        if (nextProps.instanceId !== this.props.instanceId) {
+        if (nextProps.instanceItem !== this.props.instanceItem) {
             this.props.childActions.setSelectValue(
                 this.props.childState.functionalAreaNamespace, nextProps.instanceItem.functional_area);
-            this.props.childActions.setSelectValue()
+            this.props.childActions.setCheckedValue(
+                this.props.childState.roleManagementNamespace, (nextProps.instanceItem.management) ? 'yes' : 'no');
+            this.props.childActions.setCheckedValue(
+                this.props.childState.roleLeadershipNamespace, (nextProps.instanceItem.leadership) ? 'yes': 'no');
             this.props.childActions.setM2MForeignKeyValue(
                 this.props.childState.skillNamespace, nextProps.instanceId);
             this.props.childActions.setM2MForeignKeyValue(
@@ -61,7 +65,7 @@ export default class RoleInstanceComponent extends Component {
         if (this.props.childState.functionalAreaSelectItem === '0') {
             errorMessages.push('Add or select a functional area.');
         }
-        if (this.props.childState.roleName.length === 0) {
+        if (this.props.instanceItem.name.length === 0) {
             errorMessages.push('Enter a name for this role; e.g. Software Engineer, Product Manager, Copy Writer, ' +
                 'Customer Service Associate.');
         }
@@ -71,6 +75,7 @@ export default class RoleInstanceComponent extends Component {
         if (this.props.childState.toolSelectItems.length === 0) {
             errorMessages.push('Associate at least one tool for this role.')
         }
+        errorMessages = getFormattedInputComponentErrors(this.props.instanceItem.inputErrors, errorMessages);
         this.props.actions.showError(this.props.namespace, (errorMessages.length !== 0), errorMessages);
         return (errorMessages.length === 0);
     }

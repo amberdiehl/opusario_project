@@ -4,6 +4,7 @@ import RoleInstanceComponent from '../../components/instances/RoleInstanceCompon
 import * as InstanceActions from '../../actions/Instance';
 import * as GenericActions from '../../actions/generic';
 import { setSelectValue, setForeignKeyValue } from "../../actions/SingleSelect";
+import { setCheckedValue } from "../../actions/CheckBoxRadio";
 import { setM2MForeignKeyValue} from "../../actions/ManySelect";
 import { getRoleChildState } from '../../selectors/index';
 
@@ -18,7 +19,8 @@ const mapStateToProps = state => {
 function mapDispatchToProps(dispatch) {
     return {
         actions: bindActionCreators({...InstanceActions, ...GenericActions}, dispatch),
-        childActions: bindActionCreators({ setSelectValue, setForeignKeyValue, setM2MForeignKeyValue }, dispatch)
+        childActions: bindActionCreators(
+            { setSelectValue, setCheckedValue, setForeignKeyValue, setM2MForeignKeyValue }, dispatch)
     };
 }
 

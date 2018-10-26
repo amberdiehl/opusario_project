@@ -17,9 +17,9 @@ export default class CheckBoxRadioComponent extends Component {
     }
     handleOnClick(e) {
         if (this.props.inputType === 'checkbox') {
-            this.props.actions.setSelectValue(this.props.namespace, (e.target.checked) ? 'yes' : 'no');
+            this.props.actions.setCheckedValue(this.props.namespace, (e.target.checked) ? 'yes' : 'no');
         } else {
-            this.props.actions.setSelectValue(this.props.namespace, e.target.value);
+            this.props.actions.setCheckedValue(this.props.namespace, e.target.value);
         }
     }
     renderItem(item, index) {
@@ -30,6 +30,7 @@ export default class CheckBoxRadioComponent extends Component {
                        key={index}
                        value={item.value}
                        onClick={this.handleOnClick}
+                       checked={(this.props.valueChecked === 'yes') ? 'checked' : ''}
                 />
                 <label htmlFor={`${this.props.componentId}-${item.value}`}>{item.label}</label>
             </React.Fragment>
