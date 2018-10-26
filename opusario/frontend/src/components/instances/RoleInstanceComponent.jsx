@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { getFormattedInputComponentErrors } from '../../helpers';
 
+import InputComponent from '../form_components/InputComponent';
 import FunctionalAreaContainer from '../../containers/single_selects/FunctionalAreaContainer';
-import RoleDescriptionContainer from '../../containers/inputs/RoleDescriptionContainer';
 import RoleLeadershipContainer from '../../containers/checkbox_radios/RoleLeadershipContainer';
 import RoleManagementContainer from '../../containers/checkbox_radios/RoleManagementContainer';
-import RoleNameContainer from '../../containers/inputs/RoleNameContainer';
 import SkillSelectContainer from '../../containers/many_selects/SkillSelectContainer';
 import ToolSelectContainer from '../../containers/many_selects/ToolSelectContainer';
 import FlashSuccessIcon from '../form_snippets/FlashSuccessIcon';
@@ -20,19 +20,23 @@ export default class RoleInstanceComponent extends Component {
     }
     componentDidMount() {
         if (this.props.instanceId !== 0) {
-            this.props.actions.fetchItem(
-                this.props.namespace,
-                `${this.props.apiRoute}/${this.props.instanceId}`)
+            // Get Role information associated with this instance.
+            this.props.actions.fetchItem(this.props.namespace, `${this.props.apiRoute}/${this.props.instanceId}`)
         }
     }
     componentWillUpdate(nextProps, nextState, nextContext) {
-        if (nextProps.instanceId !== this.props.instanceId) {
+        // When instanceID has been provided or changed, update stateful child components.
+        if (nextProps.instanceItem !== this.props.instanceItem) {
+            this.props.childActions.setSelectValue(
+                this.props.childState.functionalAreaNamespace, nextProps.instanceItem.functional_area);
+            this.props.childActions.setCheckedValue(
+                this.props.childState.roleManagementNamespace, (nextProps.instanceItem.management) ? 'yes' : 'no');
+            this.props.childActions.setCheckedValue(
+                this.props.childState.roleLeadershipNamespace, (nextProps.instanceItem.leadership) ? 'yes': 'no');
             this.props.childActions.setM2MForeignKeyValue(
-                this.props.childState.skillNamespace,
-                nextProps.instanceId);
+                this.props.childState.skillNamespace, nextProps.instanceId);
             this.props.childActions.setM2MForeignKeyValue(
-                this.props.childState.toolNamespace,
-                nextProps.instanceId)
+                this.props.childState.toolNamespace, nextProps.instanceId)
         }
     }
     componentWillUnmount() {
@@ -46,9 +50,8 @@ export default class RoleInstanceComponent extends Component {
             const apiRoute = (method === 'POST') ? this.props.apiRoute :
                 `${this.props.apiRoute}/${this.props.instanceId}`;
             const data = {
+                ...this.props.instanceItem,
                 "functional_area": this.props.childState.functionalAreaSelectItem,
-                "name": this.props.childState.roleName,
-                "description": this.props.childState.roleDescription,
                 "management": (this.props.childState.roleManagement === 'yes'),
                 "leadership": (this.props.childState.roleLeadership === 'yes'),
                 "skills": this.props.childState.skillSelectItems,
@@ -62,7 +65,7 @@ export default class RoleInstanceComponent extends Component {
         if (this.props.childState.functionalAreaSelectItem === '0') {
             errorMessages.push('Add or select a functional area.');
         }
-        if (this.props.childState.roleName.length === 0) {
+        if (this.props.instanceItem.name.length === 0) {
             errorMessages.push('Enter a name for this role; e.g. Software Engineer, Product Manager, Copy Writer, ' +
                 'Customer Service Associate.');
         }
@@ -72,19 +75,33 @@ export default class RoleInstanceComponent extends Component {
         if (this.props.childState.toolSelectItems.length === 0) {
             errorMessages.push('Associate at least one tool for this role.')
         }
+        errorMessages = getFormattedInputComponentErrors(this.props.instanceItem.inputErrors, errorMessages);
         this.props.actions.showError(this.props.namespace, (errorMessages.length !== 0), errorMessages);
         return (errorMessages.length === 0);
     }
     render() {
         const buttonLabel = (this.props.instanceId === 0) ? 'Add' : 'Update';
+        const childAction = {
+            setItemValue: this.props.actions.setItemValue,
+            namespace: this.props.namespace
+        };
         return(
             <form>
                 <h2>Role</h2>
                 <FormErrorMessages trueFalse={this.props.isError} messages={this.props.errorMessages}/>
                 <div className={"form-field-group"}>
                     <FunctionalAreaContainer/>
-                    <RoleNameContainer/>
-                    <RoleDescriptionContainer/>
+                    <InputComponent
+                        componentId={"RoleName"}
+                        inputValue={this.props.instanceItem.name}
+                        action={{...childAction, key: "name"}}
+                    />
+                    <InputComponent
+                        componentId={"RoleDescription"}
+                        inputType={"textarea"}
+                        inputValue={this.props.instanceItem.description}
+                        action={{...childAction, key: "description"}}
+                    />
                     <RoleManagementContainer/>
                     <RoleLeadershipContainer/>
                     <SkillSelectContainer/>

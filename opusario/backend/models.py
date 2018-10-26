@@ -170,11 +170,11 @@ class Skill(models.Model):
         return self.name
 
     def get_roles(self):
+        roles = []
         qs = Role.objects.filter(skills=self.pk)
-        if len(qs):
-            return "\n".join([r.name for r in qs])
-        else:
-            return []
+        for role in qs:
+            roles.append(role.id)
+        return roles
 
 
 class Tool(models.Model):
@@ -198,11 +198,12 @@ class Tool(models.Model):
         return self.name
 
     def get_roles(self):
+        # return "\n".join([r.pk for r in qs])
+        roles = []
         qs = Role.objects.filter(tools=self.pk)
-        if len(qs):
-            return "\n".join([r.name for r in qs])
-        else:
-            return []
+        for role in qs:
+            roles.append(role.id)
+        return roles
 
 
 class Role(models.Model):

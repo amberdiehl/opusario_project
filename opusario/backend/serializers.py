@@ -21,6 +21,9 @@ class CitySerializer(serializers.ModelSerializer):
 
 class CompanySerializer(serializers.ModelSerializer):
 
+    country = serializers.SerializerMethodField()
+    state = serializers.SerializerMethodField()
+
     def validate(self, data):
         error_messages = []
         if re.match("^[a-zA-Z0-9 ]*$", data['name']):
@@ -33,6 +36,12 @@ class CompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = Company
         fields = '__all__'
+
+    def get_country(self, obj):
+        return obj.city.state.country_id
+
+    def get_state(self, obj):
+        return obj.city.state.id
 
 
 class CountrySerializer(serializers.ModelSerializer):

@@ -16,6 +16,6 @@ const initialState = {
     apiRoute: '/api/cities',
 };
 
-export default function city(state=initialState, action) {
+export default function city_select(state=initialState, action) {
     return base_reducer_single_select(state, action);
 }

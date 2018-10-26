@@ -6,7 +6,11 @@ export const initialState = {
     ...base_reducer_state,
     namespace: getNamespace(),
     componentId: 'Role',
-    instanceId: 7,
+    instanceItem: {
+        name: '',
+        description: '',
+        inputErrors: {}
+    },
     apiRoute: '/api/roles',
 };
 
