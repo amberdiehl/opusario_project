@@ -4,12 +4,12 @@ import ModalButtonComponent from '../../components/form_components/MagicModalBut
 import { resetModalInstance } from '../../actions/Instance';
 import { fetchItems, addSelectItem } from "../../actions/ManySelect";
 import { setShowModal } from "../../actions/ModalWrapper";
-import { getSkillModalChildState } from '../../selectors/index';
+import { getToolModalChildState } from '../../selectors/index';
 
 
 const mapStateToProps = state => {
     return {
-        childState: getSkillModalChildState(state)
+        childState: getToolModalChildState(state)
     };
 };
 
@@ -20,9 +20,9 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-const SkillModalButtonContainer = connect(
+const ToolModalButtonContainer = connect(
     mapStateToProps,
     mapDispatchToProps
 )(ModalButtonComponent);
 
-export default SkillModalButtonContainer;
+export default ToolModalButtonContainer;

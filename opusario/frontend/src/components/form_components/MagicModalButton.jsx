@@ -10,15 +10,19 @@ export default class ModalButtonComponent extends Component {
     componentDidMount() {
     }
     componentWillUpdate(nextProps, nextState, nextContext) {
-        if (nextProps.childState.instanceId !== this.props.childState.instanceId) {
-            // add instance ID to many select selected items
+        // automatically select and show item created by adding returned instance ID to selected items, re-fetching
+        // items associated with the select, close the modal, and reset the modal instance so that it's not left in an
+        // update state.
+        // TODO: Need to enable magic button to handle single select.
+        // Call setSelectValue instead of addSelectItem and fetchItems needs to happen first
+        if ((nextProps.childState.instanceId !== this.props.childState.instanceId) &&
+            (nextProps.childState.instanceId !== 0)) {  // reset below will trigger adding a 0 key
             this.props.childActions.addSelectItem(this.props.childState.manySelectNamespace,
                 nextProps.childState.instanceId);
-            // refresh many select
             this.props.childActions.fetchItems(this.props.childState.manySelectNamespace,
                 this.props.childState.manySelectRoute);
-            // close the modal
-            this.props.childActions.setShowModal(this.props.childState.modalNamespace, false)
+            this.props.childActions.setShowModal(this.props.childState.modalNamespace, false);
+            this.props.childActions.resetModalInstance(this.props.childState.instanceNamespace);
         }
     }
     handleOnClick(e) {

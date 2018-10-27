@@ -42,12 +42,14 @@ export const base_reducer_state = {
 export function base_reducer(state, action) {
     switch (action.type) {
         case `${state.namespace}/${FETCH_ITEMS}`:
-            let alreadySelected = state.selectItems.slice(0);
+            let alreadySelected = [];
             if (action.initializeSelectItems) {
                 for (let i = 0; i < action.items.length; i++) {
                     let foundKey = action.items[i][state.m2mModelField].indexOf(state.m2mInstanceId);
                     if (foundKey !== -1) { alreadySelected.push(action.items[i].id) }
                 }
+            } else {
+                alreadySelected = state.selectItems.slice(0);
             }
             return {...state,
                 "items": action.items,

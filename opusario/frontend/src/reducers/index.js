@@ -14,6 +14,8 @@ import skill_instance from './instances/SkillInstance';
 import skill_modal from './modal_wrappers/SkillModalWrapper';
 import skill_select from './many_selects/SkillManySelect';
 import state_name from './single_selects/State';
+import tool_instance from './instances/ToolInstance';
+import tool_modal from './modal_wrappers/ToolModalWrapper';
 import tool_select from './many_selects/ToolManySelect'
 
 
@@ -32,6 +34,8 @@ const OpusarioReducers = combineReducers({
     role_leadership,
     role_management,
     state_name,
+    tool_instance,
+    tool_modal,
     tool_select
 });
 

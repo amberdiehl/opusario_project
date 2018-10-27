@@ -6,6 +6,7 @@ export const FETCH_ITEM = 'FETCH_ITEM';
 export const FETCH_ITEMS = 'FETCH_ITEMS';
 export const FLASH_SUCCESS = 'FLASH_SUCCESS';
 export const REMOVE_ITEM = 'REMOVE_ITEM';
+export const RESET_MODAL_INSTANCE = 'RESET_MODAL_INSTANCE';
 export const SET_FILTER = 'SET_FILTER';
 export const SET_FOREIGN_KEY_VALUE = 'SET_FOREIGN_KEY_VALUE';
 export const SET_INSTANCE_ID = 'SET_INSTANCE_ID';

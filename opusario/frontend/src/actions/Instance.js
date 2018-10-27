@@ -1,6 +1,7 @@
 import { csrfHeader, getFlattenedErrors } from "../helpers";
 import {setFlashSuccess, setLoading, showError} from './generic';
-import {FETCH_ITEM, SET_INSTANCE_ID, SET_ITEM_VALUE, server500ErrorMessage} from "../constants";
+import {FETCH_ITEM, SET_INSTANCE_ID, SET_ITEM_VALUE, RESET_MODAL_INSTANCE,
+    server500ErrorMessage} from "../constants";
 
 
 export const fetchItem = (namespace, apiRoute) => {
@@ -66,5 +67,11 @@ export const setItemValue = (namespace, itemKey, newValue) => {
         type: `${namespace}/${SET_ITEM_VALUE}`,
         itemKey,
         newValue
+    };
+};
+
+export const resetModalInstance = (namespace) => {
+    return {
+        type: `${namespace}/${RESET_MODAL_INSTANCE}`,
     };
 };

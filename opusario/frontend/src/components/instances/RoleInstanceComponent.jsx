@@ -13,6 +13,10 @@ import FormErrorMessages from '../form_snippets/FormErrorMessages';
 import SkillModalWrapperContainer from '../../containers/modal_wrappers/SkillModalWrapperContainer';
 import SkillModalButtonContainer from '../../containers/modal_buttons/SkillModalButtonContainer';
 import SkillInstanceContainer from '../../containers/instances/SkillInstanceContainer';
+import ToolModalWrapperContainer from '../../containers/modal_wrappers/ToolModalWrapperContainer';
+import ToolModalButtonContainer from '../../containers/modal_buttons/ToolModalButtonContainer';
+import ToolInstanceContainer from '../../containers/instances/ToolInstanceContainer';
+import ToolInstanceComponent from "./ToolInstanceComponent";
 
 
 export default class RoleInstanceComponent extends Component {
@@ -29,7 +33,7 @@ export default class RoleInstanceComponent extends Component {
     }
     componentWillUpdate(nextProps, nextState, nextContext) {
         // When instanceID has been provided or changed, update stateful child components.
-        if (nextProps.instanceItem !== this.props.instanceItem) {
+        if (nextProps.instanceId !== this.props.instanceId) {
             this.props.childActions.setSelectValue(
                 this.props.childState.functionalAreaNamespace, nextProps.instanceItem.functional_area);
             this.props.childActions.setCheckedValue(
@@ -84,7 +88,7 @@ export default class RoleInstanceComponent extends Component {
     }
     render() {
         const buttonLabel = (this.props.instanceId === 0) ? 'Add' : 'Update';
-        const childAction = {
+        const inputComponentAction = {
             setItemValue: this.props.actions.setItemValue,
             namespace: this.props.namespace
         };
@@ -98,19 +102,20 @@ export default class RoleInstanceComponent extends Component {
                         <InputComponent
                             componentId={"RoleName"}
                             inputValue={this.props.instanceItem.name}
-                            action={{...childAction, key: "name"}}
+                            action={{...inputComponentAction, key: "name"}}
                         />
                         <InputComponent
                             componentId={"RoleDescription"}
                             inputType={"textarea"}
                             inputValue={this.props.instanceItem.description}
-                            action={{...childAction, key: "description"}}
+                            action={{...inputComponentAction, key: "description"}}
                         />
                         <RoleManagementContainer/>
                         <RoleLeadershipContainer/>
                         <SkillSelectContainer/>
                         <SkillModalButtonContainer/>
                         <ToolSelectContainer/>
+                        <ToolModalButtonContainer/>
                         <br/><br/>
                         <button className={"button primary small"} onClick={this.buttonOnClick}>{buttonLabel}</button>
                         <FlashSuccessIcon trueFalse={this.props.flashSuccess} />
@@ -119,6 +124,9 @@ export default class RoleInstanceComponent extends Component {
                 <SkillModalWrapperContainer>
                     <SkillInstanceContainer/>
                 </SkillModalWrapperContainer>
+                <ToolModalWrapperContainer>
+                    <ToolInstanceContainer/>
+                </ToolModalWrapperContainer>
             </Fragment>
         );
     }

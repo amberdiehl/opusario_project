@@ -5,7 +5,7 @@ import { getNamespace } from '../../helpers';
 export const initialState = {
     ...base_reducer_state,
     namespace: getNamespace(),
-    componentId: 'Skill',
+    componentId: 'Tool',
     instanceItem: {
         name: '',
         version: '',
@@ -19,9 +19,9 @@ export const initialState = {
             inputErrors: {}
         }
     },
-    apiRoute: '/api/skills',
+    apiRoute: '/api/tools',
 };
 
-export default function skill_instance(state=initialState, action) {
+export default function tool_instance(state=initialState, action) {
     return base_reducer(state, action);
 }
