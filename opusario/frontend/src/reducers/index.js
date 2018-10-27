@@ -11,6 +11,7 @@ import role_leadership from './checkbox_radios/RoleLeadership';
 import role_management from './checkbox_radios/RoleManagement';
 import role_select from './single_selects/RoleSelect';
 import skill_instance from './instances/SkillInstance';
+import skill_modal from './modal_wrappers/SkillModalWrapper';
 import skill_select from './many_selects/SkillManySelect';
 import state_name from './single_selects/State';
 import tool_select from './many_selects/ToolManySelect'
@@ -23,6 +24,7 @@ const OpusarioReducers = combineReducers({
     functional_area,
     industry,
     skill_instance,
+    skill_modal,
     skill_select,
     myself,
     role_select,

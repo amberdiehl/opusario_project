@@ -10,7 +10,8 @@ import SkillSelectContainer from '../../containers/many_selects/SkillSelectConta
 import ToolSelectContainer from '../../containers/many_selects/ToolSelectContainer';
 import FlashSuccessIcon from '../form_snippets/FlashSuccessIcon';
 import FormErrorMessages from '../form_snippets/FormErrorMessages';
-import ModalWrapperComponent from '../wrappers/ModalWrapperComponent';
+import SkillModalWrapperContainer from '../../containers/modal_wrappers/SkillModalWrapperContainer';
+import SkillModalButtonContainer from '../../containers/modal_buttons/SkillModalButtonContainer';
 import SkillInstanceContainer from '../../containers/instances/SkillInstanceContainer';
 
 
@@ -108,15 +109,16 @@ export default class RoleInstanceComponent extends Component {
                         <RoleManagementContainer/>
                         <RoleLeadershipContainer/>
                         <SkillSelectContainer/>
+                        <SkillModalButtonContainer/>
                         <ToolSelectContainer/>
                         <br/><br/>
                         <button className={"button primary small"} onClick={this.buttonOnClick}>{buttonLabel}</button>
                         <FlashSuccessIcon trueFalse={this.props.flashSuccess} />
                     </div>
                 </form>
-                <ModalWrapperComponent showModal={true}>
+                <SkillModalWrapperContainer>
                     <SkillInstanceContainer/>
-                </ModalWrapperComponent>
+                </SkillModalWrapperContainer>
             </Fragment>
         );
     }
