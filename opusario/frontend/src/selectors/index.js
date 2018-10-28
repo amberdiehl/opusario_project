@@ -18,7 +18,7 @@ const getRoleManagementNamespace = (state) => state.role_management.namespace;
 const getSkillInstanceInstanceId = (state) => state.skill_instance.instanceId;
 const getSkillInstanceNamespace = (state) => state.skill_instance.namespace;
 const getSkillModalNamespace = (state) => state.skill_modal.namespace;
-const getSkillSelectItems = (state) => state.skill_select.selectItems;
+//const getSkillSelectItems = (state) => state.skill_select.selectItems;
 const getSkillSelectNamespace = (state) => state.skill_select.namespace;
 const getSkillSelectRoute = (state) => state.skill_select.apiRoute;
 const getStateSelectItem = (state) => state.state_name.selectItem;
@@ -26,7 +26,7 @@ const getStateNamespace = (state) => state.state_name.namespace;
 const getToolInstanceInstanceId = (state) => state.tool_instance.instanceId;
 const getToolInstanceNamespace = (state) => state.tool_instance.namespace;
 const getToolModalNamespace = (state) => state.tool_modal.namespace;
-const getToolSelectItems = (state) => state.tool_select.selectItems;
+//const getToolSelectItems = (state) => state.tool_select.selectItems;
 const getToolSelectNamespace = (state) => state.tool_select.namespace;
 const getToolSelectRoute = (state) => state.tool_select.apiRoute;
 
@@ -52,22 +52,16 @@ export const getCompanyChildState = createSelector(
 
 export const getRoleChildState = createSelector(
     [ getFunctionalAreaSelectItem, getFunctionalAreaNamespace, getRoleLeadership, getRoleLeadershipNamespace,
-        getRoleManagement, getRoleManagementNamespace, getSkillSelectItems, getSkillSelectNamespace,
-        getToolSelectItems, getToolSelectNamespace],
+        getRoleManagement, getRoleManagementNamespace],
     (functionalAreaSelectItem, functionalAreaNamespace, roleLeadership, roleLeadershipNamespace,
-     roleManagement, roleManagementNamespace, skillSelectItems, skillNamespace,
-     toolSelectItems, toolNamespace) => {
+     roleManagement, roleManagementNamespace) => {
         return ({
             functionalAreaSelectItem,
             functionalAreaNamespace,
             roleLeadership,
             roleLeadershipNamespace,
             roleManagement,
-            roleManagementNamespace,
-            skillSelectItems,
-            skillNamespace,
-            toolSelectItems,
-            toolNamespace,
+            roleManagementNamespace
         });
     }
 );

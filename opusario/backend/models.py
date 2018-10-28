@@ -169,13 +169,6 @@ class Skill(models.Model):
     def __str__(self):
         return self.name
 
-    def get_roles(self):
-        roles = []
-        qs = Role.objects.filter(skills=self.pk)
-        for role in qs:
-            roles.append(role.id)
-        return roles
-
 
 class Tool(models.Model):
     name = models.CharField(
@@ -196,14 +189,6 @@ class Tool(models.Model):
 
     def __str__(self):
         return self.name
-
-    def get_roles(self):
-        # return "\n".join([r.pk for r in qs])
-        roles = []
-        qs = Role.objects.filter(tools=self.pk)
-        for role in qs:
-            roles.append(role.id)
-        return roles
 
 
 class Role(models.Model):
@@ -227,14 +212,6 @@ class Role(models.Model):
     )
     leadership = models.BooleanField(
         help_text='Has executive leadership.'
-    )
-    skills = models.ManyToManyField(
-        Skill,
-        help_text='Skills associated with this role.'
-    )
-    tools = models.ManyToManyField(
-        Tool,
-        help_text='Tools associated with this role.'
     )
     created = models.DateTimeField(auto_now_add=True)
 

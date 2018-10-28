@@ -6,16 +6,8 @@ import InputComponent from '../form_components/InputComponent';
 import FunctionalAreaContainer from '../../containers/single_selects/FunctionalAreaContainer';
 import RoleLeadershipContainer from '../../containers/checkbox_radios/RoleLeadershipContainer';
 import RoleManagementContainer from '../../containers/checkbox_radios/RoleManagementContainer';
-import SkillSelectContainer from '../../containers/many_selects/SkillSelectContainer';
-import ToolSelectContainer from '../../containers/many_selects/ToolSelectContainer';
 import FlashSuccessIcon from '../form_snippets/FlashSuccessIcon';
 import FormErrorMessages from '../form_snippets/FormErrorMessages';
-import SkillModalWrapperContainer from '../../containers/modal_wrappers/SkillModalWrapperContainer';
-import SkillModalButtonContainer from '../../containers/modal_buttons/SkillModalButtonContainer';
-import SkillInstanceContainer from '../../containers/instances/SkillInstanceContainer';
-import ToolModalWrapperContainer from '../../containers/modal_wrappers/ToolModalWrapperContainer';
-import ToolModalButtonContainer from '../../containers/modal_buttons/ToolModalButtonContainer';
-import ToolInstanceContainer from '../../containers/instances/ToolInstanceContainer';
 
 
 export default class RoleInstanceComponent extends Component {
@@ -34,8 +26,6 @@ export default class RoleInstanceComponent extends Component {
         // When instanceID has been provided or changed, update stateful child components.
         if (nextProps.instanceId !== this.props.instanceId) {
             this.props.actions.fetchItem(this.props.namespace, `${this.props.apiRoute}/${nextProps.instanceId}`);
-            this.props.childActions.setM2MForeignKeyValue(this.props.childState.skillNamespace, nextProps.instanceId);
-            this.props.childActions.setM2MForeignKeyValue(this.props.childState.toolNamespace, nextProps.instanceId)
         }
         if (nextProps.instanceItem.functional_area !== this.props.instanceItem.functional_area) {
             this.props.childActions.setSelectValue(this.props.childState.functionalAreaNamespace,
@@ -65,8 +55,6 @@ export default class RoleInstanceComponent extends Component {
                 "functional_area": this.props.childState.functionalAreaSelectItem,
                 "management": (this.props.childState.roleManagement === 'yes'),
                 "leadership": (this.props.childState.roleLeadership === 'yes'),
-                "skills": this.props.childState.skillSelectItems,
-                "tools": this.props.childState.toolSelectItems
             };
             this.props.actions.addOrUpdateItem(this.props.namespace, apiRoute, method, data);
         }
@@ -79,12 +67,6 @@ export default class RoleInstanceComponent extends Component {
         if (this.props.instanceItem.name.length === 0) {
             errorMessages.push('Enter a name for this role; e.g. Software Engineer, Product Manager, Copy Writer, ' +
                 'Customer Service Associate.');
-        }
-        if (this.props.childState.skillSelectItems.length === 0) {
-            errorMessages.push('Associate at least one skill for this role.')
-        }
-        if (this.props.childState.toolSelectItems.length === 0) {
-            errorMessages.push('Associate at least one tool for this role.')
         }
         errorMessages = getFormattedInputComponentErrors(this.props.instanceItem.inputErrors, errorMessages);
         this.props.actions.showError(this.props.namespace, (errorMessages.length !== 0), errorMessages);
@@ -118,22 +100,12 @@ export default class RoleInstanceComponent extends Component {
                         />
                         <RoleManagementContainer/>
                         <RoleLeadershipContainer/>
-                        <SkillSelectContainer/>
-                        <SkillModalButtonContainer/>
-                        <ToolSelectContainer/>
-                        <ToolModalButtonContainer/>
                         <br/><br/>
                         <button className={"button primary small"} onClick={this.buttonOnClick}>{buttonLabel}</button>
                         <FlashSuccessIcon trueFalse={this.props.flashSuccess} />
                     </div>
                 </form>
-                <SkillModalWrapperContainer>
-                    <SkillInstanceContainer/>
-                </SkillModalWrapperContainer>
-                <ToolModalWrapperContainer>
-                    <ToolInstanceContainer/>
-                </ToolModalWrapperContainer>
-            </Fragment>
+           </Fragment>
         );
     }
 }

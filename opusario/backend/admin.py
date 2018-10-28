@@ -28,7 +28,7 @@ class RoleAdmin(admin.ModelAdmin):
 
 @admin.register(Skill)
 class SkillAdmin(admin.ModelAdmin):
-    list_display = ('id', 'get_roles', 'name', 'version', )
+    list_display = ('id', 'name', 'version', )
 
 
 @admin.register(State)
