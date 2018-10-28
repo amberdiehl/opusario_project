@@ -11,7 +11,6 @@ const initialState = {
         defaultValue,
     ],
     defaultValue: defaultValue,
-    addMethod: 'modal',
     hasForeignKey: true,
     foreignKeyModel: 'at_functional_area',
     foreignKeyValue: '0',

@@ -1,4 +1,5 @@
-import {FETCH_ITEM, FLASH_SUCCESS, SET_INSTANCE_ID, SET_ITEM_VALUE, SHOW_ERROR} from "../../constants";
+import {FETCH_ITEM, FLASH_SUCCESS, SET_INSTANCE_ID, SET_ITEM_VALUE, RESET_MODAL_INSTANCE,
+    SHOW_ERROR} from "../../constants";
 
 /*
 Defines STATE for the model instance components and initial defaults. Any key with a value of 'DEFINE'
@@ -13,6 +14,15 @@ export const base_reducer_state = {
         // name: '',
         // version: '',
         inputErrors: {}
+    },
+    modalReset: {
+        instanceId: 0,
+        instanceItem: {
+            // When instance is used in a modal, you MUST define default values as above, e.g.:
+            // name: '',
+            // version: '',
+            inputErrors: {}
+        }
     },
     childState: {},
     errorMessages: [],
@@ -38,6 +48,9 @@ export function base_reducer(state, action) {
                             ...state.instanceItem.inputErrors,
                             ...action.newValue
                         }
+                    },
+                    childState: {
+                        ...state.childState
                     }
                 }
             } else {
@@ -46,6 +59,9 @@ export function base_reducer(state, action) {
                     instanceItem: {
                         ...state.instanceItem,
                         [action.itemKey]: action.newValue
+                    },
+                    childState: {
+                        ...state.childState
                     }
                 }
             }
@@ -61,6 +77,10 @@ export function base_reducer(state, action) {
             return {...state,
                 "isError": action.trueFalse,
                 "errorMessages": action.message
+            };
+        case `${state.namespace}/${RESET_MODAL_INSTANCE}`:
+            return {...state,
+                ...state.modalReset
             };
         default:
             return state;

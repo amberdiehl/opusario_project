@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component, Fragment} from 'react';
 import PropTypes from 'prop-types';
 import { getFormattedInputComponentErrors } from '../../helpers';
 
@@ -10,6 +10,12 @@ import SkillSelectContainer from '../../containers/many_selects/SkillSelectConta
 import ToolSelectContainer from '../../containers/many_selects/ToolSelectContainer';
 import FlashSuccessIcon from '../form_snippets/FlashSuccessIcon';
 import FormErrorMessages from '../form_snippets/FormErrorMessages';
+import SkillModalWrapperContainer from '../../containers/modal_wrappers/SkillModalWrapperContainer';
+import SkillModalButtonContainer from '../../containers/modal_buttons/SkillModalButtonContainer';
+import SkillInstanceContainer from '../../containers/instances/SkillInstanceContainer';
+import ToolModalWrapperContainer from '../../containers/modal_wrappers/ToolModalWrapperContainer';
+import ToolModalButtonContainer from '../../containers/modal_buttons/ToolModalButtonContainer';
+import ToolInstanceContainer from '../../containers/instances/ToolInstanceContainer';
 
 
 export default class RoleInstanceComponent extends Component {
@@ -21,22 +27,27 @@ export default class RoleInstanceComponent extends Component {
     componentDidMount() {
         if (this.props.instanceId !== 0) {
             // Get Role information associated with this instance.
-            this.props.actions.fetchItem(this.props.namespace, `${this.props.apiRoute}/${this.props.instanceId}`)
+            this.props.actions.fetchItem(this.props.namespace, `${this.props.apiRoute}/${this.props.instanceId}`);
         }
     }
     componentWillUpdate(nextProps, nextState, nextContext) {
         // When instanceID has been provided or changed, update stateful child components.
-        if (nextProps.instanceItem !== this.props.instanceItem) {
-            this.props.childActions.setSelectValue(
-                this.props.childState.functionalAreaNamespace, nextProps.instanceItem.functional_area);
-            this.props.childActions.setCheckedValue(
-                this.props.childState.roleManagementNamespace, (nextProps.instanceItem.management) ? 'yes' : 'no');
-            this.props.childActions.setCheckedValue(
-                this.props.childState.roleLeadershipNamespace, (nextProps.instanceItem.leadership) ? 'yes': 'no');
-            this.props.childActions.setM2MForeignKeyValue(
-                this.props.childState.skillNamespace, nextProps.instanceId);
-            this.props.childActions.setM2MForeignKeyValue(
-                this.props.childState.toolNamespace, nextProps.instanceId)
+        if (nextProps.instanceId !== this.props.instanceId) {
+            this.props.actions.fetchItem(this.props.namespace, `${this.props.apiRoute}/${nextProps.instanceId}`);
+            this.props.childActions.setM2MForeignKeyValue(this.props.childState.skillNamespace, nextProps.instanceId);
+            this.props.childActions.setM2MForeignKeyValue(this.props.childState.toolNamespace, nextProps.instanceId)
+        }
+        if (nextProps.instanceItem.functional_area !== this.props.instanceItem.functional_area) {
+            this.props.childActions.setSelectValue(this.props.childState.functionalAreaNamespace,
+                nextProps.instanceItem.functional_area);
+        }
+        if (nextProps.instanceItem.management !== this.props.instanceItem.management) {
+            this.props.childActions.setCheckedValue(this.props.childState.roleManagementNamespace,
+                (nextProps.instanceItem.management) ? 'yes' : 'no');
+        }
+        if (nextProps.instanceItem.leadership !== this.props.instanceItem.leadership) {
+            this.props.childActions.setCheckedValue(this.props.childState.roleLeadershipNamespace,
+                (nextProps.instanceItem.leadership) ? 'yes' : 'no');
         }
     }
     componentWillUnmount() {
@@ -81,36 +92,48 @@ export default class RoleInstanceComponent extends Component {
     }
     render() {
         const buttonLabel = (this.props.instanceId === 0) ? 'Add' : 'Update';
-        const childAction = {
+        const inputComponentAction = {
             setItemValue: this.props.actions.setItemValue,
             namespace: this.props.namespace
         };
         return(
-            <form>
-                <h2>Role</h2>
-                <FormErrorMessages trueFalse={this.props.isError} messages={this.props.errorMessages}/>
-                <div className={"form-field-group"}>
-                    <FunctionalAreaContainer/>
-                    <InputComponent
-                        componentId={"RoleName"}
-                        inputValue={this.props.instanceItem.name}
-                        action={{...childAction, key: "name"}}
-                    />
-                    <InputComponent
-                        componentId={"RoleDescription"}
-                        inputType={"textarea"}
-                        inputValue={this.props.instanceItem.description}
-                        action={{...childAction, key: "description"}}
-                    />
-                    <RoleManagementContainer/>
-                    <RoleLeadershipContainer/>
-                    <SkillSelectContainer/>
-                    <ToolSelectContainer/>
-                    <br/><br/>
-                    <button className={"button primary small"} onClick={this.buttonOnClick}>{buttonLabel}</button>
-                    <FlashSuccessIcon trueFalse={this.props.flashSuccess} />
-                </div>
-            </form>
+            <Fragment>
+                <form>
+                    <h2>Role</h2>
+                    <FormErrorMessages trueFalse={this.props.isError} messages={this.props.errorMessages}/>
+                    <div className={"form-field-group"}>
+                        <FunctionalAreaContainer/>
+                        <InputComponent
+                            componentId={"RoleName"}
+                            inputValue={this.props.instanceItem.name}
+                            action={{...inputComponentAction, key: "name"}}
+                        />
+                        <InputComponent
+                            componentId={"RoleDescription"}
+                            inputType={"textarea"}
+                            inputValue={this.props.instanceItem.description}
+                            validationRegEx={/^[a-zA-Z0-9,.; ]*$/}
+                            regExDescription={"letters, numbers, and punctuation marks: comma, period, and semicolon."}
+                            action={{...inputComponentAction, key: "description"}}
+                        />
+                        <RoleManagementContainer/>
+                        <RoleLeadershipContainer/>
+                        <SkillSelectContainer/>
+                        <SkillModalButtonContainer/>
+                        <ToolSelectContainer/>
+                        <ToolModalButtonContainer/>
+                        <br/><br/>
+                        <button className={"button primary small"} onClick={this.buttonOnClick}>{buttonLabel}</button>
+                        <FlashSuccessIcon trueFalse={this.props.flashSuccess} />
+                    </div>
+                </form>
+                <SkillModalWrapperContainer>
+                    <SkillInstanceContainer/>
+                </SkillModalWrapperContainer>
+                <ToolModalWrapperContainer>
+                    <ToolInstanceContainer/>
+                </ToolModalWrapperContainer>
+            </Fragment>
         );
     }
 }

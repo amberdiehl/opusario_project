@@ -110,7 +110,6 @@ SingleSelectComponent.propTypes = {
     defaultValue: PropTypes.object.isRequired, // The default starting value (e.g. please select) to self populate.
     selectItem: PropTypes.string.isRequired,
     allowAdd: PropTypes.bool.isRequired,
-    addMethod: PropTypes.string.isRequired,
     validationRegEx: PropTypes.any.isRequired, // Not clear on how to indicate this is a RegEx.
     regExDescription: PropTypes.string.isRequired,
     hasForeignKey: PropTypes.bool.isRequired,
