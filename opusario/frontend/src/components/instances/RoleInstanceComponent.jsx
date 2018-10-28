@@ -16,7 +16,6 @@ import SkillInstanceContainer from '../../containers/instances/SkillInstanceCont
 import ToolModalWrapperContainer from '../../containers/modal_wrappers/ToolModalWrapperContainer';
 import ToolModalButtonContainer from '../../containers/modal_buttons/ToolModalButtonContainer';
 import ToolInstanceContainer from '../../containers/instances/ToolInstanceContainer';
-import ToolInstanceComponent from "./ToolInstanceComponent";
 
 
 export default class RoleInstanceComponent extends Component {
@@ -28,22 +27,27 @@ export default class RoleInstanceComponent extends Component {
     componentDidMount() {
         if (this.props.instanceId !== 0) {
             // Get Role information associated with this instance.
-            this.props.actions.fetchItem(this.props.namespace, `${this.props.apiRoute}/${this.props.instanceId}`)
+            this.props.actions.fetchItem(this.props.namespace, `${this.props.apiRoute}/${this.props.instanceId}`);
         }
     }
     componentWillUpdate(nextProps, nextState, nextContext) {
         // When instanceID has been provided or changed, update stateful child components.
         if (nextProps.instanceId !== this.props.instanceId) {
-            this.props.childActions.setSelectValue(
-                this.props.childState.functionalAreaNamespace, nextProps.instanceItem.functional_area);
-            this.props.childActions.setCheckedValue(
-                this.props.childState.roleManagementNamespace, (nextProps.instanceItem.management) ? 'yes' : 'no');
-            this.props.childActions.setCheckedValue(
-                this.props.childState.roleLeadershipNamespace, (nextProps.instanceItem.leadership) ? 'yes': 'no');
-            this.props.childActions.setM2MForeignKeyValue(
-                this.props.childState.skillNamespace, nextProps.instanceId);
-            this.props.childActions.setM2MForeignKeyValue(
-                this.props.childState.toolNamespace, nextProps.instanceId)
+            this.props.actions.fetchItem(this.props.namespace, `${this.props.apiRoute}/${nextProps.instanceId}`);
+            this.props.childActions.setM2MForeignKeyValue(this.props.childState.skillNamespace, nextProps.instanceId);
+            this.props.childActions.setM2MForeignKeyValue(this.props.childState.toolNamespace, nextProps.instanceId)
+        }
+        if (nextProps.instanceItem.functional_area !== this.props.instanceItem.functional_area) {
+            this.props.childActions.setSelectValue(this.props.childState.functionalAreaNamespace,
+                nextProps.instanceItem.functional_area);
+        }
+        if (nextProps.instanceItem.management !== this.props.instanceItem.management) {
+            this.props.childActions.setCheckedValue(this.props.childState.roleManagementNamespace,
+                (nextProps.instanceItem.management) ? 'yes' : 'no');
+        }
+        if (nextProps.instanceItem.leadership !== this.props.instanceItem.leadership) {
+            this.props.childActions.setCheckedValue(this.props.childState.roleLeadershipNamespace,
+                (nextProps.instanceItem.leadership) ? 'yes' : 'no');
         }
     }
     componentWillUnmount() {
@@ -108,6 +112,8 @@ export default class RoleInstanceComponent extends Component {
                             componentId={"RoleDescription"}
                             inputType={"textarea"}
                             inputValue={this.props.instanceItem.description}
+                            validationRegEx={/^[a-zA-Z0-9,.; ]*$/}
+                            regExDescription={"letters, numbers, and punctuation marks: comma, period, and semicolon."}
                             action={{...inputComponentAction, key: "description"}}
                         />
                         <RoleManagementContainer/>
