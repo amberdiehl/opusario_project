@@ -5,7 +5,6 @@ import * as InstanceActions from '../../actions/Instance';
 import * as GenericActions from '../../actions/generic';
 import { setSelectValue, setForeignKeyValue } from "../../actions/SingleSelect";
 import { setCheckedValue } from "../../actions/CheckBoxRadio";
-import { setM2MForeignKeyValue} from "../../actions/ManySelect";
 import { getRoleChildState } from '../../selectors/index';
 
 
@@ -20,7 +19,7 @@ function mapDispatchToProps(dispatch) {
     return {
         actions: bindActionCreators({...InstanceActions, ...GenericActions}, dispatch),
         childActions: bindActionCreators(
-            { setSelectValue, setCheckedValue, setForeignKeyValue, setM2MForeignKeyValue }, dispatch)
+            { setSelectValue, setCheckedValue, setForeignKeyValue, }, dispatch)
     };
 }
 
