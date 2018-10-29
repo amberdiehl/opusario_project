@@ -21,6 +21,7 @@ class CitySerializer(serializers.ModelSerializer):
 
 class CompanySerializer(serializers.ModelSerializer):
 
+    composite_name = serializers.SerializerMethodField()
     country = serializers.SerializerMethodField()
     state = serializers.SerializerMethodField()
 
@@ -42,6 +43,9 @@ class CompanySerializer(serializers.ModelSerializer):
 
     def get_state(self, obj):
         return obj.city.state.id
+
+    def get_composite_name(self, obj):
+        return '{} - {}, {}'.format(obj.name, obj.city.name, obj.city.state.abbreviation)
 
 
 class CountrySerializer(serializers.ModelSerializer):
@@ -89,6 +93,22 @@ class IndustrySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Industry
+        fields = '__all__'
+
+
+class ProjectSerializer(serializers.ModelSerializer):
+
+    def validate(self, data):
+        error_messages = []
+        if re.match("^[a-zA-Z ]*$", data['name']):
+            pass
+        else:
+            error_messages.append('Project name may only contain letters and spaces.')
+            raise serializers.ValidationError(error_messages)
+        return data
+
+    class Meta:
+        model = Project
         fields = '__all__'
 
 

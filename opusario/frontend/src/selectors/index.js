@@ -3,6 +3,8 @@ import { createSelector } from 'reselect';
 // selectors
 const getCitySelectItem = (state) => state.city_select.selectItem;
 const getCityNamespace = (state) => state.city_select.namespace;
+const getCompanySelectItem = (state) => state.company_select.selectItem;
+const getCompanyNamespace = (state) => state.company_select.namespace;
 const getCountrySelectItem = (state) => state.country.selectItem;
 const getCountryNamespace = (state) => state.country.namespace;
 const getFunctionalAreaSelectItem = (state) => state.functional_area.selectItem;
@@ -48,6 +50,16 @@ export const getCompanyChildState = createSelector(
           industryNamespace
       });
   }
+);
+
+export const getProjectChildState = createSelector(
+    [getCompanySelectItem, getCompanyNamespace],
+    (companySelectItem, companyNamespace) => {
+        return ({
+            companySelectItem,
+            companyNamespace
+        })
+    }
 );
 
 export const getRoleChildState = createSelector(

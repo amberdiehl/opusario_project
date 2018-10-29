@@ -9,6 +9,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 import PageWrapperComponent from './components/wrappers/PageWrapperComponent';
 import CompanyInstanceContainer from './containers/instances/CompanyInstanceContainer';
+import ProjectInstanceContainer from './containers/instances/ProjectInstanceContainer';
 import RoleInstanceContainer from './containers/instances/RoleInstanceContainer';
 import SkillInstanceContainer from './containers/instances/SkillInstanceContainer';
 import Myself from './components/Myself';
@@ -44,6 +45,11 @@ class App extends Component {
                         <Route exact path={"/app/skill"} render={()=>
                             <PageWrapperComponent>
                                 <SkillInstanceContainer/>
+                            </PageWrapperComponent>
+                        } />
+                        <Route exact path={"/app/project"} render={()=>
+                            <PageWrapperComponent>
+                                <ProjectInstanceContainer/>
                             </PageWrapperComponent>
                         } />
                         <Route path="/myself" component={Myself} />

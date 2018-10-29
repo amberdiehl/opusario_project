@@ -61,6 +61,16 @@ class IndustryDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = IndustrySerializer
 
 
+class ProjectList(generics.ListCreateAPIView):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+
+
+class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+
+
 class RoleList(generics.ListCreateAPIView):
     serializer_class = RoleSerializer
 

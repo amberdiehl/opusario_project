@@ -21,6 +21,11 @@ admin.site.register(FunctionalArea)
 admin.site.register(Industry)
 
 
+@admin.register(Project)
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'start_year', 'duration', 'team_size')
+
+
 @admin.register(Role)
 class RoleAdmin(admin.ModelAdmin):
     list_display = ('id', 'functional_area', 'name', 'management', 'leadership', )
