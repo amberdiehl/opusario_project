@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import ValidationError
+# from django.core.validators import ValidationError
 
 INVOLVEMENT_LEVEL_CHOICES = (
     ('core', 'Core project team member'),
@@ -37,6 +37,12 @@ WORK_LOCATION_CHOICES = (
     ('office', '100% on site'),
     ('mixed', 'Mixed on site and remote'),
     ('remote', '100% remote')
+)
+
+EXTERNAL_ACCOUNT_TYPES = (
+    ('source', 'Source code'),  # e.g. Github, Codepen
+    ('social', 'Social media'),  # e.g. LinkedIn, Facebook
+    ('blog', 'Blog')  # e.g. Medium
 )
 
 US_STATE_ABBREVIATIONS = {
@@ -327,25 +333,6 @@ class Company(models.Model):
         return self.name
 
 
-class ExternalAccount(models.Model):
-    type_name = models.CharField(
-        max_length=100,
-        unique=True,
-        help_text='Type or name of the external account, such as Github, Instagram, Facebook, etc.'
-    )
-    base_url = models.URLField(
-        unique=True,
-        help_text='Base URL for account. E.g. https://linkedin.com.'
-    )
-    created = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['type_name', ]
-
-    def __str__(self):
-        return self.type_name
-
-
 """
 
 Models defining subscriber experience.
@@ -354,7 +341,7 @@ Models defining subscriber experience.
 
 
 class Project(models.Model):
-    at_company = models.ForeignKey(
+    company = models.ForeignKey(
         Company,
         models.SET_NULL,
         null=True,
@@ -399,7 +386,7 @@ class Project(models.Model):
 
 
 class ProjectOutcome(models.Model):
-    at_project = models.ForeignKey(
+    project = models.ForeignKey(
         Project,
         models.SET_NULL,
         null=True,
@@ -441,15 +428,17 @@ class ProjectOutcome(models.Model):
 
 
 class ProjectRole(models.Model):
-    at_project = models.ForeignKey(
+    project = models.ForeignKey(
         Project,
         models.SET_NULL,
         null=True,
         help_text='Associated project.'
     )
-    at_role = models.ManyToManyField(
+    role = models.ForeignKey(
         Role,
-        help_text='Your functional role on the project.'
+        models.SET_NULL,
+        null=True,
+        help_text='Your primary functional role on the project.'
     )
     description = models.TextField(
         blank=True,
@@ -470,15 +459,15 @@ class ProjectRole(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return "{}, {}".format(self.at_project.name, self.at_role.name)
+        return "{}, {}".format(self.project.name, self.role.name)
 
 
 class RoleSkill(models.Model):
-    at_project_role = models.ForeignKey(
+    project_role = models.ForeignKey(
         ProjectRole,
         on_delete=models.CASCADE
     )
-    at_skill = models.ForeignKey(
+    skill = models.ForeignKey(
         Skill,
         on_delete=models.CASCADE
     )
@@ -491,15 +480,15 @@ class RoleSkill(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return '{}, {}'.format(self.at_project_role.at_role.name, self.at_skill.name)
+        return '{}, {}'.format(self.project_role.role.name, self.skill.name)
 
 
 class RoleTool(models.Model):
-    at_project_role = models.ForeignKey(
+    project_role = models.ForeignKey(
         ProjectRole,
         on_delete=models.CASCADE
     )
-    at_tool = models.ForeignKey(
+    tool = models.ForeignKey(
         Tool,
         on_delete=models.CASCADE
     )
@@ -512,7 +501,7 @@ class RoleTool(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return '{}, {}'.format(self.at_project_role.at_role.name, self.at_tool.name)
+        return '{}, {}'.format(self.project_role.role.name, self.tool.name)
 
 
 """
@@ -542,6 +531,11 @@ class Myself(models.Model):
         null=True,
         help_text='Optionally, your nickname.'
     )
+    slug = models.SlugField(
+        blank=True,
+        null=True,
+        help_text='Subscriber relative URL on Opusario.'
+    )
     photo = models.ImageField(
         upload_to=user_directory_path,
         blank=True,
@@ -549,17 +543,11 @@ class Myself(models.Model):
         help_text='A nice photo of yourself; not an avatar. '
                   'Although optional, you will get better results when you have one.'
     )
-    at_city = models.ForeignKey(
+    city = models.ForeignKey(
         City,
         models.SET_NULL,
         null=True,
         help_text='The city where you are located.'
-    )
-    at_state = models.ForeignKey(
-        State,
-        models.SET_NULL,
-        null=True,
-        help_text='The state where you are located.'
     )
     phone_number = models.IntegerField(
         help_text='Contact phone number.'
@@ -595,6 +583,18 @@ class Myself(models.Model):
         blank=True,
         help_text='A very brief description that describes your ambitions and goals.'
     )
+    skills = models.ManyToManyField(
+        Skill,
+        help_text='Your skills, regardless degree of expertise.'
+    )
+    tools = models.ManyToManyField(
+        Tool,
+        help_text='Tools you use, regardless degree of expertise.'
+    )
+    looking = models.BooleanField(
+        default=False,
+        help_text='Ready for new opportunities.'
+    )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -606,39 +606,39 @@ class Myself(models.Model):
 
 
 class MyExternalAccount(models.Model):
-    at_myself = models.ForeignKey(
+    myself = models.ForeignKey(
         Myself,
         on_delete=models.CASCADE
     )
-    at_account_type = models.ForeignKey(
-        ExternalAccount,
-        models.SET_NULL,
-        null=True,
-        help_text='Account type or name such as Github, Instagram, Facebook, etc.'
+    type = models.CharField(
+        max_length=20,
+        choices=EXTERNAL_ACCOUNT_TYPES,
+        default='social',
+        help_text='Type of external account.'
     )
-    account_url = models.URLField(
+    url = models.URLField(
         help_text='URL for your account.'
     )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['account_url', ]
+        ordering = ['url', ]
 
     def __str__(self):
-        return self.account_url
+        return self.url
 
 
 class MyExperience(models.Model):
-    at_myself = models.ForeignKey(
+    myself = models.ForeignKey(
         Myself,
         on_delete=models.CASCADE
     )
-    at_project = models.ForeignKey(
+    project = models.ForeignKey(
         Project,
         on_delete=models.CASCADE
     )
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return '{} {}, {}'.format(self.at_myself.first_name, self.at_myself.last_name, self.at_project.name)
+        return '{} {}, {}'.format(self.myself.first_name, self.myself.last_name, self.project.name)

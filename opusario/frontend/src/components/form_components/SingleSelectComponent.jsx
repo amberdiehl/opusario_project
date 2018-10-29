@@ -39,8 +39,10 @@ export default class SingleSelectComponent extends Component {
                         this.props.actions.showError(this.props.namespace, false, [])
                     }}>
                     {this.props.items.map(item => (
-                        <option key={`select${this.props.componentId}-${item.id}`}
-                                value={item.id}>{item.name}</option>
+                        <option key={`select${this.props.componentId}-${item.id}`} value={item.id}>
+                            {(item.id === 0) ? item.name : (this.props.hasCompositeName) ?
+                                item.composite_name : item.name}
+                        </option>
                     ))}
                 </select>
         )
@@ -115,6 +117,7 @@ SingleSelectComponent.propTypes = {
     hasForeignKey: PropTypes.bool.isRequired,
     foreignKeyModel: PropTypes.string.isRequired,
     foreignKeyValue: PropTypes.string.isRequired,
+    hasCompositeName: PropTypes.bool.isRequired,
     errorMessages: PropTypes.array.isRequired,
     isError: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,

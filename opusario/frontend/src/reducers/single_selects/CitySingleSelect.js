@@ -1,10 +1,10 @@
-import { base_reducer_single_select, base_reducer_single_select_state } from '../base_reducers/SingleSelect';
+import { base_reducer, base_reducer_state } from '../base_reducers/SingleSelect';
 import { getNamespace } from '../../helpers';
 
 const defaultValue = {id: 0, name: "- Select city -"};
 
 const initialState = {
-    ...base_reducer_single_select_state,
+    ...base_reducer_state,
     namespace: getNamespace(),
     componentId: 'City',
     items: [
@@ -17,5 +17,5 @@ const initialState = {
 };
 
 export default function city_select(state=initialState, action) {
-    return base_reducer_single_select(state, action);
+    return base_reducer(state, action);
 }

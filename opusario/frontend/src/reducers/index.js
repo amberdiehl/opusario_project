@@ -2,10 +2,12 @@ import { combineReducers } from 'redux';
 
 import city_select from './single_selects/CitySingleSelect';
 import company_instance from './instances/CompanyInstance';
+import company_select from './single_selects/CompanySingleSelect';
 import country from './single_selects/Country';
 import functional_area from './single_selects/FunctionalArea';
 import industry from './single_selects/Industry';
 import myself from './myself';
+import project_instance from './instances/ProjectInstance';
 import role_instance from './instances/RoleInstance';
 import role_leadership from './checkbox_radios/RoleLeadership';
 import role_management from './checkbox_radios/RoleManagement';
@@ -22,6 +24,7 @@ import tool_select from './many_selects/ToolManySelect'
 const OpusarioReducers = combineReducers({
     city_select,
     company_instance,
+    company_select,
     country,
     functional_area,
     industry,
@@ -29,6 +32,7 @@ const OpusarioReducers = combineReducers({
     skill_modal,
     skill_select,
     myself,
+    project_instance,
     role_select,
     role_instance,
     role_leadership,
