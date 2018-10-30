@@ -1027,6 +1027,7 @@ label {
   margin: 0 0 1em 0; }
 
 input[type="text"],
+input[type="number"],
 input[type="password"],
 input[type="email"],
 select,
@@ -1045,12 +1046,14 @@ textarea {
   text-decoration: none;
   width: 100%; }
   input[type="text"]:invalid,
+  input[type="number"]:invalid,
   input[type="password"]:invalid,
   input[type="email"]:invalid,
   select:invalid,
   textarea:invalid {
     box-shadow: none; }
   input[type="text"]:focus,
+  input[type="number"]:focus,
   input[type="password"]:focus,
   input[type="email"]:focus,
   select:focus,
@@ -1070,6 +1073,7 @@ select {
     display: none; }
 
 input[type="text"],
+input[type="number"],
 input[type="password"],
 input[type="email"],
 select {
@@ -1713,6 +1717,7 @@ button,
     .wrapper.style1 label {
       color: #ffffff; }
     .wrapper.style1 input[type="text"],
+    .wrapper.style1 input[type="number"],
     .wrapper.style1 input[type="password"],
     .wrapper.style1 input[type="email"],
     .wrapper.style1 select,
@@ -1805,6 +1810,7 @@ button,
     .wrapper.style3 label {
       color: #ffffff; }
     .wrapper.style3 input[type="text"],
+    .wrapper.style3 input[type="number"],
     .wrapper.style3 input[type="password"],
     .wrapper.style3 input[type="email"],
     .wrapper.style3 select,
@@ -1897,6 +1903,7 @@ button,
     .wrapper.style5 label {
       color: #98CA32; }
     .wrapper.style5 input[type="text"],
+    .wrapper.style5 input[type="number"],
     .wrapper.style5 input[type="password"],
     .wrapper.style5 input[type="email"],
     .wrapper.style5 select,

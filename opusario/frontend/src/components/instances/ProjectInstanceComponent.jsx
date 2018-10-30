@@ -35,6 +35,7 @@ export default class ProjectInstanceComponent extends Component {
     }
     buttonOnClick(e) {
         e.preventDefault();
+        this.props.actions.setShowFieldValueErrors(this.props.namespace, true);
         let isValid = this.validateForm();
         if (isValid) {
             const method = (this.props.instanceId === 0) ? 'POST' : 'PUT';
@@ -45,6 +46,7 @@ export default class ProjectInstanceComponent extends Component {
                 "company": this.props.childState.companySelectItem,
             };
             this.props.actions.addOrUpdateItem(this.props.namespace, apiRoute, method, data);
+            this.props.actions.setShowFieldValueErrors(this.props.namespace, false);
         }
     }
     validateForm(){
@@ -87,9 +89,12 @@ export default class ProjectInstanceComponent extends Component {
                         />
                         <InputComponent
                             componentId={"StartYear"}
+                            inputType={"number"}
                             inputValue={this.props.instanceItem.start_year}
                             validationRegEx={/^[0-9]*$/}
                             regExDescription={"a year, e.g. 2020."}
+                            minimumValue={(new Date()).getFullYear()-70}
+                            maximumValue={(new Date()).getFullYear()}
                             action={{...inputComponentAction, key: "start_year"}}
                         />
                         <InputComponent

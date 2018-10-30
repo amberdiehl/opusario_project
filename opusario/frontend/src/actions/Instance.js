@@ -1,6 +1,6 @@
 import { csrfHeader, getFlattenedErrors } from "../helpers";
 import {setFlashSuccess, setLoading, showError} from './generic';
-import {FETCH_ITEM, SET_INSTANCE_ID, SET_ITEM_VALUE, RESET_MODAL_INSTANCE,
+import {FETCH_ITEM, SET_INSTANCE_ID, SET_ITEM_VALUE, RESET_MODAL_INSTANCE, SHOW_FIELD_VALUE_ERRORS,
     server500ErrorMessage} from "../constants";
 
 
@@ -74,4 +74,11 @@ export const resetModalInstance = (namespace) => {
     return {
         type: `${namespace}/${RESET_MODAL_INSTANCE}`,
     };
+};
+
+export const setShowFieldValueErrors = (namespace, newValue) => {
+    return {
+        type: `${namespace}/${SHOW_FIELD_VALUE_ERRORS}`,
+        newValue
+    }
 };
