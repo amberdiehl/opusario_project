@@ -22,6 +22,7 @@ export default class InputComponent extends Component {
             showFieldValueErrors: (typeof this.props.showFieldValueErrors === "undefined") ? false :
                 this.props.showFieldValueErrors,
             errorMessages: (typeof this.props.errorMessages === "undefined") ? [] : this.props.errorMessages,
+            pendingErrorMessages: [],
             isError: (typeof this.props.isError === "undefined") ? false : this.props.isError,
             isDisabled: (typeof this.props.isDisabled === "undefined") ? false : this.props.isDisabled,
         };
@@ -34,7 +35,19 @@ export default class InputComponent extends Component {
             this.setState({
                 ...this.state,
                 inputValue: nextProps.inputValue
-            })
+            });
+        }
+        if (nextProps.showFieldValueErrors) {
+            console.log('you are here');
+            console.log(this.state);
+            if (this.state.pendingErrorMessages.length > 0) {
+                this.setState({
+                    ...this.state,
+                    isErrors: true,
+                    errorMessages: this.state.errorMessages.push.apply(
+                        this.state.errorMessages, this.state.pendingErrorMessages)
+                });
+            }
         }
     }
     handleOnChange(e) {
@@ -46,6 +59,7 @@ export default class InputComponent extends Component {
     }
     validateValue() {
         let errorMessages = [];
+        let pendingErrorMessages = [];
         let hasErrors = false;
         const errorElement = getFormattedLabelText(this.state.componentId);
         // Validate each character as its input and let user know if not valid immediately.
@@ -54,32 +68,29 @@ export default class InputComponent extends Component {
             hasErrors = true;
             errorMessages.push(`${errorElement} can only contain ${this.state.regExDescription}`);
         }
-        // THESE NEED TO PUSHED TO PENDING MESSAGE GROUP THAT SHOWS WHEN SHOW FIELD VALUE ERRORS TRIGGERS
         // Validate based on field level requirements such as min, max values or min, max length
         if (typeof this.props.minimumValue !== "undefined") {
             if (this.state.inputValue < this.props.minimumValue) {
                 hasErrors = true;
-                if (this.props.showFieldValueErrors) {
-                    errorMessages.push(`${errorElement} is less than the minimum value ${this.props.minimumValue}.`)
-                }
+                pendingErrorMessages.push(`${errorElement} is less than the minimum value ${this.props.minimumValue}.`)
             }
         }
         if (typeof this.props.maximumValue !== "undefined") {
             if (this.state.inputValue > this.props.maximumValue) {
                 hasErrors = true;
-                if (this.props.showFieldValueErrors) {
-                    errorMessages.push(`${errorElement} is more than the maximum value ${this.props.minimumValue}.`)
-                }
+                pendingErrorMessages.push(`${errorElement} is more than the maximum value ${this.props.minimumValue}.`)
             }
         }
         // Update local and parent state with result of validation; i.e. throw error, keep status quo, or clear error.
         this.setState({
             ...this.state,
             isError: (errorMessages.length !== 0),
-            errorMessages: errorMessages
+            errorMessages: errorMessages,
+            pendingErrorMessages: pendingErrorMessages,
         });
         this.props.action.setItemValue(this.props.action.namespace,
             "inputErrors", {[this.props.action.key]: hasErrors});
+
         // Update parent state with current value only when valid
         if (errorMessages.length === 0) {
             this.props.action.setItemValue(this.props.action.namespace, this.props.action.key, this.state.inputValue);
@@ -128,7 +139,7 @@ InputComponent.propTypes = {
     componentId: PropTypes.string.isRequired,
     inputType: PropTypes.string,
     inputSize: PropTypes.number,
-    inputValue: PropTypes.string.isRequired,  // Shared with parent state
+    inputValue: PropTypes.any.isRequired,  // Shared with parent state
     validationRegEx: PropTypes.any, // Not clear on how to indicate this is a RegEx.
     regExDescription: PropTypes.string,
     isRequired: PropTypes.bool,

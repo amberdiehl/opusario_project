@@ -95,6 +95,7 @@ export default class ProjectInstanceComponent extends Component {
                             regExDescription={"a year, e.g. 2020."}
                             minimumValue={(new Date()).getFullYear()-70}
                             maximumValue={(new Date()).getFullYear()}
+                            showFieldValueErrors={this.props.showFieldValueErrors}
                             action={{...inputComponentAction, key: "start_year"}}
                         />
                         <InputComponent
@@ -141,6 +142,7 @@ ProjectInstanceComponent.propTypes = {
     instanceId: PropTypes.number.isRequired,
     instanceItem: PropTypes.object.isRequired,
     childState: PropTypes.object.isRequired,
+    showFieldValueErrors: PropTypes.bool.isRequired,
     errorMessages: PropTypes.array.isRequired,
     isError: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,
