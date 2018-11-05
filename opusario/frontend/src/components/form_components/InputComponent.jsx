@@ -10,114 +10,111 @@ export default class InputComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            componentId: this.props.componentId,
-            inputType: (typeof this.props.inputType === "undefined") ? 'text' : this.props.inputType,
-            inputSize: (typeof this.props.inputSize === "undefined") ? 250 : this.props.inputSize,
-            inputValue: this.props.inputValue,
-            validationRegEx: (typeof this.props.validationRegEx === "undefined") ? /^[a-zA-Z ]*$/ :
-                this.props.validationRegEx,
-            regExDescription: (typeof this.props.regExDescription === "undefined") ? "letters and spaces." :
-                this.props.regExDescription,
-            isRequired: (typeof this.props.isRequired === "undefined") ? false : this.props.isRequired,
-            showFieldValueErrors: (typeof this.props.showFieldValueErrors === "undefined") ? false :
-                this.props.showFieldValueErrors,
-            errorMessages: (typeof this.props.errorMessages === "undefined") ? [] : this.props.errorMessages,
-            pendingErrorMessages: [],
-            isError: (typeof this.props.isError === "undefined") ? false : this.props.isError,
-            isDisabled: (typeof this.props.isDisabled === "undefined") ? false : this.props.isDisabled,
+            isError: false,
+            errorMessages: [],
+            pendingErrorMessages: []
         };
         this.renderInputByType = this.renderInputByType.bind(this);
         this.handleOnChange = this.handleOnChange.bind(this);
         this.validateValue = this.validateValue.bind(this);
     }
     componentWillUpdate(nextProps, nextState, nextContext) {
+        /* A new input value is only received when the inputValue does not contain an invalid character. In that case
+           ensure current error state is reset to none.
+         */
         if (nextProps.inputValue !== this.props.inputValue) {
             this.setState({
                 ...this.state,
-                inputValue: nextProps.inputValue
+                isError: false,
+                errorMessages: []
+            }, () => {
+                /* Checking for pending errors which will be shown upon parent request (submit button) must be executed
+                   via the call back, otherwise adding pending errors causes the above state change to revert to its
+                   prior state.
+                 */
+                this.validateValue(nextProps.inputValue);
             });
         }
-        if (nextProps.showFieldValueErrors) {
-            console.log('you are here');
-            console.log(this.state);
+        // When parent asks to see field value errors, move pending error messages to current error state to show them.
+        if ((nextProps.showFieldValueErrors !== this.props.showFieldValueErrors) && (nextProps.showFieldValueErrors)) {
             if (this.state.pendingErrorMessages.length > 0) {
                 this.setState({
                     ...this.state,
-                    isErrors: true,
-                    errorMessages: this.state.errorMessages.push.apply(
-                        this.state.errorMessages, this.state.pendingErrorMessages)
+                    isError: true,
+                    errorMessages: this.state.pendingErrorMessages
                 });
             }
         }
     }
     handleOnChange(e) {
         e.preventDefault();
-        this.setState({
-            ...this.state,
-            inputValue: e.target.type === 'number' ? parseInt(e.target.value, 10) : e.target.value,
-        }, this.validateValue);
+        if (e.target.validity.valid) {
+            let newInputValue = e.target.type === 'number' ? parseInt(e.target.value, 10) : e.target.value;
+            this.props.action.setItemValue(this.props.action.namespace, this.props.action.key, newInputValue);
+        } else {
+            let m = `${getFormattedLabelText(this.props.componentId)} can only contain ${this.props.regExDescription}`;
+            this.setState({
+                ...this.state,
+                isError: true,
+                errorMessages: [m]
+            })
+        }
     }
-    validateValue() {
-        let errorMessages = [];
-        let pendingErrorMessages = [];
+    validateValue(newInputValue) {
+        /* The newInputValue is checked every time against field level constraints / validators. This is done since,
+           at any give time a user could click the submit button. When the user does click submit, the parent will
+           change the showFieldValidationErrors to true which will cause any pending error messages to show (see above).
+         */
         let hasErrors = false;
-        const errorElement = getFormattedLabelText(this.state.componentId);
-        // Validate each character as its input and let user know if not valid immediately.
-        let isValid = this.state.validationRegEx.test(this.state.inputValue);
-        if (!isValid) {
-            hasErrors = true;
-            errorMessages.push(`${errorElement} can only contain ${this.state.regExDescription}`);
-        }
-        // Validate based on field level requirements such as min, max values or min, max length
-        if (typeof this.props.minimumValue !== "undefined") {
-            if (this.state.inputValue < this.props.minimumValue) {
+        let pendingErrors = [];
+        const errorElement = getFormattedLabelText(this.props.componentId);
+
+        if (typeof this.props.minimumValue === "number") {
+            if (newInputValue < this.props.minimumValue) {
                 hasErrors = true;
-                pendingErrorMessages.push(`${errorElement} is less than the minimum value ${this.props.minimumValue}.`)
+                pendingErrors.push(`${errorElement} is less than the minimum value ${this.props.minimumValue}.`)
             }
         }
-        if (typeof this.props.maximumValue !== "undefined") {
-            if (this.state.inputValue > this.props.maximumValue) {
+        if (typeof this.props.maximumValue === "number") {
+            if (newInputValue > this.props.maximumValue) {
                 hasErrors = true;
-                pendingErrorMessages.push(`${errorElement} is more than the maximum value ${this.props.minimumValue}.`)
+                pendingErrors.push(`${errorElement} is more than the maximum value ${this.props.maximumValue}.`)
             }
         }
-        // Update local and parent state with result of validation; i.e. throw error, keep status quo, or clear error.
+
         this.setState({
             ...this.state,
-            isError: (errorMessages.length !== 0),
-            errorMessages: errorMessages,
-            pendingErrorMessages: pendingErrorMessages,
+            pendingErrorMessages: pendingErrors
         });
         this.props.action.setItemValue(this.props.action.namespace,
             "inputErrors", {[this.props.action.key]: hasErrors});
-
-        // Update parent state with current value only when valid
-        if (errorMessages.length === 0) {
-            this.props.action.setItemValue(this.props.action.namespace, this.props.action.key, this.state.inputValue);
-        }
     }
     renderInputByType() {
-        switch(this.state.inputType) {
+        switch(this.props.inputType) {
             case 'textarea': {
                 return (
                     <div className="col-6 col-6-xsmall">
-                        <textarea id={this.state.componentId} cols={this.state.inputSize}
-                            placeholder={getFormattedLabelText(this.state.componentId)}
-                            readOnly={this.state.isDisabled}
+                        <textarea id={this.props.componentId} cols={this.props.inputSize}
+                            placeholder={getFormattedLabelText(this.props.componentId)}
+                            pattern={this.props.validationRegEx}
                             onChange={this.handleOnChange}
-                            value={this.state.inputValue} />
+                            value={this.props.inputValue}
+                            readOnly={this.props.isDisabled}
+                        />
                     </div>
                 );
             }
             default: {
                 return (
                     <div className="col-6 col-6-xsmall">
-                        <input id={this.state.componentId}
-                            type={this.state.inputType} style={{width: this.state.inputSize}}
-                            placeholder={getFormattedLabelText(this.state.componentId)}
-                            value={this.state.inputValue}
-                            disabled={this.state.isDisabled}
+                        <input id={this.props.componentId}
+                            type={'text'}
+                            style={{width: this.props.inputSize}}
+                            placeholder={getFormattedLabelText(this.props.componentId)}
+                            pattern={this.props.validationRegEx}
                             onChange={this.handleOnChange}
+                            value={this.props.inputValue}
+                            disabled={this.props.isDisabled}
                         />
                     </div>
                 );
@@ -127,7 +124,7 @@ export default class InputComponent extends Component {
     render() {
         return (
             <div className={"row gtr-0 gtr-uniform"}>
-                <FormFieldLabel componentId={this.state.componentId}/>
+                <FormFieldLabel componentId={this.props.componentId}/>
                 {this.renderInputByType()}
                 <FormErrorMessages trueFalse={this.state.isError} messages={this.state.errorMessages}/>
             </div>
@@ -140,16 +137,26 @@ InputComponent.propTypes = {
     inputType: PropTypes.string,
     inputSize: PropTypes.number,
     inputValue: PropTypes.any.isRequired,  // Shared with parent state
-    validationRegEx: PropTypes.any, // Not clear on how to indicate this is a RegEx.
+    validationRegEx: PropTypes.string, // Since regular expression is used in property 'pattern', pass as string.
     regExDescription: PropTypes.string,
     isRequired: PropTypes.bool,
+    showFieldValueErrors: PropTypes.bool.isRequired,  // Set by parent state
+    isDisabled: PropTypes.bool,
+    action: PropTypes.object.isRequired,
+    /* The values below are optional and without default. When the property is not provided, it will have a value
+       'undefined'. This prevents the edit from being performed. Otherwise, if it exists, it must be provided with
+       the desired value--there cannot be a default.
+     */
     minimumValue: PropTypes.number,
     maximumValue: PropTypes.number,
     minimumLength: PropTypes.number,
     maximumLength: PropTypes.number,
-    showFieldValueErrors: PropTypes.bool,  // Set by parent state
-    errorMessages: PropTypes.array,
-    isError: PropTypes.bool,
-    isDisabled: PropTypes.bool,
-    action: PropTypes.object.isRequired
+};
+InputComponent.defaultProps = {
+    inputType: 'text',
+    inputSize: 250,
+    validationRegEx: '^[a-zA-Z ]*$',
+    regExDescription: 'letters and spaces.',
+    isRequired: false,
+    isDisabled: false
 };
