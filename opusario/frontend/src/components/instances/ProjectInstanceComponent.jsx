@@ -80,6 +80,24 @@ export default class ProjectInstanceComponent extends Component {
                     <div className={"form-field-group"}>
                         <CompanySelectContainer/>
                         <InputComponent
+                            componentId={"ProjectName"}
+                            inputValue={this.props.instanceItem.name}
+                            validationRegEx={'^[a-zA-Z0-9 ]*$'}
+                            regExDescription={'letters, numbers, and spaces.'}
+                            showFieldValueErrors={this.props.showFieldValueErrors}
+                            isRequired={true}
+                            action={{...inputComponentAction, key: "name"}}
+                        />
+                        <InputComponent
+                            componentId={"Description"}
+                            inputType={"textarea"}
+                            inputValue={this.props.instanceItem.project_objective}
+                            validationRegEx={'^[a-zA-Z0-9,.; ]*$'}
+                            regExDescription={"letters, numbers, and punctuation marks: comma, period, and semicolon."}
+                            showFieldValueErrors={this.props.showFieldValueErrors}
+                            action={{...inputComponentAction, key: "project_objective"}}
+                        />
+                        <InputComponent
                             componentId={"StartYear"}
                             inputValue={this.props.instanceItem.start_year}
                             validationRegEx={'^[0-9]*$'}
@@ -89,6 +107,41 @@ export default class ProjectInstanceComponent extends Component {
                             showFieldValueErrors={this.props.showFieldValueErrors}
                             isRequired={true}
                             action={{...inputComponentAction, key: "start_year"}}
+                        />
+                        <InputComponent
+                            componentId={"Duration"}
+                            inputValue={this.props.instanceItem.duration}
+                            validationRegEx={'^[0-9]*$'}
+                            regExDescription={"a number of months, e.g. 5."}
+                            showFieldValueErrors={this.props.showFieldValueErrors}
+                            action={{...inputComponentAction, key: "duration"}}
+                        />
+                        <InputComponent
+                            componentId={"TeamSize"}
+                            inputValue={this.props.instanceItem.team_size}
+                            validationRegEx={'^[0-9]*$'}
+                            regExDescription={"a whole number, e.g. 12."}
+                            minimumValue={1}
+                            maximumValue={999}
+                            showFieldValueErrors={this.props.showFieldValueErrors}
+                            isRequired={true}
+                            action={{...inputComponentAction, key: "team_size"}}
+                        />
+                        <InputComponent
+                            componentId={"CodeRepository"}
+                            inputValue={this.props.instanceItem.code_repository}
+                            validationRegEx={'^[a-zA-Z.:/ ]*$'}
+                            regExDescription={"a complete URL such as https://www.opusario.com."}
+                            showFieldValueErrors={this.props.showFieldValueErrors}
+                            action={{...inputComponentAction, key: "code_repository"}}
+                        />
+                        <InputComponent
+                            componentId={"ProjectSite"}
+                            inputValue={this.props.instanceItem.project_site}
+                            validationRegEx={'^[a-zA-Z.:/ ]*$'}
+                            regExDescription={"a complete URL such as https://www.opusario.com."}
+                            showFieldValueErrors={this.props.showFieldValueErrors}
+                            action={{...inputComponentAction, key: "project_site"}}
                         />
                         <br/><br/>
                         <button className={"button primary small"} onClick={this.buttonOnClick}>{buttonLabel}</button>
