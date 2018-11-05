@@ -31,17 +31,22 @@ export default class ProjectInstanceComponent extends Component {
         }
     }
     componentDidUpdate(prevProps, prevState) {
-        // IMPORTANT: This needs to be included for all instance components.
+        // **** IMPORTANT ***********************************************
+        // This must be included here when instance uses InputComponent.
         if ((prevProps.showFieldValueErrors !== this.props.showFieldValueErrors) && (this.props.showFieldValueErrors)) {
             this.props.actions.setShowFieldValueErrors(this.props.namespace, false);
         }
+        // *******************
     }
     componentWillUnmount() {
         console.log('ProjectInstance componentWillUnmount');
     }
     buttonOnClick(e) {
         e.preventDefault();
+        // **** IMPORTANT ***********************************************
+        // This must be included here when instance uses InputComponent.
         this.props.actions.setShowFieldValueErrors(this.props.namespace, true);
+        // *******************
         let isValid = this.validateForm();
         if (isValid) {
             const method = (this.props.instanceId === 0) ? 'POST' : 'PUT';
@@ -59,10 +64,10 @@ export default class ProjectInstanceComponent extends Component {
         if (this.props.childState.companySelectItem === '0') {
             errorMessages.push('Add or select a company.');
         }
-        if (this.props.instanceItem.name.length === 0) {
-            errorMessages.push('Enter a name for this project');
-        }
+        // **** IMPORTANT ***********************************************
+        // This must be included here when instance uses InputComponent.
         errorMessages = getFormattedInputComponentErrors(this.props.instanceItem.inputErrors, errorMessages);
+        // *******************
         this.props.actions.showError(this.props.namespace, (errorMessages.length !== 0), errorMessages);
         return (errorMessages.length === 0);
     }
@@ -84,8 +89,10 @@ export default class ProjectInstanceComponent extends Component {
                             inputValue={this.props.instanceItem.name}
                             validationRegEx={'^[a-zA-Z0-9 ]*$'}
                             regExDescription={'letters, numbers, and spaces.'}
-                            showFieldValueErrors={this.props.showFieldValueErrors}
+                            minimumLength={3}
+                            maximumLength={128}
                             isRequired={true}
+                            showFieldValueErrors={this.props.showFieldValueErrors}
                             action={{...inputComponentAction, key: "name"}}
                         />
                         <InputComponent
@@ -104,8 +111,8 @@ export default class ProjectInstanceComponent extends Component {
                             regExDescription={`a year, e.g. ${(new Date()).getFullYear()}.`}
                             minimumValue={(new Date()).getFullYear()-70}
                             maximumValue={(new Date()).getFullYear()}
-                            showFieldValueErrors={this.props.showFieldValueErrors}
                             isRequired={true}
+                            showFieldValueErrors={this.props.showFieldValueErrors}
                             action={{...inputComponentAction, key: "start_year"}}
                         />
                         <InputComponent
@@ -123,8 +130,8 @@ export default class ProjectInstanceComponent extends Component {
                             regExDescription={"a whole number, e.g. 12."}
                             minimumValue={1}
                             maximumValue={999}
-                            showFieldValueErrors={this.props.showFieldValueErrors}
                             isRequired={true}
+                            showFieldValueErrors={this.props.showFieldValueErrors}
                             action={{...inputComponentAction, key: "team_size"}}
                         />
                         <InputComponent

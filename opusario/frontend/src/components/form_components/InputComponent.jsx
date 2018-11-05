@@ -70,8 +70,15 @@ export default class InputComponent extends Component {
     }
     handleOnChange(e) {
         e.preventDefault();
+        // Default isValid based on non-textarea input assumption; re-evaluate if input is 'textarea' since 'pattern' is
+        // not allowed for that input type.
+        let isValid = e.target.validity.valid;
+        if (this.props.inputType === 'textarea') {
+            let validationRegEx = new RegExp(this.props.validationRegEx);
+            isValid = validationRegEx.test(e.target.value);
+        }
         // Invalid characters are trapped and not allowed into state.
-        if (e.target.validity.valid) {
+        if (isValid) {
             let newInputValue = e.target.type === 'number' ? parseInt(e.target.value, 10) : e.target.value;
             // Valid characters are pushed to parent instanceItem; this creates a 'feedback' loop to this component's
             // inputValue property.
@@ -104,6 +111,18 @@ export default class InputComponent extends Component {
             if (newInputValue > this.props.maximumValue) {
                 hasErrors = true;
                 pendingErrors.push(`${errorElement} is more than the maximum value ${this.props.maximumValue}.`)
+            }
+        }
+        if (typeof this.props.minimumLength === "number") {
+            if (newInputValue.length < this.props.minimumLength) {
+                hasErrors = true;
+                pendingErrors.push(`${errorElement} is less than the minimum length ${this.props.minimumLength}.`)
+            }
+        }
+        if (typeof this.props.maximumLength === "number") {
+            if (newInputValue.length > this.props.maximumLength) {
+                hasErrors = true;
+                pendingErrors.push(`${errorElement} is more than the maximum length ${this.props.maximumLength}.`)
             }
         }
         if (this.props.isRequired) {
@@ -170,9 +189,9 @@ InputComponent.propTypes = {
     inputValue: PropTypes.any.isRequired,  // Set by parent state--though component does update parent through action.
     validationRegEx: PropTypes.string, // Since regular expression is used in property 'pattern', pass as string.
     regExDescription: PropTypes.string,
-    showFieldValueErrors: PropTypes.bool.isRequired,  // Set by parent state
     isRequired: PropTypes.bool,
     isDisabled: PropTypes.bool,
+    showFieldValueErrors: PropTypes.bool.isRequired,  // Set by parent state
     action: PropTypes.object.isRequired,
     /* The values below are optional and without default. When the property is not provided, it will have a value
        'undefined'. This prevents the edit from being performed. Otherwise, if it exists, it must be provided with
