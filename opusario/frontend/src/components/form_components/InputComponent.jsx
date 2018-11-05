@@ -18,11 +18,32 @@ export default class InputComponent extends Component {
         this.handleOnChange = this.handleOnChange.bind(this);
         this.validateValue = this.validateValue.bind(this);
     }
+    componentDidMount() {
+        // Immediately cycle through field validation. This is done to immediately capture required fields and prevent
+        // user from being able to immediately submit the form without entering them.
+        this.validateValue(this.props.inputValue);
+    }
+    shouldComponentUpdate(nextProps, nextState) {
+        /* Facebook strongly discourages the use of shouldComponentUpdate but in looking at the number events firing,
+           and since this will be used extensively, the 'noise' it will create might be a real performance issue.
+
+           The conditions below capture:
+           1. Don't update when doing the behind the scenes validation (pendingErrorMessages).
+           2. Don't update when inputValue hasn't changed...and the follow are true:
+                a. showFieldValueErrors has not been triggered,
+                b. There are no new or past error messages.
+         */
+        return !((nextState.pendingErrorMessages !== this.state.pendingErrorMessages) ||
+            ((nextProps.inputValue === this.props.inputValue) &&
+            ((nextProps.showFieldValueErrors === false) && (this.props.showFieldValueErrors === false)) &&
+            ((nextState.errorMessages.length === 0) && (this.state.errorMessages.length === 0))));
+    }
     componentWillUpdate(nextProps, nextState, nextContext) {
         /* A new input value is only received when the inputValue does not contain an invalid character. In that case
            ensure current error state is reset to none.
          */
         if (nextProps.inputValue !== this.props.inputValue) {
+            // Due to asynchronous communication, clearing error state needs to be tied to receipt of new inputValue.
             this.setState({
                 ...this.state,
                 isError: false,
@@ -30,12 +51,13 @@ export default class InputComponent extends Component {
             }, () => {
                 /* Checking for pending errors which will be shown upon parent request (submit button) must be executed
                    via the call back, otherwise adding pending errors causes the above state change to revert to its
-                   prior state.
+                   prior (error) state.
                  */
                 this.validateValue(nextProps.inputValue);
             });
         }
         // When parent asks to see field value errors, move pending error messages to current error state to show them.
+        // They will remain showing until user clicks submit again.
         if ((nextProps.showFieldValueErrors !== this.props.showFieldValueErrors) && (nextProps.showFieldValueErrors)) {
             if (this.state.pendingErrorMessages.length > 0) {
                 this.setState({
@@ -48,8 +70,11 @@ export default class InputComponent extends Component {
     }
     handleOnChange(e) {
         e.preventDefault();
+        // Invalid characters are trapped and not allowed into state.
         if (e.target.validity.valid) {
             let newInputValue = e.target.type === 'number' ? parseInt(e.target.value, 10) : e.target.value;
+            // Valid characters are pushed to parent instanceItem; this creates a 'feedback' loop to this component's
+            // inputValue property.
             this.props.action.setItemValue(this.props.action.namespace, this.props.action.key, newInputValue);
         } else {
             let m = `${getFormattedLabelText(this.props.componentId)} can only contain ${this.props.regExDescription}`;
@@ -81,11 +106,17 @@ export default class InputComponent extends Component {
                 pendingErrors.push(`${errorElement} is more than the maximum value ${this.props.maximumValue}.`)
             }
         }
-
+        if (this.props.isRequired) {
+            if (newInputValue.length === 0) {
+                hasErrors = true;
+                pendingErrors.push(`${errorElement} is required.`)
+            }
+        }
         this.setState({
             ...this.state,
             pendingErrorMessages: pendingErrors
         });
+        // Let the parent know that there are errors so that a person cannot submit the form.
         this.props.action.setItemValue(this.props.action.namespace,
             "inputErrors", {[this.props.action.key]: hasErrors});
     }
@@ -96,11 +127,11 @@ export default class InputComponent extends Component {
                     <div className="col-6 col-6-xsmall">
                         <textarea id={this.props.componentId} cols={this.props.inputSize}
                             placeholder={getFormattedLabelText(this.props.componentId)}
-                            pattern={this.props.validationRegEx}
                             onChange={this.handleOnChange}
                             value={this.props.inputValue}
                             readOnly={this.props.isDisabled}
                         />
+                    <FormErrorMessages trueFalse={this.state.isError} messages={this.state.errorMessages}/>
                     </div>
                 );
             }
@@ -116,6 +147,7 @@ export default class InputComponent extends Component {
                             value={this.props.inputValue}
                             disabled={this.props.isDisabled}
                         />
+                    <FormErrorMessages trueFalse={this.state.isError} messages={this.state.errorMessages}/>
                     </div>
                 );
             }
@@ -126,7 +158,6 @@ export default class InputComponent extends Component {
             <div className={"row gtr-0 gtr-uniform"}>
                 <FormFieldLabel componentId={this.props.componentId}/>
                 {this.renderInputByType()}
-                <FormErrorMessages trueFalse={this.state.isError} messages={this.state.errorMessages}/>
             </div>
         );
     }
@@ -136,11 +167,11 @@ InputComponent.propTypes = {
     componentId: PropTypes.string.isRequired,
     inputType: PropTypes.string,
     inputSize: PropTypes.number,
-    inputValue: PropTypes.any.isRequired,  // Shared with parent state
+    inputValue: PropTypes.any.isRequired,  // Set by parent state--though component does update parent through action.
     validationRegEx: PropTypes.string, // Since regular expression is used in property 'pattern', pass as string.
     regExDescription: PropTypes.string,
-    isRequired: PropTypes.bool,
     showFieldValueErrors: PropTypes.bool.isRequired,  // Set by parent state
+    isRequired: PropTypes.bool,
     isDisabled: PropTypes.bool,
     action: PropTypes.object.isRequired,
     /* The values below are optional and without default. When the property is not provided, it will have a value

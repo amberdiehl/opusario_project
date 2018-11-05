@@ -83,11 +83,11 @@ export default class ProjectInstanceComponent extends Component {
                             componentId={"StartYear"}
                             inputValue={this.props.instanceItem.start_year}
                             validationRegEx={'^[0-9]*$'}
-                            regExDescription={"a year, e.g. 2020."}
-                            isRequired={true}
+                            regExDescription={`a year, e.g. ${(new Date()).getFullYear()}.`}
                             minimumValue={(new Date()).getFullYear()-70}
                             maximumValue={(new Date()).getFullYear()}
                             showFieldValueErrors={this.props.showFieldValueErrors}
+                            isRequired={true}
                             action={{...inputComponentAction, key: "start_year"}}
                         />
                         <br/><br/>
