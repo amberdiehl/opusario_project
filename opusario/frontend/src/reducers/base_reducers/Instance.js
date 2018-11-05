@@ -1,4 +1,4 @@
-import {FETCH_ITEM, FLASH_SUCCESS, SET_INSTANCE_ID, SET_ITEM_VALUE, RESET_MODAL_INSTANCE,
+import {FETCH_ITEM, FLASH_SUCCESS, SET_INSTANCE_ID, SET_ITEM_VALUE, RESET_MODAL_INSTANCE, SHOW_FIELD_VALUE_ERRORS,
     SHOW_ERROR} from "../../constants";
 
 /*
@@ -22,9 +22,11 @@ export const base_reducer_state = {
             // name: '',
             // version: '',
             inputErrors: {}
-        }
+        },
+        showFieldValueErrors: false
     },
     childState: {},
+    showFieldValueErrors: false,
     errorMessages: [],
     isError: false,
     isLoading: false,
@@ -81,6 +83,10 @@ export function base_reducer(state, action) {
         case `${state.namespace}/${RESET_MODAL_INSTANCE}`:
             return {...state,
                 ...state.modalReset
+            };
+        case `${state.namespace}/${SHOW_FIELD_VALUE_ERRORS}`:
+            return {...state,
+                showFieldValueErrors: action.newValue
             };
         default:
             return state;

@@ -30,11 +30,23 @@ export default class ProjectInstanceComponent extends Component {
                 nextProps.instanceItem.company);
         }
     }
+    componentDidUpdate(prevProps, prevState) {
+        // **** IMPORTANT ***********************************************
+        // This must be included here when instance uses InputComponent.
+        if ((prevProps.showFieldValueErrors !== this.props.showFieldValueErrors) && (this.props.showFieldValueErrors)) {
+            this.props.actions.setShowFieldValueErrors(this.props.namespace, false);
+        }
+        // *******************
+    }
     componentWillUnmount() {
         console.log('ProjectInstance componentWillUnmount');
     }
     buttonOnClick(e) {
         e.preventDefault();
+        // **** IMPORTANT ***********************************************
+        // This must be included here when instance uses InputComponent.
+        this.props.actions.setShowFieldValueErrors(this.props.namespace, true);
+        // *******************
         let isValid = this.validateForm();
         if (isValid) {
             const method = (this.props.instanceId === 0) ? 'POST' : 'PUT';
@@ -52,10 +64,10 @@ export default class ProjectInstanceComponent extends Component {
         if (this.props.childState.companySelectItem === '0') {
             errorMessages.push('Add or select a company.');
         }
-        if (this.props.instanceItem.name.length === 0) {
-            errorMessages.push('Enter a name for this project');
-        }
+        // **** IMPORTANT ***********************************************
+        // This must be included here when instance uses InputComponent.
         errorMessages = getFormattedInputComponentErrors(this.props.instanceItem.inputErrors, errorMessages);
+        // *******************
         this.props.actions.showError(this.props.namespace, (errorMessages.length !== 0), errorMessages);
         return (errorMessages.length === 0);
     }
@@ -73,51 +85,69 @@ export default class ProjectInstanceComponent extends Component {
                     <div className={"form-field-group"}>
                         <CompanySelectContainer/>
                         <InputComponent
-                            componentId={"Name"}
+                            componentId={"ProjectName"}
                             inputValue={this.props.instanceItem.name}
+                            validationRegEx={'^[a-zA-Z0-9 ]*$'}
+                            regExDescription={'letters, numbers, and spaces.'}
+                            minimumLength={3}
+                            maximumLength={128}
+                            isRequired={true}
+                            showFieldValueErrors={this.props.showFieldValueErrors}
                             action={{...inputComponentAction, key: "name"}}
                         />
                         <InputComponent
                             componentId={"Description"}
                             inputType={"textarea"}
                             inputValue={this.props.instanceItem.project_objective}
-                            validationRegEx={/^[a-zA-Z0-9,.; ]*$/}
+                            validationRegEx={'^[a-zA-Z0-9,.; ]*$'}
                             regExDescription={"letters, numbers, and punctuation marks: comma, period, and semicolon."}
+                            showFieldValueErrors={this.props.showFieldValueErrors}
                             action={{...inputComponentAction, key: "project_objective"}}
                         />
                         <InputComponent
                             componentId={"StartYear"}
                             inputValue={this.props.instanceItem.start_year}
-                            validationRegEx={/^[0-9]*$/}
-                            regExDescription={"a year, e.g. 2020."}
+                            validationRegEx={'^[0-9]*$'}
+                            regExDescription={`a year, e.g. ${(new Date()).getFullYear()}.`}
+                            minimumValue={(new Date()).getFullYear()-70}
+                            maximumValue={(new Date()).getFullYear()}
+                            isRequired={true}
+                            showFieldValueErrors={this.props.showFieldValueErrors}
                             action={{...inputComponentAction, key: "start_year"}}
                         />
                         <InputComponent
                             componentId={"Duration"}
                             inputValue={this.props.instanceItem.duration}
-                            validationRegEx={/^[0-9]*$/}
+                            validationRegEx={'^[0-9]*$'}
                             regExDescription={"a number of months, e.g. 5."}
+                            showFieldValueErrors={this.props.showFieldValueErrors}
                             action={{...inputComponentAction, key: "duration"}}
                         />
                         <InputComponent
                             componentId={"TeamSize"}
                             inputValue={this.props.instanceItem.team_size}
-                            validationRegEx={/^[0-9]*$/}
+                            validationRegEx={'^[0-9]*$'}
                             regExDescription={"a whole number, e.g. 12."}
+                            minimumValue={1}
+                            maximumValue={999}
+                            isRequired={true}
+                            showFieldValueErrors={this.props.showFieldValueErrors}
                             action={{...inputComponentAction, key: "team_size"}}
                         />
                         <InputComponent
                             componentId={"CodeRepository"}
                             inputValue={this.props.instanceItem.code_repository}
-                            validationRegEx={/^[a-zA-Z.:/ ]*$/}
+                            validationRegEx={'^[a-zA-Z.:/ ]*$'}
                             regExDescription={"a complete URL such as https://www.opusario.com."}
+                            showFieldValueErrors={this.props.showFieldValueErrors}
                             action={{...inputComponentAction, key: "code_repository"}}
                         />
                         <InputComponent
                             componentId={"ProjectSite"}
                             inputValue={this.props.instanceItem.project_site}
-                            validationRegEx={/^[a-zA-Z.:/ ]*$/}
+                            validationRegEx={'^[a-zA-Z.:/ ]*$'}
                             regExDescription={"a complete URL such as https://www.opusario.com."}
+                            showFieldValueErrors={this.props.showFieldValueErrors}
                             action={{...inputComponentAction, key: "project_site"}}
                         />
                         <br/><br/>
@@ -136,6 +166,7 @@ ProjectInstanceComponent.propTypes = {
     instanceId: PropTypes.number.isRequired,
     instanceItem: PropTypes.object.isRequired,
     childState: PropTypes.object.isRequired,
+    showFieldValueErrors: PropTypes.bool.isRequired,
     errorMessages: PropTypes.array.isRequired,
     isError: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,
