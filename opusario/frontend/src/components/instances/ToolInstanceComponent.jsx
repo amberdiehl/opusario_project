@@ -20,8 +20,23 @@ export default class ToolInstanceComponent extends Component {
     }
     componentWillUpdate(nextProps, nextState, nextContext) {
     }
+    componentDidUpdate(prevProps, prevState) {
+        // **** IMPORTANT ***********************************************
+        // This must be included here when instance uses InputComponent.
+        if ((prevProps.showFieldValueErrors !== this.props.showFieldValueErrors) && (this.props.showFieldValueErrors)) {
+            this.props.actions.setShowFieldValueErrors(this.props.namespace, false);
+        }
+        // *******************
+    }
+    componentWillUnmount() {
+        console.log('ToolInstance componentWillUnmount');
+    }
     buttonOnClick(e) {
         e.preventDefault();
+        // **** IMPORTANT ***********************************************
+        // This must be included here when instance uses InputComponent.
+        this.props.actions.setShowFieldValueErrors(this.props.namespace, true);
+        // *******************
         let isValid = this.validateForm();
         if (isValid) {
             const method = (this.props.instanceId === 0) ? 'POST' : 'PUT';
@@ -36,19 +51,22 @@ export default class ToolInstanceComponent extends Component {
     }
     validateForm(){
         let errorMessages = [];
-        if (this.props.instanceItem.name.length === 0) {
-            errorMessages.push('Enter a tool name.');
-        }
+        // **** IMPORTANT ***********************************************
+        // This must be included here when instance uses InputComponent.
         errorMessages = getFormattedInputComponentErrors(this.props.instanceItem.inputErrors, errorMessages);
+        // *******************
         this.props.actions.showError(this.props.namespace, (errorMessages.length !== 0), errorMessages);
         return (errorMessages.length === 0);
     }
     render() {
         const buttonLabel = (this.props.instanceId === 0) ? 'Add' : 'Update';
-        const childAction = {
+        // **** IMPORTANT ***********************************************
+        // This must be included here when instance uses InputComponent.
+        const inputComponentAction = {
             setItemValue: this.props.actions.setItemValue,
             namespace: this.props.namespace
         };
+        // *******************
         return(
             <form>
                 <h2>Tool</h2>
@@ -57,16 +75,21 @@ export default class ToolInstanceComponent extends Component {
                     <InputComponent
                         componentId={"Name"}
                         inputValue={this.props.instanceItem.name}
-                        validationRegEx={/^[a-zA-Z0-9+ ]*$/}
-                        regExDescription={"letters, numbers, plus signs, and spaces."}
-                        action={{...childAction, key: "name"}}
+                        validationRegEx={'^[a-zA-Z0-9+ ]*$'}
+                        regExDescription={'letters, numbers, plus signs, and spaces.'}
+                        minimumLength={3}
+                        maximumLength={60}
+                        isRequired={true}
+                        showFieldValueErrors={this.props.showFieldValueErrors}
+                        action={{...inputComponentAction, key: "name"}}
                     />
                     <InputComponent
                         componentId={"Version"}
                         inputValue={this.props.instanceItem.version}
-                        validationRegEx={/^[a-zA-Z0-9. ]*$/}
-                        regExDescription={"letters, numbers, periods, and spaces."}
-                        action={{...childAction, key: "version"}}
+                        validationRegEx={'^[a-zA-Z0-9. ]*$'}
+                        regExDescription={'letters, numbers, periods, and spaces.'}
+                        showFieldValueErrors={this.props.showFieldValueErrors}
+                        action={{...inputComponentAction, key: "version"}}
                     />
                     <br/><br/>
                     <button className={"button primary small"} onClick={this.buttonOnClick}>{buttonLabel}</button>
@@ -83,6 +106,7 @@ ToolInstanceComponent.propTypes = {
     instanceId: PropTypes.number.isRequired,
     instanceItem: PropTypes.object.isRequired,
     childState: PropTypes.object,
+    showFieldValueErrors: PropTypes.bool.isRequired,
     errorMessages: PropTypes.array.isRequired,
     isError: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,

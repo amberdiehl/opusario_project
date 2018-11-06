@@ -24,9 +24,6 @@ export default class RoleInstanceComponent extends Component {
     }
     componentWillUpdate(nextProps, nextState, nextContext) {
         // When instanceID has been provided or changed, update stateful child components.
-        if (nextProps.instanceId !== this.props.instanceId) {
-            this.props.actions.fetchItem(this.props.namespace, `${this.props.apiRoute}/${nextProps.instanceId}`);
-        }
         if (nextProps.instanceItem.functional_area !== this.props.instanceItem.functional_area) {
             this.props.childActions.setSelectValue(this.props.childState.functionalAreaNamespace,
                 nextProps.instanceItem.functional_area);
@@ -40,11 +37,23 @@ export default class RoleInstanceComponent extends Component {
                 (nextProps.instanceItem.leadership) ? 'yes' : 'no');
         }
     }
+    componentDidUpdate(prevProps, prevState) {
+        // **** IMPORTANT ***********************************************
+        // This must be included here when instance uses InputComponent.
+        if ((prevProps.showFieldValueErrors !== this.props.showFieldValueErrors) && (this.props.showFieldValueErrors)) {
+            this.props.actions.setShowFieldValueErrors(this.props.namespace, false);
+        }
+        // *******************
+    }
     componentWillUnmount() {
         console.log('RoleInstance componentWillUnmount');
     }
     buttonOnClick(e) {
         e.preventDefault();
+        // **** IMPORTANT ***********************************************
+        // This must be included here when instance uses InputComponent.
+        this.props.actions.setShowFieldValueErrors(this.props.namespace, true);
+        // *******************
         let isValid = this.validateForm();
         if (isValid) {
             const method = (this.props.instanceId === 0) ? 'POST' : 'PUT';
@@ -68,16 +77,22 @@ export default class RoleInstanceComponent extends Component {
             errorMessages.push('Enter a name for this role; e.g. Software Engineer, Product Manager, Copy Writer, ' +
                 'Customer Service Associate.');
         }
+        // **** IMPORTANT ***********************************************
+        // This must be included here when instance uses InputComponent.
         errorMessages = getFormattedInputComponentErrors(this.props.instanceItem.inputErrors, errorMessages);
+        // *******************
         this.props.actions.showError(this.props.namespace, (errorMessages.length !== 0), errorMessages);
         return (errorMessages.length === 0);
     }
     render() {
         const buttonLabel = (this.props.instanceId === 0) ? 'Add' : 'Update';
+        // **** IMPORTANT ***********************************************
+        // This must be included here when instance uses InputComponent.
         const inputComponentAction = {
             setItemValue: this.props.actions.setItemValue,
             namespace: this.props.namespace
         };
+        // *******************
         return(
             <Fragment>
                 <form>
@@ -87,15 +102,21 @@ export default class RoleInstanceComponent extends Component {
                         <FunctionalAreaContainer/>
                         <InputComponent
                             componentId={"RoleName"}
+                            inputSize={310}
                             inputValue={this.props.instanceItem.name}
+                            minimumLength={3}
+                            maximumLength={128}
+                            isRequired={true}
+                            showFieldValueErrors={this.props.showFieldValueErrors}
                             action={{...inputComponentAction, key: "name"}}
                         />
                         <InputComponent
                             componentId={"RoleDescription"}
                             inputType={"textarea"}
                             inputValue={this.props.instanceItem.description}
-                            validationRegEx={/^[a-zA-Z0-9,.; ]*$/}
+                            validationRegEx={'^[a-zA-Z0-9,.; ]*$'}
                             regExDescription={"letters, numbers, and punctuation marks: comma, period, and semicolon."}
+                            showFieldValueErrors={this.props.showFieldValueErrors}
                             action={{...inputComponentAction, key: "description"}}
                         />
                         <RoleManagementContainer/>
@@ -116,6 +137,7 @@ RoleInstanceComponent.propTypes = {
     instanceId: PropTypes.number.isRequired,
     instanceItem: PropTypes.object.isRequired,
     childState: PropTypes.object.isRequired,
+    showFieldValueErrors: PropTypes.bool.isRequired,
     errorMessages: PropTypes.array.isRequired,
     isError: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,

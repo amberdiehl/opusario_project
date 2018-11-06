@@ -18,13 +18,12 @@ export default class ProjectInstanceComponent extends Component {
         if (this.props.instanceId !== 0) {
             // Get Project information associated with this instance.
             this.props.actions.fetchItem(this.props.namespace, `${this.props.apiRoute}/${this.props.instanceId}`);
+        } else {
+            // Set defaults for other components
         }
     }
     componentWillUpdate(nextProps, nextState, nextContext) {
         // When instanceID has changed, update stateful child components.
-        if (nextProps.instanceId !== this.props.instanceId) {
-            this.props.actions.fetchItem(this.props.namespace, `${this.props.apiRoute}/${nextProps.instanceId}`);
-        }
         if (nextProps.instanceItem.company !== this.props.instanceItem.company) {
             this.props.childActions.setSelectValue(this.props.childState.companyNamespace,
                 nextProps.instanceItem.company);
@@ -73,10 +72,13 @@ export default class ProjectInstanceComponent extends Component {
     }
     render() {
         const buttonLabel = (this.props.instanceId === 0) ? 'Add' : 'Update';
+        // **** IMPORTANT ***********************************************
+        // This must be included here when instance uses InputComponent.
         const inputComponentAction = {
             setItemValue: this.props.actions.setItemValue,
             namespace: this.props.namespace
         };
+        // *******************
         return(
             <Fragment>
                 <form>

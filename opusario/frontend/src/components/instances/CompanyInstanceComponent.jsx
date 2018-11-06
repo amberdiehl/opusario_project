@@ -61,8 +61,23 @@ export default class CompanyInstanceComponent extends Component {
                 nextProps.childState.stateSelectItem);
         }
     }
+    componentDidUpdate(prevProps, prevState) {
+        // **** IMPORTANT ***********************************************
+        // This must be included here when instance uses InputComponent.
+        if ((prevProps.showFieldValueErrors !== this.props.showFieldValueErrors) && (this.props.showFieldValueErrors)) {
+            this.props.actions.setShowFieldValueErrors(this.props.namespace, false);
+        }
+        // *******************
+    }
+    componentWillUnmount() {
+        console.log('CompanyInstance componentWillUnmount');
+    }
     buttonOnClick(e) {
         e.preventDefault();
+        // **** IMPORTANT ***********************************************
+        // This must be included here when instance uses InputComponent.
+        this.props.actions.setShowFieldValueErrors(this.props.namespace, true);
+        // *******************
         let isValid = this.validateForm();
         if (isValid) {
             const method = (this.props.instanceId === 0) ? 'POST' : 'PUT';
@@ -78,9 +93,6 @@ export default class CompanyInstanceComponent extends Component {
     }
     validateForm(){
         let errorMessages = [];
-        if (this.props.instanceItem.name.length === 0) {
-            errorMessages.push('Enter a company name.');
-        }
         if (this.props.childState.citySelectItem === '0') {
             errorMessages.push('Select or add city.');
         }
@@ -93,16 +105,22 @@ export default class CompanyInstanceComponent extends Component {
         if (this.props.childState.industrySelectItem === '0') {
             errorMessages.push('Select or add industry.');
         }
+        // **** IMPORTANT ***********************************************
+        // This must be included here when instance uses InputComponent.
         errorMessages = getFormattedInputComponentErrors(this.props.instanceItem.inputErrors, errorMessages);
+        // *******************
         this.props.actions.showError(this.props.namespace, (errorMessages.length !== 0), errorMessages);
         return (errorMessages.length === 0);
     }
     render() {
         const buttonLabel = (this.props.instanceId === 0) ? 'Add' : 'Update';
-        const childAction = {
+        // **** IMPORTANT ***********************************************
+        // This must be included here when instance uses InputComponent.
+        const inputComponentAction = {
             setItemValue: this.props.actions.setItemValue,
             namespace: this.props.namespace
         };
+        // *******************
         return(
             <form>
                 <h2>Company Information</h2>
@@ -111,7 +129,13 @@ export default class CompanyInstanceComponent extends Component {
                     <InputComponent
                         componentId={"CompanyName"}
                         inputValue={this.props.instanceItem.name}
-                        action={{...childAction, key: "name"}}
+                        validationRegEx={'^[a-zA-Z0-9& ]*$'}
+                        regExDescription={'letters, numbers, spaces and ampersand.'}
+                        minimumLength={3}
+                        maximumLength={128}
+                        isRequired={true}
+                        showFieldValueErrors={this.props.showFieldValueErrors}
+                        action={{...inputComponentAction, key: "name"}}
                     />
                     <CountryContainer/>
                     <StateContainer/>
@@ -119,17 +143,19 @@ export default class CompanyInstanceComponent extends Component {
                     <InputComponent
                         componentId={"CompanySize"}
                         inputValue={this.props.instanceItem.size}
-                        validationRegEx={/^[0-9]*$/}
-                        regExDescription={"whole numbers."}
-                        action={{...childAction, key: "size"}}
+                        validationRegEx={'^[0-9]*$'}
+                        regExDescription={'whole numbers.'}
+                        showFieldValueErrors={this.props.showFieldValueErrors}
+                        action={{...inputComponentAction, key: "size"}}
                     />
                     <IndustryContainer/>
                     <InputComponent
                         componentId={"CompanyWebsite"}
                         inputValue={this.props.instanceItem.company_website}
-                        validationRegEx={/^[a-zA-Z.:/ ]*$/}
-                        regExDescription={"a complete URL such as https://www.opusario.com."}
-                        action={{...childAction, key: "company_website"}}
+                        validationRegEx={'^[a-zA-Z.:/ ]*$'}
+                        regExDescription={'a complete URL such as https://www.opusario.com.'}
+                        showFieldValueErrors={this.props.showFieldValueErrors}
+                        action={{...inputComponentAction, key: "company_website"}}
                     />
                     <br/><br/>
                     <button className={"button primary small"} onClick={this.buttonOnClick}>{buttonLabel}</button>
@@ -146,6 +172,7 @@ CompanyInstanceComponent.propTypes = {
     instanceId: PropTypes.number.isRequired,
     instanceItem: PropTypes.object.isRequired,
     childState: PropTypes.object.isRequired,
+    showFieldValueErrors: PropTypes.bool.isRequired,
     errorMessages: PropTypes.array.isRequired,
     isError: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,
