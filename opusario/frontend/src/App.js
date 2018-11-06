@@ -12,6 +12,7 @@ import CompanyInstanceContainer from './containers/instances/CompanyInstanceCont
 import ProjectInstanceContainer from './containers/instances/ProjectInstanceContainer';
 import RoleInstanceContainer from './containers/instances/RoleInstanceContainer';
 import SkillInstanceContainer from './containers/instances/SkillInstanceContainer';
+import ToolInstanceContainer from './containers/instances/ToolInstanceContainer';
 import Myself from './components/Myself';
 import NotFound from './components/NotFound';
 
@@ -47,7 +48,12 @@ class App extends Component {
                                 <SkillInstanceContainer/>
                             </PageWrapperComponent>
                         } />
-                        <Route exact path={"/app/project"} render={()=>
+                        <Route exact path={"/app/tool"} render={()=>
+                            <PageWrapperComponent>
+                                <ToolInstanceContainer/>
+                            </PageWrapperComponent>
+                        } />
+                         <Route exact path={"/app/project"} render={()=>
                             <PageWrapperComponent>
                                 <ProjectInstanceContainer/>
                             </PageWrapperComponent>
