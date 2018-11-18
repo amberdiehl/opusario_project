@@ -66,7 +66,10 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_filters',
     'account',
-    'backend.apps.BackendConfig',  # <-- in short, backend
+    'core',
+    'experience',
+    'subscriber',
+    # 'backend.apps.BackendConfig',  # <-- in short, backend
 ]
 
 MIDDLEWARE = [
