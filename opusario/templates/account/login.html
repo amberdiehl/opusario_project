@@ -18,58 +18,48 @@
 
 {% block body_container %}
 
-    <div class="col-md-6 col-md-offset-3">
+    <section class="wrapper style5">
+        <div class="inner">
 
-            <form id="login_form" class="margin-top-30 sky-form boxed" method="POST" action="{% url "account_login" %}"
+            <form id="login_form" method="POST" action="{% url "account_login" %}"
                     {% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>
                 {% csrf_token %}
 
-                <header>{% trans "Log In" %}</header>
+                <h2>{% trans "Log In" %}</h2>
 
-                <div class="box-static box-transparent box-bordered padding-30">
+                <!-- ALERT -->
+                {% include "./_form_errors.html" %}
 
-                    <!-- ALERT -->
-                    {% include "./_form_errors.html" %}
-
-                    <fieldset>
-
-                    <div class="row"> <!-- username -->
-                        <div class="form-group">
-                            <div class="col-md-6 col-sm-6">
-                                <label>{{ form.username.label }}: *</label>
-                                <label class="input margin-bottom-5" id="id_username">
-                                    <i class="ico-append fa fa-user"></i>
-                                    {{ form.username }}
-                                    <b class="tooltip tooltip-bottom-left">Your user name may be different than
-                                        your email address.</b>
-                                </label>
-                                {% include "./_username_errors.html" %}
-                            </div>
+                <div class="form-field-group">
+                    <div class="row gtr-0 gtr-uniform">
+                        <div class="col-2 form-label">
+                            <label for="id_username">{{ form.username.label }}:</label>
+                        </div>
+                        <div class="col-4 col-4-xsmall">
+                            {{ form.username }}
+                            <p class="tooltip">Your user name may be different than your email address.</p>
+                            {% include "./_username_errors.html" %}
                         </div>
                     </div>
-                    <div class="row"> <!-- password -->
-                        <div class="form-group">
-                            <div class="col-md-6 col-sm-6">
-                                <label for="register:pass1">{{ form.password.label }}: *</label>
-                                <label class="input margin-bottom-5">
-                                    <i class="ico-append fa fa-lock"></i>
-                                    {{ form.password }}
-                                </label>
-                                {% include "./_password_errors.html" %}
-                            </div>
+                    <div class="row gtr-0 gtr-uniform">
+                        <div class="col-2 form-label">
+                            <label for="register:pass1">{{ form.password.label }}:</label>
+                        </div>
+                        <div class="col-4 col-4-xsmall">
+                            {{ form.password }}
+                            {% include "./_password_errors.html" %}
                         </div>
                     </div>
-
-                    </fieldset>
-
-                    {% if redirect_field_value %}
-                        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-                    {% endif %}
-
-                    <button type="submit" class="btn btn-primary btn-bordered pull-right" >{% trans "Log in" %}</button>
-                    <a href="{% url "account_password_reset" %}" class="btn btn-link">{% trans "Forgot your password?" %}</a>
-
                 </div>
+
+                {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% endif %}
+
+                <button type="submit" class="button primary small form-submit-button" >{% trans "Log in" %}</button>
+                <br><br>
+                <a href="{% url "account_password_reset" %}" class="btn btn-link">{% trans "Forgot your password?" %}</a>
+
             </form>
 
             {% if ACCOUNT_OPEN_SIGNUP %}
@@ -80,7 +70,7 @@
                 </p>
             {% endif %}
         </div>
-    </div>
+    </section>
 
 {% endblock %}
 

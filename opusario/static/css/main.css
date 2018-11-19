@@ -2492,6 +2492,9 @@ body.is-mobile.landing #footer {
 .form-label {
   flex: 0 0 150px !important; }
 
+.form-submit-button {
+  margin-top: 40px; }
+
 .col-3-fixed-width {
   flex: 1 0 200px !important; }
 
@@ -2552,7 +2555,7 @@ body.is-mobile.landing #footer {
   max-width: 100%;
   height: 400px;
   max-height: 100%;
-  z-index: 1010;
+  z-index: 10210 !important;
   display: flex;
   background: white;
   box-shadow: 0 0 40px 10px rgba(0, 0, 0, 0.9); }
@@ -2568,7 +2571,11 @@ body.is-mobile.landing #footer {
       top: 0;
       margin: 1em 1em 0 0;
       color: #091D34 !important; }
+    .modal .modal-header .modal-title {
+      margin: 1em 0 0 1em;
+      color: #316AAA; }
   .modal .modal-guts {
+    color: #8E8892 !important;
     position: absolute;
     top: 41px;
     left: 0;
@@ -2581,11 +2588,18 @@ body.is-mobile.landing #footer {
   display: none; }
 
 .modal-overlay {
-  z-index: 1000;
+  z-index: 10200 !important;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%; }
+
+.tooltip {
+  color: #8E8892 !important;
+  margin-top: 4px;
+  margin-bottom: 10px;
+  font-size: 10px !important;
+  line-height: 1 !important; }
 
 /*# sourceMappingURL=main.css.map */

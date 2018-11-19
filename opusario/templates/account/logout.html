@@ -10,24 +10,25 @@
 
 {% block body_container %}
 
-    <div class="col-md-6 col-md-offset-3">
-        <form  id="login_form" class="margin-top-30 sky-form boxed" method="POST" action="{% url "account_logout" %}">
-            {% csrf_token %}
+    <section class="wrapper style5">
+        <div class="inner">
 
-            <header>{% trans "Log Out" %}</header>
+            <form  id="login_form" method="POST" action="{% url "account_logout" %}">
+                {% csrf_token %}
 
-            <div class="box-static box-transparent box-bordered padding-30">
+                <h2>{% trans "Log Out" %}</h2>
 
-                <fieldset>
-                    <p>{% trans "Are you sure you want to log out?" %}</p>
-                    <button type="submit" class="btn btn-primary btn-bordered pull-right">{% trans "Log out" %}</button>
-                </fieldset>
-
-            </div>
-
-        </form>
-
-    </div>
+                <div class="form-field-group">
+                    <div class="row gtr-0 gtr-uniform">
+                        <div class="col-12 col-12-xsmall">
+                            <p>{% trans "Are you sure you want to log out?" %}</p>
+                            <button type="submit" class="button primary small">{% trans "Yes!" %}</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
 
 {% endblock %}
 {% block scripts %}
