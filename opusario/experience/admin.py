@@ -17,8 +17,18 @@ class CountryAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', )
 
 
-admin.site.register(FunctionalArea)
-admin.site.register(Industry)
+@admin.register(FunctionalArea)
+class FunctionalAreaAdmin(admin.ModelAdmin):
+
+    list_display = ('id', 'name', 'description', 'get_encoded_id')
+    readonly_fields = ('get_encoded_id', )
+
+
+@admin.register(Industry)
+class IndustryAdmin(admin.ModelAdmin):
+
+    list_display = ('id', 'name', 'description', 'get_encoded_id')
+    readonly_fields = ('get_encoded_id', )
 
 
 @admin.register(Project)
@@ -33,7 +43,9 @@ class RoleAdmin(admin.ModelAdmin):
 
 @admin.register(Skill)
 class SkillAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'version', )
+
+    list_display = ('id', 'name', 'version', 'get_encoded_id', )
+    readonly_fields = ('get_encoded_id', )
 
 
 @admin.register(State)
@@ -43,4 +55,6 @@ class StateAdmin(admin.ModelAdmin):
 
 @admin.register(Tool)
 class ToolAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'version', )
+
+    list_display = ('id', 'name', 'version', 'get_encoded_id', )
+    readonly_fields = ('get_encoded_id', )

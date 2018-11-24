@@ -1935,25 +1935,34 @@
 		}
 	}
 
-.component-error-message {
-	margin: 15px 0 0 22px;
+ul.errorlist {
+	margin: 15px 0 0 0;
     padding: 5px 10px 5px 10px;
     color: red;
     background-color: cornsilk;
-    border: 1px solid moccasin;
+    border: 1px solid whitesmoke;
     border-radius: 10px;
+	list-style-type: none;
 }
-.form-error-message {
+.form-messages {
 	margin: 5px 0 30px 22px;
     padding: 5px 10px 5px 10px;
-    color: red;
     background-color: cornsilk;
-    border: 1px solid moccasin;
+    border: 1px solid whitesmoke;
     border-radius: 10px;
     p {
       margin: 0;
       padding: 0;
     }
+	.info {
+		color: _colors(success-notification)
+	}
+	.error {
+		color: red
+	}
+	.warning {
+		color: goldenrod;
+	}
 }
 .form-field-group {
     margin: 10px 0 10px 0;

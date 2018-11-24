@@ -1,5 +1,7 @@
 from django.db import models
+from django.urls import reverse
 from core.models import WorkRelationship, InvolvementLevel, MetricType, MetricSubject, DegreeOfUse
+from utils import hasher
 
 
 US_STATE_ABBREVIATIONS = {
@@ -76,7 +78,7 @@ class Industry(models.Model):
     name = models.CharField(
         max_length=100,
         unique=True,
-        help_text='Industry name'
+        help_text='Industry name',
     )
     description = models.TextField(
         blank=True,
@@ -91,6 +93,12 @@ class Industry(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse("experience:industry_update", kwargs={"pk": hasher.encode(self.pk)})
+
+    def get_encoded_id(self):
+        return hasher.encode(self.pk) if self.pk else ''
 
 
 class FunctionalArea(models.Model):
@@ -112,6 +120,12 @@ class FunctionalArea(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse("experience:functional_area_update", kwargs={"pk": hasher.encode(self.pk)})
+
+    def get_encoded_id(self):
+        return hasher.encode(self.pk) if self.pk else ''
 
 
 class Skill(models.Model):
@@ -135,6 +149,12 @@ class Skill(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse("experience:skill_update", kwargs={"pk": hasher.encode(self.pk)})
+
+    def get_encoded_id(self):
+        return hasher.encode(self.pk) if self.pk else ''
+
 
 class Tool(models.Model):
 
@@ -156,6 +176,12 @@ class Tool(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse("experience:tool_update", kwargs={"pk": hasher.encode(self.pk)})
+
+    def get_encoded_id(self):
+        return hasher.encode(self.pk) if self.pk else ''
 
 
 class Role(models.Model):
@@ -189,6 +215,12 @@ class Role(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse("experience:role_update", kwargs={"pk": hasher.encode(self.pk)})
+
+    def get_encoded_id(self):
+        return hasher.encode(self.pk) if self.pk else ''
+
 
 class Country(models.Model):
 
@@ -211,6 +243,12 @@ class Country(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse("experience:country_update", kwargs={"pk": hasher.encode(self.pk)})
+
+    def get_encoded_id(self):
+        return hasher.encode(self.pk) if self.pk else ''
 
 
 class State(models.Model):
@@ -240,6 +278,12 @@ class State(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse("experience:state_update", kwargs={"pk": hasher.encode(self.pk)})
+
+    def get_encoded_id(self):
+        return hasher.encode(self.pk) if self.pk else ''
+
 
 class City(models.Model):
 
@@ -262,6 +306,12 @@ class City(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse("experience:city_update", kwargs={"pk": hasher.encode(self.pk)})
+
+    def get_encoded_id(self):
+        return hasher.encode(self.pk) if self.pk else ''
 
 
 class Company(models.Model):
@@ -297,6 +347,12 @@ class Company(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse("experience:company_update", kwargs={"pk": hasher.encode(self.pk)})
+
+    def get_encoded_id(self):
+        return hasher.encode(self.pk) if self.pk else ''
 
 
 """

@@ -26,6 +26,9 @@ VAR_DIR = os.path.join(BASE_DIR, 'var')
 # Keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
+# Fetch salt
+SALT = os.environ.get('SALT')
+
 # SMTP Email
 EMAIL_HOST = os.environ.get('EMAIL_HOST')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
@@ -116,6 +119,9 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'account.context_processors.account',
             ],
+            'libraries': {
+                'opusario_tags': 'templatetags.opusario_tags',
+            },
         },
     },
 ]

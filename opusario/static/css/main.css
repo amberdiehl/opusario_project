@@ -2467,24 +2467,30 @@ body.is-mobile.landing .wrapper.style4 {
 body.is-mobile.landing #footer {
   background-color: #030a11; }
 
-.component-error-message {
-  margin: 15px 0 0 22px;
+ul.errorlist {
+  margin: 15px 0 0 0;
   padding: 5px 10px 5px 10px;
   color: red;
   background-color: cornsilk;
-  border: 1px solid moccasin;
-  border-radius: 10px; }
+  border: 1px solid whitesmoke;
+  border-radius: 10px;
+  list-style-type: none; }
 
-.form-error-message {
+.form-messages {
   margin: 5px 0 30px 22px;
   padding: 5px 10px 5px 10px;
-  color: red;
   background-color: cornsilk;
-  border: 1px solid moccasin;
+  border: 1px solid whitesmoke;
   border-radius: 10px; }
-  .form-error-message p {
+  .form-messages p {
     margin: 0;
     padding: 0; }
+  .form-messages .info {
+    color: #98CA32; }
+  .form-messages .error {
+    color: red; }
+  .form-messages .warning {
+    color: goldenrod; }
 
 .form-field-group {
   margin: 10px 0 10px 0; }

@@ -1,0 +1,60 @@
+{% extends "../opusario/base.html" %}
+{% load static from staticfiles %}
+
+{% load account_tags opusario_tags %}
+{% load i18n %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block static %}
+{% endblock %}
+
+{% block body_container %}
+
+    <section class="wrapper style5">
+        <div class="inner">
+            <form action="{{ form.form_action }}" method="post">
+                {% csrf_token %}
+                <h2>{{ title }}</h2>
+                {% if messages %}
+                    <div class="row">
+                        <div class="col-10 form-messages">
+                        {% for message in messages %}
+                            <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                        {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="form-field-group">
+                    {% for field in form %}
+                        <div class="row gtr-0 gtr-uniform">
+                            <div class="col-2 form-label">
+                                {% if field.field.widget|get_widget_class == 'CheckboxInput' %}
+                                    <label>{{ field.label }}</label>
+                                {% else %}
+                                    <label for="id_{{ field.name }}">{{ field.label }}</label>
+                                {% endif %}
+                            </div>
+                            {% with field.field.widget|get_widget_size as size %}
+                            <div class="col-{{ size }} col-{{ size }}-xsmall">
+                                {{ field }}
+                                {% if field.field.widget|get_widget_class == 'CheckboxInput' %}
+                                    <label for="id_{{ field.name }}">&nbsp;</label>
+                                {% endif %}
+                                {% if field.help_text %}
+                                    <p class="tooltip">{{ field.help_text|safe }}</p>
+                                {% endif %}
+                                {{ field.errors }}
+                            </div>
+                            {% endwith %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <input class="button primary small form-submit-button" type="submit" value="Submit">
+            </form>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
