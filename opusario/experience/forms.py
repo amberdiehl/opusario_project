@@ -1,7 +1,12 @@
 import re
-from django.forms import ModelForm, TextInput
+from django.forms import ModelForm, TextInput, ChoiceField
 from utils import validate
 from .models import *
+
+
+class CountrySelectField(ChoiceField):
+
+    choices = Country.objects.all()
 
 
 class SimpleModelForm(ModelForm):
@@ -140,3 +145,23 @@ class RoleForm(SimpleModelForm):
             if not re.match(validate['g2']['regex'], description):
                 self.add_error('description', 'Version may only contain {}'.format(validate['g2']['valid']))
         return description
+
+
+class CountryForm(SimpleModelForm):
+
+    placeholders = {
+        'name': 'Country name',
+    }
+
+    class Meta:
+        model = Country
+        fields = ['name', ]
+        widgets = {
+            'name': TextInput(attrs={'col-size': 4}),
+        }
+
+    def clean_name(self):
+        name = self.cleaned_data['name']
+        if not re.match(validate['g0']['regex'], name):
+            self.add_error('name', 'Name may only contain {}.'.format(validate['g0']['valid']))
+        return name

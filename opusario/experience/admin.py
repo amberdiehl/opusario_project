@@ -14,7 +14,9 @@ class CompanyAdmin(admin.ModelAdmin):
 
 @admin.register(Country)
 class CountryAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', )
+
+    list_display = ('id', 'name', 'get_encoded_id', )
+    readonly_fields = ('get_encoded_id', )
 
 
 @admin.register(FunctionalArea)

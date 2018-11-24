@@ -13,4 +13,6 @@ urlpatterns = [
     url(r'^tool/?$', ToolCreateView.as_view(), name='tool_add'),
     url(r'^role/(?P<pk>[a-zA-Z0-9]+)/?$', RoleUpdateView.as_view(), name='role_update'),
     url(r'^role/?$', RoleCreateView.as_view(), name='role_add'),
+    url(r'^country/(?P<pk>[a-zA-Z0-9]+)/?$', CountryUpdateView.as_view(), name='country_update'),
+    url(r'^country/?$', CountryCreateView.as_view(), name='country_add'),
 ]
