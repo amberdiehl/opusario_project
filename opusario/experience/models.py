@@ -66,6 +66,7 @@ US_STATE_ABBREVIATIONS = {
     "Virgin Islands": "VI",
 }
 
+
 """
 
 Models defining object instances that are shared amongst subscribers.
@@ -283,6 +284,11 @@ class State(models.Model):
 
     def get_encoded_id(self):
         return hasher.encode(self.pk) if self.pk else ''
+
+    def save(self, *args, **kwargs):
+        if self.country.name == 'United States':
+            self.abbreviation = US_STATE_ABBREVIATIONS.get(self.name)
+        super().save(*args, **kwargs)
 
 
 class City(models.Model):

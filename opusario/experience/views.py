@@ -136,3 +136,16 @@ class CountryUpdateView(SimpleModelUpdateView):
     model = 'Country'
     title = 'Country'
     form_class = CountryForm
+
+
+class StateCreateView(SimpleModelCreateView):
+
+    title = 'State'
+    form_class = StateForm
+
+
+class StateUpdateView(SimpleModelUpdateView):
+
+    model = 'State'
+    title = 'State'
+    form_class = StateForm

@@ -165,3 +165,29 @@ class CountryForm(SimpleModelForm):
         if not re.match(validate['g0']['regex'], name):
             self.add_error('name', 'Name may only contain {}.'.format(validate['g0']['valid']))
         return name
+
+
+class StateForm(SimpleModelForm):
+
+    placeholders = {
+        'name': 'State name',
+    }
+
+    class Meta:
+        model = State
+        fields = ['country', 'name', ]
+        widgets = {
+            'name': TextInput(attrs={'col-size': 3}),
+        }
+
+    def clean_name(self):
+        name = self.cleaned_data['name'].title()
+        country = self.cleaned_data['country']
+        if not re.match(validate['g0']['regex'], name):
+            self.add_error('name', 'Name may only contain {}.'.format(validate['g0']['valid']))
+            return name # Don't go any further if name has bad characters
+        if country == 'United States':
+            abbreviation = US_STATE_ABBREVIATIONS.get(name, '')
+            if len(abbreviation) == 0:
+                self.add_error('name', '{} is not a valid US state.'.format(name))
+        return name
