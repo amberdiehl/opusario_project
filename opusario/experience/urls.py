@@ -16,4 +16,10 @@ urlpatterns = [
     url(r'^country/?$', CountryCreateView.as_view(), name='country_create'),
     url(r'^state/(?P<pk>[a-zA-Z0-9]+)/?$', StateUpdateView.as_view(), name='state_update'),
     url(r'^state/?$', StateCreateView.as_view(), name='state_create'),
+    url(r'^city/(?P<pk>[a-zA-Z0-9]+)/?$', CityUpdateView.as_view(), name='city_update'),
+    url(r'^city/?$', CityCreateView.as_view(), name='city_create'),
+    url(r'^company/(?P<pk>[a-zA-Z0-9]+)/?$', CompanyUpdateView.as_view(), name='company_update'),
+    url(r'^company/?$', CompanyCreateView.as_view(), name='company_create'),
+    url(r'^ajax-get-states/?$', ajax_get_states, name='ajax_get_states'),
+    url(r'^ajax-get-cities/?$', ajax_get_cities, name='ajax_get_states'),
 ]

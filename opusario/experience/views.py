@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from braces.views import LoginRequiredMixin
 from django.contrib import messages
 from django.views.generic.edit import CreateView, UpdateView
@@ -7,6 +7,18 @@ from utils import hasher  # Pycharm doesn't see this is used but it is.
 import experience.models
 from .forms import *
 from .models import *
+
+
+def ajax_get_states(request):
+    country_id = request.GET.get('selected')
+    states = State.objects.filter(country=country_id)
+    return render(request, 'experience/_select_options.html', {'items': states})
+
+
+def ajax_get_cities(request):
+    state_id = request.GET.get('selected')
+    cities = City.objects.filter(state=state_id)
+    return render(request, 'experience/_select_options.html', {'items': cities})
 
 
 class ModelFormActionMixin(object):
@@ -149,3 +161,29 @@ class StateUpdateView(SimpleModelUpdateView):
     model = 'State'
     title = 'State'
     form_class = StateForm
+
+
+class CityCreateView(SimpleModelCreateView):
+
+    title = 'City'
+    form_class = CityForm
+
+
+class CityUpdateView(SimpleModelUpdateView):
+
+    model = 'City'
+    title = 'City'
+    form_class = CityForm
+
+
+class CompanyCreateView(SimpleModelCreateView):
+
+    title = 'Company'
+    form_class = CompanyForm
+
+
+class CompanyUpdateView(SimpleModelUpdateView):
+
+    model = 'Company'
+    title = 'Company'
+    form_class = CompanyForm

@@ -1027,6 +1027,7 @@ label {
   margin: 0 0 1em 0; }
 
 input[type="text"],
+input[type="url"],
 input[type="number"],
 input[type="password"],
 input[type="email"],
@@ -1046,6 +1047,7 @@ textarea {
   text-decoration: none;
   width: 100%; }
   input[type="text"]:invalid,
+  input[type="url"]:invalid,
   input[type="number"]:invalid,
   input[type="password"]:invalid,
   input[type="email"]:invalid,
@@ -1053,6 +1055,7 @@ textarea {
   textarea:invalid {
     box-shadow: none; }
   input[type="text"]:focus,
+  input[type="url"]:focus,
   input[type="number"]:focus,
   input[type="password"]:focus,
   input[type="email"]:focus,
@@ -1073,6 +1076,7 @@ select {
     display: none; }
 
 input[type="text"],
+input[type="url"],
 input[type="number"],
 input[type="password"],
 input[type="email"],
@@ -1717,6 +1721,7 @@ button,
     .wrapper.style1 label {
       color: #ffffff; }
     .wrapper.style1 input[type="text"],
+    .wrapper.style1 input[type="url"],
     .wrapper.style1 input[type="number"],
     .wrapper.style1 input[type="password"],
     .wrapper.style1 input[type="email"],
@@ -1810,6 +1815,7 @@ button,
     .wrapper.style3 label {
       color: #ffffff; }
     .wrapper.style3 input[type="text"],
+    .wrapper.style3 input[type="url"],
     .wrapper.style3 input[type="number"],
     .wrapper.style3 input[type="password"],
     .wrapper.style3 input[type="email"],
@@ -1903,6 +1909,7 @@ button,
     .wrapper.style5 label {
       color: #98CA32; }
     .wrapper.style5 input[type="text"],
+    .wrapper.style5 input[type="url"],
     .wrapper.style5 input[type="number"],
     .wrapper.style5 input[type="password"],
     .wrapper.style5 input[type="email"],

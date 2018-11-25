@@ -343,7 +343,11 @@ class Company(models.Model):
         null=True,
         help_text='Primary source of revenue.'
     )
-    company_website = models.URLField(null=True, blank=True)
+    company_website = models.URLField(
+        null=True,
+        blank=True,
+        help_text='Company website; e.g. https://www.opusario.com'
+    )
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:

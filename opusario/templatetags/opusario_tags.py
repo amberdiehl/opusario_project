@@ -17,3 +17,20 @@ def get_widget_size(obj):
         return obj.attrs.get('col-size', 3)
 
     return 3
+
+
+@register.filter
+def has_ajax(obj):
+    if 'data-url' in obj.field.widget.attrs:
+        return True
+    return False
+
+
+@register.filter
+def get_ajax_url(obj):
+    return obj.field.widget.attrs['data-url']
+
+
+@register.filter
+def get_ajax_target(obj):
+    return obj.field.widget.attrs['data-target']

@@ -4,7 +4,9 @@ from .models import *
 
 @admin.register(City)
 class CityAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'state', )
+
+    list_display = ('id', 'name', 'state', 'get_encoded_id', )
+    readonly_fields = ('get_encoded_id', )
 
 
 @admin.register(Company)
@@ -40,7 +42,9 @@ class ProjectAdmin(admin.ModelAdmin):
 
 @admin.register(Role)
 class RoleAdmin(admin.ModelAdmin):
-    list_display = ('id', 'functional_area', 'name', 'management', 'leadership', )
+
+    list_display = ('id', 'functional_area', 'name', 'management', 'leadership', 'get_encoded_id', )
+    readonly_fields = ('get_encoded_id', )
 
 
 @admin.register(Skill)
@@ -52,7 +56,9 @@ class SkillAdmin(admin.ModelAdmin):
 
 @admin.register(State)
 class StateAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'abbreviation', 'country', )
+
+    list_display = ('id', 'name', 'abbreviation', 'country', 'get_encoded_id', )
+    readonly_fields = ('get_encoded_id', )
 
 
 @admin.register(Tool)

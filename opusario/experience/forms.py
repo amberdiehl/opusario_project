@@ -1,5 +1,5 @@
 import re
-from django.forms import ModelForm, TextInput, ChoiceField
+from django.forms import ModelForm, TextInput, ChoiceField, Select
 from utils import validate
 from .models import *
 
@@ -190,4 +190,73 @@ class StateForm(SimpleModelForm):
             abbreviation = US_STATE_ABBREVIATIONS.get(name, '')
             if len(abbreviation) == 0:
                 self.add_error('name', '{} is not a valid US state.'.format(name))
+        return name
+
+
+class CityForm(SimpleModelForm):
+
+    placeholders = {
+        'name': 'City name',
+    }
+
+    class Meta:
+        model = City
+        fields = ['state', 'name', ]
+        widgets = {
+            'name': TextInput(attrs={'col-size': 3}),
+        }
+
+    def clean_name(self):
+        name = self.cleaned_data['name'].title()
+        if not re.match(validate['g0']['regex'], name):
+            self.add_error('name', 'Name may only contain {}.'.format(validate['g0']['valid']))
+        return name
+
+
+class CompanyForm(SimpleModelForm):
+
+    placeholders = {
+        'name': 'Company name',
+        'size': 'Employee count',
+        'company_website': 'Company website'
+    }
+
+    country = ChoiceField(
+        help_text='Country where company is located.'
+    )
+    state = ChoiceField(
+        help_text='State where company is located.'
+    )
+
+    class Meta:
+        model = Company
+        fields = ['name', 'country', 'state', 'city', 'size', 'industry', 'company_website', ]
+        widgets = {
+            'name': TextInput(attrs={'col-size': 4}),
+            'company_website': TextInput(attrs={'col-size': 4}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        try:
+            default_country = Country.objects.get(name='United States')
+            initial_country = default_country.pk
+        except models.ObjectDoesNotExist:
+            initial_country = 0
+
+        self.fields['country'].choices=[('0', '---------')] + [(c.pk, c.name) for c in Country.objects.all()]
+        self.fields['country'].initial=initial_country
+        self.fields['country'].widget.attrs={'data-target': 'state', 'data-url': 'ajax-get-states'}
+
+        self.fields['state'].choices=[('0', '---------')] + \
+                                     [(s.pk, s.name) for s in State.objects.filter(country=initial_country)]
+        self.fields['state'].widget.attrs={'data-target': 'city', 'data-url': 'ajax-get-cities'}
+
+        self.fields['city'].queryset=City.objects.none()
+
+    def clean_name(self):
+        name = self.cleaned_data['name'].title()
+        if not re.match(validate['g1']['regex'], name):
+            self.add_error('name', 'Name may only contain {}.'.format(validate['g1']['valid']))
         return name
