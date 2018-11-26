@@ -267,7 +267,9 @@ class CompanyForm(SimpleModelForm):
         self.fields['city'].queryset=City.objects.filter(state=initial_state)
 
     def clean_name(self):
-        name = self.cleaned_data['name'].title()
+        name = self.cleaned_data['name']
+        if not re.match('^[A-Z0-9 ]*$', name):
+            name = name.title()
         if not re.match(validate['g1']['regex'], name):
             self.add_error('name', 'Name may only contain {}.'.format(validate['g1']['valid']))
         return name
