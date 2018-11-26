@@ -68,6 +68,8 @@
                             success: function (data) {$("#id_{{ ajax_target }}").html(data);}
                         });
                     });
+                    $('#id_{{ field.name }} > option:selected').removeAttr('selected');
+                    $('#id_{{ field.name }} > option[value="{{ field.field.initial }}"]').attr('selected','selected');
                 {% endwith %}
             {% endif %}
         {% endfor %}

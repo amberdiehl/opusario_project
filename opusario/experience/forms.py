@@ -1,5 +1,5 @@
 import re
-from django.forms import ModelForm, TextInput, ChoiceField, Select
+from django.forms import ModelForm, TextInput, ChoiceField, ModelChoiceField
 from utils import validate
 from .models import *
 
@@ -221,10 +221,12 @@ class CompanyForm(SimpleModelForm):
         'company_website': 'Company website'
     }
 
-    country = ChoiceField(
+    country = ModelChoiceField(
+        queryset=Country.objects.all(),
         help_text='Country where company is located.'
     )
-    state = ChoiceField(
+    state = ModelChoiceField(
+        queryset=State.objects.all(),
         help_text='State where company is located.'
     )
 
@@ -239,21 +241,30 @@ class CompanyForm(SimpleModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        try:
-            default_country = Country.objects.get(name='United States')
-            initial_country = default_country.pk
-        except models.ObjectDoesNotExist:
-            initial_country = 0
+        if self.changed_data:
+            if self.initial:
+                use_key = self.initial['city']
+            else:
+                use_key = self.data['city']
+            selected_city = City.objects.get(pk=use_key)
+            initial_country = selected_city.state.country_id
+            initial_state = selected_city.state_id
+        else:
+            try:
+                default_country = Country.objects.get(name='United States')
+                initial_country = default_country.pk
+            except models.ObjectDoesNotExist:
+                initial_country = 0
+            initial_state = 0
 
-        self.fields['country'].choices=[('0', '---------')] + [(c.pk, c.name) for c in Country.objects.all()]
-        self.fields['country'].initial=initial_country
         self.fields['country'].widget.attrs={'data-target': 'state', 'data-url': 'ajax-get-states'}
+        self.fields['country'].initial=initial_country
 
-        self.fields['state'].choices=[('0', '---------')] + \
-                                     [(s.pk, s.name) for s in State.objects.filter(country=initial_country)]
+        self.fields['state'].queryset=State.objects.filter(country=initial_country)
         self.fields['state'].widget.attrs={'data-target': 'city', 'data-url': 'ajax-get-cities'}
+        self.fields['state'].initial=initial_state
 
-        self.fields['city'].queryset=City.objects.none()
+        self.fields['city'].queryset=City.objects.filter(state=initial_state)
 
     def clean_name(self):
         name = self.cleaned_data['name'].title()
