@@ -1,12 +1,7 @@
-import re
+import datetime, re
 from django.forms import ModelForm, TextInput, ChoiceField, ModelChoiceField
 from utils import validate
 from .models import *
-
-
-class CountrySelectField(ChoiceField):
-
-    choices = Country.objects.all()
 
 
 class SimpleModelForm(ModelForm):
@@ -243,9 +238,9 @@ class CompanyForm(SimpleModelForm):
 
         if self.changed_data:
             if self.initial:
-                use_key = self.initial['city']
+                use_key = self.initial['city']  # When form is loaded with existing company
             else:
-                use_key = self.data['city']
+                use_key = self.data['city']  # When form is re-loaded while adding a company
             selected_city = City.objects.get(pk=use_key)
             initial_country = selected_city.state.country_id
             initial_state = selected_city.state_id
@@ -273,3 +268,55 @@ class CompanyForm(SimpleModelForm):
         if not re.match(validate['g1']['regex'], name):
             self.add_error('name', 'Name may only contain {}.'.format(validate['g1']['valid']))
         return name
+
+
+class ProjectForm(SimpleModelForm):
+
+    placeholders = {
+        'name': 'Project name',
+        'project_objective': 'Project objective',
+        'start_year': 'Start year',
+        'duration': 'Duration in weeks',
+        'team_size': 'Team size',
+        'code_repository': 'https://www.repository.com/project',
+        'project_site': 'https://www.projectsite.com',
+    }
+
+    class Meta:
+        model = Project
+        fields = ['company', 'name', 'project_objective', 'start_year', 'duration', 'team_size', 'code_repository',
+                  'project_site' ]
+        widgets = {
+            'name': TextInput(attrs={'col-size': 4}),
+            'code_repository': TextInput(attrs={'col-size': 4}),
+            'project_site': TextInput(attrs={'col-size': 4}),
+        }
+
+    def clean_name(self):
+        name = self.cleaned_data['name']
+        if not re.match(validate['g0']['regex'], name):
+            self.add_error('name', 'Name may only contain {}.'.format(validate['g0']['valid']))
+        return name
+
+    def clean_project_objective(self):
+        project_objective = self.cleaned_data['project_objective']
+        if not re.match(validate['g2']['regex'], project_objective):
+            self.add_error('project_objective', 'Project objective may only contain {}.'
+                           .format(validate['g2']['valid']))
+        return project_objective
+
+    def clean_start_year(self):
+        start_year = self.cleaned_data['start_year']
+        current_year = datetime.datetime.today().year
+        if start_year > current_year:
+            self.add_error('start_year', 'Start year cannot be in the future.')
+        if start_year < (current_year-60):
+            self.add_error('start_year', 'Start year cannot be earlier than {}.'.format(current_year-60))
+        return start_year
+
+    def clean_duration(self):
+        duration = self.cleaned_data['duration']
+        if duration > 156:  # Three years
+            self.add_error('duration', "That's a big project! Please break your project into phases that are 3 years "
+                                       "or less in duration.")
+        return duration

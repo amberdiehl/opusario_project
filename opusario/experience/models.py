@@ -417,6 +417,12 @@ class Project(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse("experience:project_update", kwargs={"pk": hasher.encode(self.pk)})
+
+    def get_encoded_id(self):
+        return hasher.encode(self.pk) if self.pk else ''
+
 
 class ProjectOutcome(models.Model):
 

@@ -11,7 +11,8 @@ class CityAdmin(admin.ModelAdmin):
 
 @admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'city', 'size', 'industry', 'company_website', )
+    list_display = ('id', 'name', 'city', 'size', 'industry', 'company_website', 'get_encoded_id', )
+    readonly_fields = ('get_encoded_id', )
 
 
 @admin.register(Country)
@@ -37,7 +38,8 @@ class IndustryAdmin(admin.ModelAdmin):
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'start_year', 'duration', 'team_size')
+    list_display = ('id', 'name', 'start_year', 'duration', 'team_size', 'get_encoded_id')
+    readonly_fields = ('get_encoded_id', )
 
 
 @admin.register(Role)

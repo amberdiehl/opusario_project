@@ -187,3 +187,16 @@ class CompanyUpdateView(SimpleModelUpdateView):
     model = 'Company'
     title = 'Company'
     form_class = CompanyForm
+
+
+class ProjectCreateView(SimpleModelCreateView):
+
+    title = 'Project'
+    form_class = ProjectForm
+
+
+class ProjectUpdateView(SimpleModelUpdateView):
+
+    model = 'Project'
+    title = 'Project'
+    form_class = ProjectForm
