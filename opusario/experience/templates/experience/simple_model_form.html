@@ -25,29 +25,15 @@
                     </div>
                 {% endif %}
                 <div class="form-field-group">
-                    {% for field in form %}
-                        <div class="row gtr-0 gtr-uniform">
-                            <div class="col-2 form-label">
-                                {% if field.field.widget|get_widget_class == 'CheckboxInput' %}
-                                    <label>{{ field.label }}</label>
-                                {% else %}
-                                    <label for="id_{{ field.name }}">{{ field.label }}</label>
-                                {% endif %}
-                            </div>
-                            {% with field.field.widget|get_widget_size as size %}
-                            <div class="col-{{ size }} col-{{ size }}-xsmall">
-                                {{ field }}
-                                {% if field.field.widget|get_widget_class == 'CheckboxInput' %}
-                                    <label for="id_{{ field.name }}">&nbsp;</label>
-                                {% endif %}
-                                {% if field.help_text %}
-                                    <p class="tooltip">{{ field.help_text|safe }}</p>
-                                {% endif %}
-                                {{ field.errors }}
-                            </div>
-                            {% endwith %}
-                        </div>
-                    {% endfor %}
+                    {# Render main form--potentially 'parent' if there is an inline formset #}
+                    {% include 'experience/_render_fields.html' %}
+                    {# Render the child inline formset if it exists  #}
+                    {% if formset %}
+                        {{ formset.management_form }}
+                        {% for form in formset %}
+                            {% include 'experience/_render_fields.html' %}
+                        {% endfor %}
+                    {% endif %}
                 </div>
                 <input class="button primary small form-submit-button" type="submit" value="Submit">
             </form>

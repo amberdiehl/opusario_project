@@ -42,6 +42,11 @@ class ProjectAdmin(admin.ModelAdmin):
     readonly_fields = ('get_encoded_id', )
 
 
+@admin.register(ProjectOutcome)
+class ProjectOutcomeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'project', 'non_quantified_outcomes', 'metric_type', 'metric_amount', 'metric_subject')
+
+
 @admin.register(Role)
 class RoleAdmin(admin.ModelAdmin):
 

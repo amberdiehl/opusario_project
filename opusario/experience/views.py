@@ -1,3 +1,4 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from braces.views import LoginRequiredMixin
 from django.contrib import messages
@@ -189,14 +190,48 @@ class CompanyUpdateView(SimpleModelUpdateView):
     form_class = CompanyForm
 
 
-class ProjectCreateView(SimpleModelCreateView):
+class ProjectAndProjectOutcomesCreateView(SimpleModelCreateView):
 
     title = 'Project'
     form_class = ProjectForm
 
+    def get_context_data(self, **kwargs):
+        context = super(ProjectAndProjectOutcomesCreateView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            context['formset'] = ProjectInlineFormSet(self.request.POST, instance=self.object)
+        else:
+            context['formset'] = ProjectInlineFormSet()
+        return context
 
-class ProjectUpdateView(SimpleModelUpdateView):
+    def form_valid(self, form):
+        context = self.get_context_data()
+        outcomes_formset = context['formset']
+        if outcomes_formset.is_valid():
+            self.object = form.save()
+            outcomes_formset.instance = self.object
+            outcomes_formset.save()
+        return super(ProjectAndProjectOutcomesCreateView, self).form_valid(form)
+
+
+class ProjectAndProjectOutcomesUpdateView(SimpleModelUpdateView):
 
     model = 'Project'
     title = 'Project'
     form_class = ProjectForm
+
+    def get_context_data(self, **kwargs):
+        context = super(ProjectAndProjectOutcomesUpdateView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            context['formset'] = ProjectInlineFormSet(self.request.POST, instance=self.object)
+        else:
+            context['formset'] = ProjectInlineFormSet(instance=self.object)
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        outcomes_formset = context['formset']
+        if outcomes_formset.is_valid():
+            self.object = form.save()
+            outcomes_formset.instance = self.object
+            outcomes_formset.save()
+        return super(ProjectAndProjectOutcomesUpdateView, self).form_valid(form)

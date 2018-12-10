@@ -1,5 +1,5 @@
 import datetime, re
-from django.forms import ModelForm, TextInput, ChoiceField, ModelChoiceField
+from django.forms import ModelForm, inlineformset_factory, TextInput, ModelChoiceField, Textarea
 from utils import validate
 from .models import *
 
@@ -288,6 +288,7 @@ class ProjectForm(SimpleModelForm):
                   'project_site' ]
         widgets = {
             'name': TextInput(attrs={'col-size': 4}),
+            'project_objective': Textarea(attrs={'rows': 5}),
             'code_repository': TextInput(attrs={'col-size': 4}),
             'project_site': TextInput(attrs={'col-size': 4}),
         }
@@ -320,3 +321,29 @@ class ProjectForm(SimpleModelForm):
             self.add_error('duration', "That's a big project! Please break your project into phases that are 3 years "
                                        "or less in duration.")
         return duration
+
+
+class ProjectOutcomeInlineForm(SimpleModelForm):
+
+    placeholders = {
+        'non_quantified_outcomes': 'Non-quantified project outcomes.',
+        'metric_amount': 'Metric amount',
+    }
+
+    class Meta:
+        model = ProjectOutcome
+        fields = ['non_quantified_outcomes', 'metric_type', 'metric_amount', 'metric_subject', ]
+        widgets = {
+            'non_quantified_outcomes': Textarea(attrs={'rows': 3}),
+        }
+
+    def clean_non_quantified_outcomes(self):
+        non_quantified_outcomes = self.cleaned_data['non_quantified_outcomes']
+        if not re.match(validate['g2']['regex'], non_quantified_outcomes):
+            self.add_error('non_quantified_outcomes', 'Description of non-qualified outcomes may only contain {}.'
+                           .format(validate['g2']['valid']))
+        return non_quantified_outcomes
+
+
+ProjectInlineFormSet = inlineformset_factory(Project, ProjectOutcome,
+                                             form=ProjectOutcomeInlineForm, extra=1, can_delete=True, can_order=False)
