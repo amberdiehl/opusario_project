@@ -326,7 +326,7 @@ class ProjectForm(SimpleModelForm):
 class ProjectOutcomeInlineForm(SimpleModelForm):
 
     placeholders = {
-        'non_quantified_outcomes': 'Non-quantified project outcomes.',
+        'non_quantified_outcomes': 'Non-quantified project outcomes',
         'metric_amount': 'Metric amount',
     }
 

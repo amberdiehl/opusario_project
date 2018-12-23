@@ -1,0 +1,36 @@
+{% load account_tags opusario_tags %}
+{% load i18n %}
+                    {% for field in form %}
+                        {# Render hidden fields wherever and not in the visible field structure #}
+                        {% if field.field.widget|get_widget_class == 'HiddenInput' %}
+                            {{ field }}
+                        {% else %}
+                        <div class="row gtr-0 gtr-uniform">
+                            <div class="col-2 form-label">
+                                {% if field.field.widget|get_widget_class == 'CheckboxInput' %}
+                                    <label>{{ field.label }}</label>
+                                {% else %}
+                                    <label for="id_{{ field.name }}">{{ field.label }}</label>
+                                {% endif %}
+                            </div>
+                            {% with field.field.widget|get_widget_size as size %}
+                            <div class="col-{{ size }} col-{{ size }}-xsmall">
+                                {{ field }}
+                                {# Checkboxes must render with label name matching input or CSS won't render them #}
+                                {% if field.field.widget|get_widget_class == 'CheckboxInput' %}
+                                    {% if form.prefix %}
+                                        {# Checkboxes associated with inline formsets have different nomenclature #}
+                                        <label for="id_{{ form.prefix }}-{{ field.name }}">&nbsp;</label>
+                                    {% else %}
+                                        <label for="id_{{ field.name }}">&nbsp;</label>
+                                    {% endif %}
+                                {% endif %}
+                                {% if field.help_text %}
+                                    <p class="tooltip">{{ field.help_text|safe }}</p>
+                                {% endif %}
+                                {{ field.errors }}
+                            </div>
+                            {% endwith %}
+                        </div>
+                        {% endif %}
+                    {% endfor %}

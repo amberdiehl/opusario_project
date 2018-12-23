@@ -1,6 +1,8 @@
 from django.db import models
+from django.urls import reverse
 from core.models import WorkRelationship, WorkSchedule, WorkLocation, ExternalAccountType, InvolvementLevel, DegreeOfUse
 from experience.models import City, Skill, Tool, Project, Role
+from utils import hasher
 
 """
 
@@ -97,6 +99,13 @@ class Myself(models.Model):
 
     def __str__(self):
         return '{}, {}'.format(self.last_name, self.first_name)
+
+    def get_absolute_url(self):
+        return reverse("experience:project_update", kwargs={"pk": hasher.encode(self.pk)})
+
+    def get_encoded_id(self):
+        return hasher.encode(self.pk) if self.pk else ''
+
 
 
 class MyExternalAccount(models.Model):
