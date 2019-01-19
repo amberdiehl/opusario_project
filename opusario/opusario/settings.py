@@ -70,8 +70,7 @@ INSTALLED_APPS = [
     'django_filters',
     'account',
     'core',
-    'experience',
-    'subscriber',
+    'talent'
     # 'backend.apps.BackendConfig',  # <-- in short, backend
 ]
 

@@ -5,7 +5,6 @@ from django.contrib import messages
 from django.views.generic.edit import CreateView, UpdateView
 from utils import hasher  # Pycharm doesn't see this is used but it is.
 
-import experience.models
 from .forms import *
 from .models import *
 
@@ -13,13 +12,13 @@ from .models import *
 def ajax_get_states(request):
     country_id = request.GET.get('selected')
     states = State.objects.filter(country=country_id)
-    return render(request, 'experience/_select_options.html', {'items': states})
+    return render(request, 'talent/_select_options.html', {'items': states})
 
 
 def ajax_get_cities(request):
     state_id = request.GET.get('selected')
     cities = City.objects.filter(state=state_id)
-    return render(request, 'experience/_select_options.html', {'items': cities})
+    return render(request, 'talent/_select_options.html', {'items': cities})
 
 
 class ModelFormActionMixin(object):
@@ -37,7 +36,7 @@ class SimpleModelCreateView(LoginRequiredMixin, ModelFormActionMixin, CreateView
 
     title = NotImplemented
     form_class = NotImplemented
-    template_name = 'experience/simple_model_form.html'
+    template_name = 'talent/simple_model_form.html'
     success_message = NotImplemented
 
     def __init__(self, **kwargs):
@@ -55,7 +54,7 @@ class SimpleModelUpdateView(LoginRequiredMixin, ModelFormActionMixin, UpdateView
     model = NotImplemented
     title = NotImplemented
     form_class = NotImplemented
-    template_name = 'experience/simple_model_form.html'
+    template_name = 'talent/simple_model_form.html'
     success_message = NotImplemented
 
     def __init__(self, **kwargs):
@@ -63,7 +62,7 @@ class SimpleModelUpdateView(LoginRequiredMixin, ModelFormActionMixin, UpdateView
         self.success_message = '{} updated'.format(self.title)
 
     def get_object(self, queryset=None):
-        model_instance = get_object_or_404(getattr(experience.models, self.model),
+        model_instance = get_object_or_404(getattr(models, self.model),
                                            pk=hasher.decode(self.kwargs.get('pk'))[0])  # hasher returns tuple
         return model_instance
 
