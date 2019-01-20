@@ -2090,3 +2090,38 @@ ul.errorlist {
 	font-size: 10px !important;
     line-height: 1 !important;
 }
+
+// Tabs
+.tab-section {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tab-label {
+  background: #eee;
+  border: 1px solid #ddd;
+  padding: .5em 1em;
+  cursor: pointer;
+  order: 1;
+}
+
+.tab-div {
+  width: 100%;
+  padding: 1em;
+  border: 1px solid #ddd;
+  background: #fff;
+  order: 2; // Pushes it to the end.
+}
+
+input.tab-input[type=radio], div.tab-div {
+  display: none;
+}
+
+input.tab-input[type=radio]:checked + label.tab-label {
+  background: #fff;
+  border-bottom: 1px solid black;
+}
+
+input.tab-input[type=radio]:checked + label.tab-label + div.tab-div {
+  display: block;
+}

@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.views.generic.edit import CreateView, UpdateView
 from utils import hasher  # Pycharm doesn't see this is used but it is.
 
+import talent.models
 from .forms import *
 from .models import *
 
@@ -62,7 +63,7 @@ class SimpleModelUpdateView(LoginRequiredMixin, ModelFormActionMixin, UpdateView
         self.success_message = '{} updated'.format(self.title)
 
     def get_object(self, queryset=None):
-        model_instance = get_object_or_404(getattr(models, self.model),
+        model_instance = get_object_or_404(getattr(talent.models, self.model),
                                            pk=hasher.decode(self.kwargs.get('pk'))[0])  # hasher returns tuple
         return model_instance
 

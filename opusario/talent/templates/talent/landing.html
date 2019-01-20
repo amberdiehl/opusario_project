@@ -1,0 +1,48 @@
+{% extends "../opusario/base.html" %}
+{% load static from staticfiles %}
+
+{% load account_tags opusario_tags %}
+{% load i18n %}
+
+{% block title %}My Experience{% endblock %}
+{% block static %}
+{% endblock %}
+
+{% block navigation %}
+{% endblock %}
+
+{% block body_container %}
+
+    <section class="wrapper style5">
+        <div class="inner">
+
+            <div class="tab-section">
+
+                <input id="tab-one" class="tab-input" type="radio" name="grp" checked />
+                <label for="tab-one" class="tab-label">Dashboard</label>
+                <div class="tab-div">
+                    <h2>Dashboard</h2>
+                </div>
+
+                <input id="tab-two" class="tab-input" type="radio" name="grp" />
+                <label for="tab-two" class="tab-label">Companies</label>
+                <div class="tab-div">
+                    <h2>Companies I've Worked With</h2>
+                </div>
+
+                <input id="tab-three" class="tab-input" type="radio" name="grp" />
+                <label for="tab-three" class="tab-label">Projects</label>
+                <div class="tab-div">
+                    <h2>Projects I've Worked On</h2>
+                    <a href="{% url 'talent:project_create' %}">New Project</a>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

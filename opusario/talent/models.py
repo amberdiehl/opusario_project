@@ -97,7 +97,7 @@ class Industry(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("experience:industry_update", kwargs={"pk": hasher.encode(self.pk)})
+        return reverse("talent:industry_update", kwargs={"pk": hasher.encode(self.pk)})
 
     def get_encoded_id(self):
         return hasher.encode(self.pk) if self.pk else ''
@@ -124,7 +124,7 @@ class FunctionalArea(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("experience:functional_area_update", kwargs={"pk": hasher.encode(self.pk)})
+        return reverse("talent:functional_area_update", kwargs={"pk": hasher.encode(self.pk)})
 
     def get_encoded_id(self):
         return hasher.encode(self.pk) if self.pk else ''
@@ -152,7 +152,7 @@ class Skill(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("experience:skill_update", kwargs={"pk": hasher.encode(self.pk)})
+        return reverse("talent:skill_update", kwargs={"pk": hasher.encode(self.pk)})
 
     def get_encoded_id(self):
         return hasher.encode(self.pk) if self.pk else ''
@@ -180,7 +180,7 @@ class Tool(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("experience:tool_update", kwargs={"pk": hasher.encode(self.pk)})
+        return reverse("talent:tool_update", kwargs={"pk": hasher.encode(self.pk)})
 
     def get_encoded_id(self):
         return hasher.encode(self.pk) if self.pk else ''
@@ -218,7 +218,7 @@ class Role(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("experience:role_update", kwargs={"pk": hasher.encode(self.pk)})
+        return reverse("talent:role_update", kwargs={"pk": hasher.encode(self.pk)})
 
     def get_encoded_id(self):
         return hasher.encode(self.pk) if self.pk else ''
@@ -247,7 +247,7 @@ class Country(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("experience:country_update", kwargs={"pk": hasher.encode(self.pk)})
+        return reverse("talent:country_update", kwargs={"pk": hasher.encode(self.pk)})
 
     def get_encoded_id(self):
         return hasher.encode(self.pk) if self.pk else ''
@@ -281,7 +281,7 @@ class State(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("experience:state_update", kwargs={"pk": hasher.encode(self.pk)})
+        return reverse("talent:state_update", kwargs={"pk": hasher.encode(self.pk)})
 
     def get_encoded_id(self):
         return hasher.encode(self.pk) if self.pk else ''
@@ -315,7 +315,7 @@ class City(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("experience:city_update", kwargs={"pk": hasher.encode(self.pk)})
+        return reverse("talent:city_update", kwargs={"pk": hasher.encode(self.pk)})
 
     def get_encoded_id(self):
         return hasher.encode(self.pk) if self.pk else ''
@@ -360,7 +360,7 @@ class Company(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("experience:company_update", kwargs={"pk": hasher.encode(self.pk)})
+        return reverse("talent:company_update", kwargs={"pk": hasher.encode(self.pk)})
 
     def get_encoded_id(self):
         return hasher.encode(self.pk) if self.pk else ''
@@ -419,7 +419,7 @@ class Project(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("experience:project_update", kwargs={"pk": hasher.encode(self.pk)})
+        return reverse("talent:project_update", kwargs={"pk": hasher.encode(self.pk)})
 
     def get_encoded_id(self):
         return hasher.encode(self.pk) if self.pk else ''
@@ -564,7 +564,7 @@ class Myself(models.Model):
         return '{}, {}'.format(self.last_name, self.first_name)
 
     def get_absolute_url(self):
-        return reverse("experience:project_update", kwargs={"pk": hasher.encode(self.pk)})
+        return reverse("talent:project_update", kwargs={"pk": hasher.encode(self.pk)})
 
     def get_encoded_id(self):
         return hasher.encode(self.pk) if self.pk else ''

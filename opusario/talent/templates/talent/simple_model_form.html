@@ -8,6 +8,12 @@
 {% block static %}
 {% endblock %}
 
+{% block navigation %}
+    <ul>
+    <li><a href="{% url 'talent:company_create' %}"></a></li>
+    </ul>
+{% endblock %}
+
 {% block body_container %}
 
     <section class="wrapper style5">
@@ -26,12 +32,12 @@
                 {% endif %}
                 <div class="form-field-group">
                     {# Render main form--potentially 'parent' if there is an inline formset #}
-                    {% include 'experience/_render_fields.html' %}
+                    {% include 'talent/_render_fields.html' %}
                     {# Render the child inline formset if it exists  #}
                     {% if formset %}
                         {{ formset.management_form }}
                         {% for form in formset %}
-                            {% include 'experience/_render_fields.html' %}
+                            {% include 'talent/_render_fields.html' %}
                         {% endfor %}
                     {% endif %}
                 </div>

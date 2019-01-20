@@ -1,7 +1,9 @@
 from django.conf.urls import url
+from django.views.generic import TemplateView
 from .views import *
 
 urlpatterns = [
+    url(r'^experience/?$', TemplateView.as_view(template_name='talent/landing.html'), name='experience'),
     url(r'^city/(?P<pk>[a-zA-Z0-9]+)/?$', CityUpdateView.as_view(), name='city_update'),
     url(r'^city/?$', CityCreateView.as_view(), name='city_create'),
     url(r'^company/(?P<pk>[a-zA-Z0-9]+)/?$', CompanyUpdateView.as_view(), name='company_update'),

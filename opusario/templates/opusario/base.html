@@ -33,6 +33,7 @@
                                     <li><a href="/">Home</a></li>
                                     {% if user.is_authenticated %}
                                         <li><a href="{% url 'account_logout' %}">Log out</a></li>
+                                        <li><a href="{% url 'talent:experience' %}">Experience</a></li>
                                     {% else %}
                                         <li><a href="{% url 'account_signup' %}">Join</a></li>
                                         <li><a href="{% url 'account_login' %}">Sign in</a></li>
@@ -42,6 +43,9 @@
                         </li>
                     </ul>
                 </nav>
+                <div class="col-12-medium">
+                    {% block navigation %}{% endblock %}
+                </div>
             </header>
             <article id="main">
                 {% block body_container %}{% endblock %}
