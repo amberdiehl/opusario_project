@@ -293,6 +293,12 @@ class ProjectForm(SimpleModelForm):
             'project_site': TextInput(attrs={'col-size': 4}),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # TODO Trigger add button and associate URL to go to along with "next" concept to return back here
+        self.fields['company'].widget.attrs={'data-add': '', 'data-next': ''}
+
     def clean_name(self):
         name = self.cleaned_data['name']
         if not re.match(validate['g0']['regex'], name):

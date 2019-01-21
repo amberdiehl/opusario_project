@@ -368,7 +368,7 @@ class Company(models.Model):
 
 """
 
-Models defining subscriber experience.
+Models defining talent experience.
 
 """
 
