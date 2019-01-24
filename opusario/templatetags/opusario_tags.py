@@ -41,4 +41,4 @@ def get_ajax_target(obj):
 
 @register.filter
 def get_goto_path(obj):
-    return obj.attrs.get('data-goto', None)
+    return obj.attrs.get('data-next', None)

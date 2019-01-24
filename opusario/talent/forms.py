@@ -296,7 +296,8 @@ class ProjectForm(SimpleModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Setup attributes for company here rather than in meta to access object instance
-        self.fields['company'].widget.attrs={'data-goto': '/talent/company/?next=/talent/project'}
+        key = '/{}'.format(self.instance.get_encoded_id()) if self.instance.pk else ''
+        self.fields['company'].widget.attrs={'data-next': '/talent/company/?next=/talent/project{}'.format(key)}
 
     def clean_name(self):
         name = self.cleaned_data['name']
