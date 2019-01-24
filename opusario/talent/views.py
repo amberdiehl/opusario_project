@@ -181,6 +181,7 @@ class CompanyCreateView(SimpleModelCreateView):
 
     title = 'Company'
     form_class = CompanyForm
+    success_url = '/'
 
 
 class CompanyUpdateView(SimpleModelUpdateView):

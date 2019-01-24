@@ -55,7 +55,7 @@
                 {% with ajax_url=field|get_ajax_url ajax_target=field|get_ajax_target %}
                     $("#id_{{ field.name }}").change(function () {
                         $.ajax({
-                            url: "/experience/{{ ajax_url }}",
+                            url: "/talent/{{ ajax_url }}",
                             data: {'selected': $(this).val()},
                             success: function (data) {$("#id_{{ ajax_target }}").html(data);}
                         });
