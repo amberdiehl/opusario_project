@@ -1,5 +1,5 @@
 import datetime, re
-from django.forms import ModelForm, inlineformset_factory, TextInput, ModelChoiceField, Textarea
+from django.forms import ModelForm, inlineformset_factory, TextInput, ModelChoiceField, Textarea, Select
 from utils import validate
 from .models import *
 
@@ -295,9 +295,8 @@ class ProjectForm(SimpleModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        # TODO Trigger add button and associate URL to go to along with "next" concept to return back here
-        self.fields['company'].widget.attrs={'data-add': '', 'data-next': ''}
+        # Setup attributes for company here rather than in meta to access object instance
+        self.fields['company'].widget.attrs={'data-goto': '/talent/company'}
 
     def clean_name(self):
         name = self.cleaned_data['name']

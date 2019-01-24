@@ -31,6 +31,13 @@
                                 {{ field.errors }}
                             </div>
                             {% endwith %}
+                            {% with goto=field.field.widget|get_goto_path %}
+                                {% if goto %}
+                                    <div class="col-1 col-1-xsmall">
+                                        <a class="button primary" href="{{ goto }}">Add</a>
+                                    </div>
+                                {% endif %}
+                            {% endwith %}
                         </div>
                         {% endif %}
                     {% endfor %}

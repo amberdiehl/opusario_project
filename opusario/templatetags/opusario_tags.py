@@ -16,6 +16,9 @@ def get_widget_size(obj):
     if obj.__class__.__name__ == "TextInput":
         return obj.attrs.get('col-size', 3)
 
+    if obj.__class__.__name__ == 'Select':
+        return obj.attrs.get('col-size', 3)
+
     return 3
 
 
@@ -34,3 +37,8 @@ def get_ajax_url(obj):
 @register.filter
 def get_ajax_target(obj):
     return obj.field.widget.attrs['data-target']
+
+
+@register.filter
+def get_goto_path(obj):
+    return obj.attrs.get('data-goto', None)
