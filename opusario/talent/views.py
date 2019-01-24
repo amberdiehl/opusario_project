@@ -44,6 +44,12 @@ class SimpleModelCreateView(LoginRequiredMixin, ModelFormActionMixin, CreateView
         super(SimpleModelCreateView, self).__init__(**kwargs)
         self.success_message = '{} added'.format(self.title)
 
+    def dispatch(self, *args, **kwargs):
+        # If next defined, go to specified path rather than default behavior
+        if self.request.GET.get('next'):
+            self.success_url = self.request.GET['next']
+        return super(SimpleModelCreateView, self).dispatch(*args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super(SimpleModelCreateView, self).get_context_data(**kwargs)
         context['title'] = self.title
@@ -181,7 +187,6 @@ class CompanyCreateView(SimpleModelCreateView):
 
     title = 'Company'
     form_class = CompanyForm
-    success_url = '/'
 
 
 class CompanyUpdateView(SimpleModelUpdateView):
