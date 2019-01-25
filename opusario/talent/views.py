@@ -1,13 +1,15 @@
-from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from braces.views import LoginRequiredMixin
 from django.contrib import messages
 from django.views.generic.edit import CreateView, UpdateView
-from utils import hasher  # Pycharm doesn't see this is used but it is.
+from utils import hasher, validate  # Pycharm doesn't see this is used but it is.
 
 import talent.models
 from .forms import *
 from .models import *
+
+MINIMUM_COUNTRY_LENGTH = 4
 
 
 def ajax_get_states(request):
@@ -20,6 +22,21 @@ def ajax_get_cities(request):
     state_id = request.GET.get('selected')
     cities = City.objects.filter(state=state_id)
     return render(request, 'talent/_select_options.html', {'items': cities})
+
+
+def ajax_put_country(request):
+    country_name = request.GET.get('country', '')
+    if not re.match(validate['g0']['regex'], country_name) or len(country_name) < MINIMUM_COUNTRY_LENGTH:
+        return JsonResponse({'Success': False, 'Data': 'Invalid country name.'})
+    else:
+        new_country = Country()
+        new_country.name = country_name
+        try:
+            new_country.save()
+        except:
+            return JsonResponse({'Success': False, 'Data': 'Country already exists.'})
+        finally:
+            return JsonResponse({'Success': True, 'Data': {'id': new_country.pk, 'name': new_country.name}})
 
 
 class ModelFormActionMixin(object):

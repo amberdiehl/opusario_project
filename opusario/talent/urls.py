@@ -27,4 +27,5 @@ urlpatterns = [
     url(r'^tool/?$', ToolCreateView.as_view(), name='tool_create'),
     url(r'^ajax-get-states/?$', ajax_get_states, name='ajax_get_states'),
     url(r'^ajax-get-cities/?$', ajax_get_cities, name='ajax_get_states'),
+    url(r'^ajax-put-country/?$', ajax_put_country, name='ajax_put_country')
 ]
