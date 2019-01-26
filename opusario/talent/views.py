@@ -1,3 +1,4 @@
+from django.db.utils import IntegrityError
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from braces.views import LoginRequiredMixin
@@ -26,17 +27,17 @@ def ajax_get_cities(request):
 
 def ajax_put_country(request):
     country_name = request.GET.get('country', '')
-    if not re.match(validate['g0']['regex'], country_name) or len(country_name) < MINIMUM_COUNTRY_LENGTH:
-        return JsonResponse({'Success': False, 'Data': 'Invalid country name.'})
+    if (not re.match(validate['g0']['regex'], country_name)) or (len(country_name) < MINIMUM_COUNTRY_LENGTH):
+        return JsonResponse({'success': False, 'data': 'Invalid country name.'})
     else:
         new_country = Country()
         new_country.name = country_name
         try:
             new_country.save()
-        except:
-            return JsonResponse({'Success': False, 'Data': 'Country already exists.'})
-        finally:
-            return JsonResponse({'Success': True, 'Data': {'id': new_country.pk, 'name': new_country.name}})
+        except IntegrityError:
+            return JsonResponse({'success': False, 'data': 'Country already exists.'})
+        else:
+            return JsonResponse({'success': True, 'data': {'id': new_country.pk, 'name': new_country.name}})
 
 
 class ModelFormActionMixin(object):

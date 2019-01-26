@@ -45,7 +45,7 @@
             </form>
         {% for field in form %}
             {% if field|has_modal %}
-                {% with field_name=field.name modal_url=field|get_modal_url %}
+                {% with field_name=field.name %}
                     {% include 'talent/_modal.html' %}
                 {% endwith %}
             {% endif %}
@@ -57,8 +57,8 @@
 
 {% block scripts %}
     <script>
-        {# Dynamically render ajax for interdependent select values #}
         {% for field in form %}
+            {# Dynamically render ajax for fields which contain interdependent select values #}
             {% if field|has_ajax %}
                 {% with ajax_url=field|get_refresh_url ajax_target=field|get_refresh_target %}
                     $("#id_{{ field.name }}").change(function () {
@@ -72,6 +72,44 @@
                     $('#id_{{ field.name }} > option[value="{{ field.field.initial }}"]').attr('selected','selected');
                 {% endwith %}
             {% endif %}
+            {# Dynamically render ajax for fields which are enabled to add values via modal form #}
+            {% if field|has_modal %}
+                {% with ajax_url=field|get_modal_url %}
+                    $("#modal-add-{{ field.name }}").click(function () {
+                        $.ajax({
+                            url: "/talent/{{ ajax_url }}",
+                            data: {'{{ field.name }}': $('#modal-value-{{ field.name }}').val()},
+                            success: function (data) {
+                                if (data.success) {
+                                    $('#id_{{ field.name }}').append('<option value="' + data.data.id + '">' +
+                                        data.data.name + '</option>');
+                                    $('#id_{{ field.name }} > option[value=' + data.data.id + ']')
+                                        .attr('selected','selected');
+                                    toggleModal('{{ field.name }}');
+                                    $('#id_{{ field.name }}').trigger('change') // Refresh dependent data, if any
+                                } else {
+                                    $('#modal-error-{{ field.name }}').html(data.data)
+                                }
+                            }
+                        });
+                    });
+                    $('#modal-open-{{ field.name }}').click(function (e) {
+                        e.preventDefault();
+                        toggleModal('{{ field.name }}');
+                        $('#modal-value-{{ field_name }}').focus();
+                    });
+                    $('#modal-close-{{ field.name }}').click(function () {
+                        $('#modal-error-{{ field.name }}').html('');
+                        $('#modal-value-{{ field.name }}').val('');
+                        toggleModal('{{ field.name }}');
+                    });
+                {% endwith %}
+            {% endif %}
         {% endfor %}
+        {# Toggle modal form(s) which may or may not exist #}
+        function toggleModal(fieldName) {
+            $('#modal-' + fieldName).toggleClass('closed');
+            $('#modal-overlay-' + fieldName).toggleClass('closed');
+        }
     </script>
 {% endblock %}
