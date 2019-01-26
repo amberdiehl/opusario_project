@@ -26,7 +26,7 @@ def ajax_get_cities(request):
 
 
 def ajax_put_country(request):
-    country_name = request.GET.get('country', '')
+    country_name = request.POST.get('country', '')
     if (not re.match(validate['g0']['regex'], country_name)) or (len(country_name) < MINIMUM_COUNTRY_LENGTH):
         return JsonResponse({'success': False, 'data': 'Invalid country name.'})
     else:

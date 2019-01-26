@@ -73,10 +73,15 @@
                 {% endwith %}
             {% endif %}
             {# Dynamically render ajax for fields which are enabled to add values via modal form #}
+
             {% if field|has_modal %}
                 {% with ajax_url=field|get_modal_url %}
                     $("#modal-add-{{ field.name }}").click(function () {
+                        $.ajaxSetup({beforeSend: function(xhr, settings){
+                            xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+                        }});
                         $.ajax({
+                            type: 'POST',
                             url: "/talent/{{ ajax_url }}",
                             data: {'{{ field.name }}': $('#modal-value-{{ field.name }}').val()},
                             success: function (data) {
@@ -86,17 +91,20 @@
                                     $('#id_{{ field.name }} > option[value=' + data.data.id + ']')
                                         .attr('selected','selected');
                                     toggleModal('{{ field.name }}');
+                                    $('#modal-value-{{ field.name }}').val('');
                                     $('#id_{{ field.name }}').trigger('change') // Refresh dependent data, if any
                                 } else {
-                                    $('#modal-error-{{ field.name }}').html(data.data)
+                                    $('#modal-error-{{ field.name }}').html(data.data);
                                 }
+                            },
+                            error: function () {
+                                $('#modal-error-{{ field.name }}').html('Error - please try again later.');
                             }
                         });
                     });
                     $('#modal-open-{{ field.name }}').click(function (e) {
                         e.preventDefault();
                         toggleModal('{{ field.name }}');
-                        $('#modal-value-{{ field_name }}').focus();
                     });
                     $('#modal-close-{{ field.name }}').click(function () {
                         $('#modal-error-{{ field.name }}').html('');
