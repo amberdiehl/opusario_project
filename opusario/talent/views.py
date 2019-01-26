@@ -11,6 +11,7 @@ from .forms import *
 from .models import *
 
 MINIMUM_COUNTRY_LENGTH = 4
+MINIMUM_STATE_LENGTH = 2
 
 
 def ajax_get_states(request):
@@ -38,6 +39,78 @@ def ajax_put_country(request):
             return JsonResponse({'success': False, 'data': 'Country already exists.'})
         else:
             return JsonResponse({'success': True, 'data': {'id': new_country.pk, 'name': new_country.name}})
+
+
+def ajax_put_state(request):
+
+    state_name = request.POST.get('state', '')
+    country_id = request.POST.get('dependency', 0)
+    request_response = {
+        'success': True,
+        'data': {}
+    }
+
+    if (not re.match(validate['g0']['regex'], state_name)) or (len(state_name) < MINIMUM_STATE_LENGTH):
+        request_response['success'] = False
+        request_response['data'] = 'Invalid state name.'
+    if not request_response['success']:
+        return JsonResponse(request_response)
+
+    if re.match("^[0-9]*$", country_id):  # Ensure numeric value only
+        country = Country.objects.filter(pk=country_id)  # Ensure country exists
+        if len(country) == 0:
+            request_response['success'] = False
+    else:
+        request_response['success'] = False
+    if not request_response['success']:
+        request_response['data'] = 'Invalid request.'
+        return JsonResponse(request_response)
+
+    new_state = State()
+    new_state.name = state_name
+    new_state.country = country[0]
+    try:
+        new_state.save()
+    except IntegrityError:
+        return JsonResponse({'success': False, 'data': 'State already exists.'})
+    else:
+        return JsonResponse({'success': True, 'data': {'id': new_state.pk, 'name': new_state.name}})
+
+
+def ajax_put_city(request):
+
+    city_name = request.POST.get('city', '')
+    state_id = request.POST.get('dependency', 0)
+    request_response = {
+        'success': True,
+        'data': {}
+    }
+
+    if (not re.match(validate['g0']['regex'], city_name)) or (len(city_name) < MINIMUM_STATE_LENGTH):
+        request_response['success'] = False
+        request_response['data'] = 'Invalid city name.'
+    if not request_response['success']:
+        return JsonResponse(request_response)
+
+    if re.match("^[0-9]*$", state_id):  # Ensure numeric value only
+        state = State.objects.filter(pk=state_id)  # Ensure state exists
+        if len(state) == 0:
+            request_response['success'] = False
+    else:
+        request_response['success'] = False
+    if not request_response['success']:
+        request_response['data'] = 'Invalid request.'
+        return JsonResponse(request_response)
+
+    new_city = City()
+    new_city.name = city_name
+    new_city.state = state[0]
+    try:
+        new_city.save()
+    except IntegrityError:
+        return JsonResponse({'success': False, 'data': 'City already exists.'})
+    else:
+        return JsonResponse({'success': True, 'data': {'id': new_city.pk, 'name': new_city.name}})
 
 
 class ModelFormActionMixin(object):

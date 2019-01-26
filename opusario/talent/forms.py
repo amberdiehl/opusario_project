@@ -262,11 +262,17 @@ class CompanyForm(SimpleModelForm):
         self.fields['state'].queryset=State.objects.filter(country=initial_country)
         self.fields['state'].widget.attrs={
             'data-refresh': 'city',
-            'data-refresh-url': 'ajax-get-cities'
+            'data-refresh-url': 'ajax-get-cities',
+            'data-modal-url': 'ajax-put-state',
+            'data-modal-dependency': 'country'
         }
         self.fields['state'].initial=initial_state
 
         self.fields['city'].queryset=City.objects.filter(state=initial_state)
+        self.fields['city'].widget.attrs={
+            'data-modal-url': 'ajax-put-city',
+            'data-modal-dependency': 'state'
+        }
 
     def clean_name(self):
         name = self.cleaned_data['name']

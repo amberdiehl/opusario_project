@@ -54,3 +54,13 @@ def get_goto_path(obj):
 @register.filter
 def get_modal_url(obj):
     return obj.field.widget.attrs['data-modal-url']
+
+
+@register.filter
+def get_modal_dependency(obj):
+    try:
+        dependency = obj.field.widget.attrs['data-modal-dependency']
+    except KeyError:
+        return ''
+    else:
+        return dependency

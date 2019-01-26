@@ -75,15 +75,23 @@
             {# Dynamically render ajax for fields which are enabled to add values via modal form #}
 
             {% if field|has_modal %}
-                {% with ajax_url=field|get_modal_url %}
+                {% with ajax_url=field|get_modal_url dependency=field|get_modal_dependency %}
                     $("#modal-add-{{ field.name }}").click(function () {
+                        {% if dependency %}
+                            var relatedItem = $('#id_{{ dependency }}').val();
+                        {% else %}
+                            var relatedItem = '';
+                        {% endif %}
                         $.ajaxSetup({beforeSend: function(xhr, settings){
                             xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
                         }});
                         $.ajax({
                             type: 'POST',
                             url: "/talent/{{ ajax_url }}",
-                            data: {'{{ field.name }}': $('#modal-value-{{ field.name }}').val()},
+                            data: {
+                                '{{ field.name }}': $('#modal-value-{{ field.name }}').val(),
+                                'dependency': relatedItem
+                            },
                             success: function (data) {
                                 if (data.success) {
                                     $('#id_{{ field.name }}').append('<option value="' + data.data.id + '">' +
