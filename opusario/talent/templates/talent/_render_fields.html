@@ -38,6 +38,13 @@
                                     </div>
                                 {% endif %}
                             {% endwith %}
+                            {% with modal=field|has_modal %}
+                                {% if modal %}
+                                    <div class="col-1 col-1-xsmall">
+                                        <button class="btn btn-group-sm">Add</button>
+                                    </div>
+                                {% endif %}
+                            {% endwith %}
                         </div>
                         {% endif %}
                     {% endfor %}

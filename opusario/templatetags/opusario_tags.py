@@ -24,21 +24,33 @@ def get_widget_size(obj):
 
 @register.filter
 def has_ajax(obj):
-    if 'data-url' in obj.field.widget.attrs:
+    if 'data-refresh-url' in obj.field.widget.attrs:
         return True
     return False
 
 
 @register.filter
-def get_ajax_url(obj):
-    return obj.field.widget.attrs['data-url']
+def has_modal(obj):
+    if 'data-modal-url' in obj.field.widget.attrs:
+        return True
+    return False
 
 
 @register.filter
-def get_ajax_target(obj):
-    return obj.field.widget.attrs['data-target']
+def get_refresh_url(obj):
+    return obj.field.widget.attrs['data-refresh-url']
+
+
+@register.filter
+def get_refresh_target(obj):
+    return obj.field.widget.attrs['data-refresh']
 
 
 @register.filter
 def get_goto_path(obj):
     return obj.attrs.get('data-next', None)
+
+
+@register.filter
+def get_modal_url(obj):
+    return obj.field.widget.attrs['data-modal-url']

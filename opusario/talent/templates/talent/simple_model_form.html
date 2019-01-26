@@ -43,6 +43,13 @@
                 </div>
                 <input class="button primary small form-submit-button" type="submit" value="Submit">
             </form>
+        {% for field in form %}
+            {% if field|has_modal %}
+                {% with field_name=field.name modal_url=field|get_modal_url %}
+                    {% include 'talent/_modal.html' %}
+                {% endwith %}
+            {% endif %}
+        {% endfor %}
         </div>
     </section>
 
@@ -50,9 +57,10 @@
 
 {% block scripts %}
     <script>
+        {# Dynamically render ajax for interdependent select values #}
         {% for field in form %}
             {% if field|has_ajax %}
-                {% with ajax_url=field|get_ajax_url ajax_target=field|get_ajax_target %}
+                {% with ajax_url=field|get_refresh_url ajax_target=field|get_refresh_target %}
                     $("#id_{{ field.name }}").change(function () {
                         $.ajax({
                             url: "/talent/{{ ajax_url }}",

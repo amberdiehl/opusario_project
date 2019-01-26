@@ -252,11 +252,18 @@ class CompanyForm(SimpleModelForm):
                 initial_country = 0
             initial_state = 0
 
-        self.fields['country'].widget.attrs={'data-target': 'state', 'data-url': 'ajax-get-states'}
+        self.fields['country'].widget.attrs={
+            'data-refresh': 'state',
+            'data-refresh-url': 'ajax-get-states',
+            'data-modal-url': 'ajax-put-country'
+        }
         self.fields['country'].initial=initial_country
 
         self.fields['state'].queryset=State.objects.filter(country=initial_country)
-        self.fields['state'].widget.attrs={'data-target': 'city', 'data-url': 'ajax-get-cities'}
+        self.fields['state'].widget.attrs={
+            'data-refresh': 'city',
+            'data-refresh-url': 'ajax-get-cities'
+        }
         self.fields['state'].initial=initial_state
 
         self.fields['city'].queryset=City.objects.filter(state=initial_state)
@@ -410,11 +417,11 @@ class MyselfModelForm(SimpleModelForm):
                 initial_country = 0
             initial_state = 0
 
-        self.fields['country'].widget.attrs={'data-target': 'state', 'data-url': 'ajax-get-states'}
+        self.fields['country'].widget.attrs={'data-refresh': 'state', 'data-refresh-url': 'ajax-get-states'}
         self.fields['country'].initial=initial_country
 
         self.fields['state'].queryset=State.objects.filter(country=initial_country)
-        self.fields['state'].widget.attrs={'data-target': 'city', 'data-url': 'ajax-get-cities'}
+        self.fields['state'].widget.attrs={'data-refresh': 'city', 'data-refresh-url': 'ajax-get-cities'}
         self.fields['state'].initial=initial_state
 
         self.fields['city'].queryset=City.objects.filter(state=initial_state)
