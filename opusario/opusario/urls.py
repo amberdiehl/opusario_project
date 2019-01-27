@@ -22,6 +22,7 @@ urlpatterns = [
     # path('admin/', admin.site.urls), <-- does not seem to want to work with React setup
     url(r'^admin/', admin.site.urls),
     url(r"^account/", include("account.urls")),
+    url(r"^core/", include(("core.urls", 'core'), namespace='core')),
     url(r"^talent/", include(("talent.urls", 'talent'), namespace='talent')),
     # url(r'^api/', include('backend.urls')),
     url(r'^landing$', TemplateView.as_view(template_name="opusario/app.html")),

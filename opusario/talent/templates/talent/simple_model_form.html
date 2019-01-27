@@ -63,7 +63,7 @@
                 {% with ajax_url=field|get_refresh_url ajax_target=field|get_refresh_target %}
                     $("#id_{{ field.name }}").change(function () {
                         $.ajax({
-                            url: "/talent/{{ ajax_url }}",
+                            url: "{{ ajax_url }}",
                             data: {'selected': $(this).val()},
                             success: function (data) {$("#id_{{ ajax_target }}").html(data);}
                         });
@@ -87,7 +87,7 @@
                         }});
                         $.ajax({
                             type: 'POST',
-                            url: "/talent/{{ ajax_url }}",
+                            url: "{{ ajax_url }}",
                             data: {
                                 '{{ field.name }}': $('#modal-value-{{ field.name }}').val(),
                                 'dependency': relatedItem

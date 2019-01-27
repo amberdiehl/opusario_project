@@ -2,41 +2,42 @@ from django.contrib import admin
 from .models import *
 
 
-@admin.register(WorkRelationship)
-class WorkRelationshipAdmin(admin.ModelAdmin):
-    list_display = ('id', 'relationship', )
+@admin.register(City)
+class CityAdmin(admin.ModelAdmin):
+
+    list_display = ('id', 'name', 'state', 'get_encoded_id', )
+    readonly_fields = ('get_encoded_id', )
 
 
-@admin.register(WorkSchedule)
-class WorkScheduleAdmin(admin.ModelAdmin):
-    list_display = ('id', 'schedule', )
+@admin.register(Company)
+class CompanyAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'city', 'size', 'industry', 'company_website', 'get_encoded_id', )
+    readonly_fields = ('get_encoded_id', )
 
 
-@admin.register(WorkLocation)
-class WorkLocationAdmin(admin.ModelAdmin):
-    list_display = ('id', 'location', )
+@admin.register(Country)
+class CountryAdmin(admin.ModelAdmin):
+
+    list_display = ('id', 'name', 'get_encoded_id', )
+    readonly_fields = ('get_encoded_id', )
 
 
-@admin.register(ExternalAccountType)
-class ExternalAccountTypeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'type', )
+@admin.register(FunctionalArea)
+class FunctionalAreaAdmin(admin.ModelAdmin):
+
+    list_display = ('id', 'name', 'description', 'get_encoded_id')
+    readonly_fields = ('get_encoded_id', )
 
 
-@admin.register(InvolvementLevel)
-class InvolvementLevelAdmin(admin.ModelAdmin):
-    list_display = ('id', 'involvement', 'weight', )
+@admin.register(Industry)
+class IndustryAdmin(admin.ModelAdmin):
+
+    list_display = ('id', 'name', 'description', 'get_encoded_id')
+    readonly_fields = ('get_encoded_id', )
 
 
-@admin.register(MetricType)
-class MetricTypeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'metric_type', )
+@admin.register(State)
+class StateAdmin(admin.ModelAdmin):
 
-
-@admin.register(MetricSubject)
-class MetricSubjectAdmin(admin.ModelAdmin):
-    list_display = ('id', 'metric_subject', )
-
-
-@admin.register(DegreeOfUse)
-class DegreeOfUseAdmin(admin.ModelAdmin):
-    list_display = ('id', 'degree_used', 'weight', )
+    list_display = ('id', 'name', 'abbreviation', 'country', 'get_encoded_id', )
+    readonly_fields = ('get_encoded_id', )

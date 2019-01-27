@@ -1,133 +1,14 @@
 from django.db import models
 from django.urls import reverse
-from core.models import WorkRelationship, WorkSchedule, WorkLocation, ExternalAccountType, InvolvementLevel, \
-    MetricType, MetricSubject, DegreeOfUse
+from core.models import City, Company, FunctionalArea
 from utils import hasher
 
 
-US_STATE_ABBREVIATIONS = {
-    "Alabama": "AL",
-    "Alaska": "AK",
-    "Arizona": "AZ",
-    "Arkansas": "AR",
-    "California": "CA",
-    "Colorado": "CO",
-    "Connecticut": "CT",
-    "Delaware": "DE",
-    "Florida": "FL",
-    "Georgia": "GA",
-    "Hawaii": "HI",
-    "Idaho": "ID",
-    "Illinois": "IL",
-    "Indiana": "IN",
-    "Iowa": "IA",
-    "Kansas": "KS",
-    "Kentucky": "KY",
-    "Louisiana": "LA",
-    "Maine": "ME",
-    "Maryland": "MD",
-    "Massachusetts": "MA",
-    "Michigan": "MI",
-    "Minnesota": "MN",
-    "Mississippi": "MS",
-    "Missouri": "MO",
-    "Montana": "MT",
-    "Nebraska": "NE",
-    "Nevada": "NV",
-    "New Hampshire": "NH",
-    "New Jersey": "NJ",
-    "New Mexico": "NM",
-    "New York": "NY",
-    "North Carolina": "NC",
-    "North Dakota": "ND",
-    "Ohio": "OH",
-    "Oklahoma": "OK",
-    "Oregon": "OR",
-    "Pennsylvania": "PA",
-    "Rhode Island": "RI",
-    "South Carolina": "SC",
-    "South Dakota": "SD",
-    "Tennessee": "TN",
-    "Texas": "TX",
-    "Utah": "UT",
-    "Vermont": "VT",
-    "Virginia": "VA",
-    "Washington": "WA",
-    "West Virginia": "WV",
-    "Wisconsin": "WI",
-    "Wyoming": "WY",
-    "American Samoa": "AS",
-    "District of Columbia": "DC",
-    "Federated States of Micronesia": "FM",
-    "Guam": "GU",
-    "Marshall Islands": "MH",
-    "Northern Mariana Islands": "MP",
-    "Palau": "PW",
-    "Puerto Rico": "PR",
-    "Virgin Islands": "VI",
-}
-
-
 """
 
-Models defining object instances that are shared amongst subscribers.
+Models defining object instances that are shared amongst talented people.
 
 """
-
-
-class Industry(models.Model):
-
-    name = models.CharField(
-        max_length=100,
-        unique=True,
-        help_text='Industry name',
-    )
-    description = models.TextField(
-        blank=True,
-        null=True,
-        help_text='General description of this industry.'
-    )
-    created = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        verbose_name_plural = 'Industries'
-        ordering = ['name', ]
-
-    def __str__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse("talent:industry_update", kwargs={"pk": hasher.encode(self.pk)})
-
-    def get_encoded_id(self):
-        return hasher.encode(self.pk) if self.pk else ''
-
-
-class FunctionalArea(models.Model):
-
-    name = models.CharField(
-        max_length=100,
-        unique=True,
-        help_text='Name for functional area, e.g. Technology, Marketing, Product Management, Executive Management.'
-    )
-    description = models.TextField(
-        blank=True,
-        null=True,
-        help_text='General description of this functional area.'
-    )
-    created = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['name', ]
-
-    def __str__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse("talent:functional_area_update", kwargs={"pk": hasher.encode(self.pk)})
-
-    def get_encoded_id(self):
-        return hasher.encode(self.pk) if self.pk else ''
 
 
 class Skill(models.Model):
@@ -186,6 +67,24 @@ class Tool(models.Model):
         return hasher.encode(self.pk) if self.pk else ''
 
 
+class DegreeOfUse(models.Model):
+
+    degree_used = models.CharField(
+        max_length=50,
+        unique=True,
+        help_text='Frequency of use, e.g. Daily, Occasionally'
+    )
+    weight = models.IntegerField(
+        help_text='Weight of use for analysis.'
+    )
+
+    class Meta:
+        ordering = ('degree_used', )
+
+    def __str__(self):
+        return self.degree_used
+
+
 class Role(models.Model):
 
     functional_area = models.ForeignKey(
@@ -224,146 +123,113 @@ class Role(models.Model):
         return hasher.encode(self.pk) if self.pk else ''
 
 
-class Country(models.Model):
+class InvolvementLevel(models.Model):
 
-    name = models.CharField(
+    involvement = models.CharField(
         max_length=50,
         unique=True,
-        help_text='Name of country.'
+        help_text='Involvement in project, e.g. Core team member, Part-time, Subject matter expert.'
     )
-    abbreviation = models.CharField(
-        max_length=4,
-        null=True,
-        blank=True,
-        help_text='Optional internet country code assignment.'
+    weight = models.IntegerField(
+        help_text='Weight of involvement for analysis.'
     )
-    created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name_plural = 'Countries'
-        ordering = ['name', ]
+        ordering = ('involvement', )
 
     def __str__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse("talent:country_update", kwargs={"pk": hasher.encode(self.pk)})
-
-    def get_encoded_id(self):
-        return hasher.encode(self.pk) if self.pk else ''
+        return self.involvement
 
 
-class State(models.Model):
+class WorkRelationship(models.Model):
 
-    name = models.CharField(
+    relationship = models.CharField(
+        max_length=30,
+        unique=True,
+        help_text='Relationship with employer, e.g. Employee, Consultant, Freelancer.'
+    )
+
+    class Meta:
+        ordering = ('relationship', )
+
+    def __str__(self):
+        return self.relationship
+
+
+class WorkSchedule(models.Model):
+
+    schedule = models.CharField(
+        max_length=20,
+        unique=True,
+        help_text='Work schedule, e.g. Full-time, Part-Time, Shared job.'
+    )
+
+    class Meta:
+        ordering = ('schedule', )
+
+    def __str__(self):
+        return self.schedule
+
+
+class WorkLocation(models.Model):
+
+    location = models.CharField(
+        max_length=30,
+        unique=True,
+        help_text='Work location, e.g. On site, Mixed (on site and remote), Remote.'
+    )
+
+    class Meta:
+        ordering = ('location', )
+
+    def __str__(self):
+        return self.location
+
+
+class MetricType(models.Model):
+
+    metric_type = models.CharField(
+        max_length=20,
+        unique=True,
+        help_text='Type of measurement value, e.g. Monetary, Percentage.'
+    )
+
+    class Meta:
+        ordering = ('metric_type', )
+
+    def __str__(self):
+        return self.metric_type
+
+
+# Revenue, Expense, Customer acquisition, Customer retention, Customer lifetime value, Cost of goods sold
+class MetricSubject(models.Model):
+
+    metric_subject = models.CharField(
+        max_length=25,
+        unique=True,
+        help_text='Subject of metric value, e.g. Revenue, Expense.'
+    )
+
+    class Meta:
+        ordering = ('metric_subject', )
+
+    def __str__(self):
+        return self.metric_subject
+
+
+class ExternalAccountType(models.Model):
+
+    type = models.CharField(
         max_length=50,
         unique=True,
-        help_text='Name of state.'
+        help_text='External account, e.g. Source code, Social media, Blog.'
     )
-    abbreviation = models.CharField(
-        max_length=2,
-        null=True,
-        blank=True,
-        help_text='For United States, two character abbreviation for state.'
-    )
-    country = models.ForeignKey(
-        Country,
-        on_delete=models.SET_NULL,
-        null=True,
-        help_text='Country where state is located.'
-    )
-    created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['name', ]
+        ordering = ('type', )
 
     def __str__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse("talent:state_update", kwargs={"pk": hasher.encode(self.pk)})
-
-    def get_encoded_id(self):
-        return hasher.encode(self.pk) if self.pk else ''
-
-    def save(self, *args, **kwargs):
-        if self.country.name == 'United States':
-            self.abbreviation = US_STATE_ABBREVIATIONS.get(self.name)
-        super().save(*args, **kwargs)
-
-
-class City(models.Model):
-
-    name = models.CharField(
-        max_length=50,
-        unique=True,
-        help_text='Name of city.'
-    )
-    state = models.ForeignKey(
-        State,
-        on_delete=models.SET_NULL,
-        null=True,
-        help_text='State where city is located.'
-    )
-    created = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        verbose_name_plural = 'Cities'
-        ordering = ['name', ]
-
-    def __str__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse("talent:city_update", kwargs={"pk": hasher.encode(self.pk)})
-
-    def get_encoded_id(self):
-        return hasher.encode(self.pk) if self.pk else ''
-
-
-class Company(models.Model):
-
-    name = models.CharField(
-        max_length=255,
-        help_text='Name of company.'
-    )
-    city = models.ForeignKey(
-        City,
-        on_delete=models.SET_NULL,
-        null=True,
-        help_text='City where company is located.'
-    )
-    size = models.IntegerField(
-        blank=True,
-        null=True,
-        help_text='Number of employees.'
-    )
-    industry = models.ForeignKey(
-        Industry,
-        on_delete=models.SET_NULL,
-        null=True,
-        help_text='Primary source of revenue.'
-    )
-    company_website = models.URLField(
-        null=True,
-        blank=True,
-        help_text='Company website; e.g. https://www.opusario.com'
-    )
-    created = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        verbose_name_plural = 'Companies'
-        unique_together = ('name', 'city', )
-        ordering = ['name', ]
-
-    def __str__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse("talent:company_update", kwargs={"pk": hasher.encode(self.pk)})
-
-    def get_encoded_id(self):
-        return hasher.encode(self.pk) if self.pk else ''
+        return self.type
 
 
 """
@@ -409,6 +275,11 @@ class Project(models.Model):
         blank=True,
         help_text='Project site, or portion of company website impacted by project, if publicly available.'
     )
+    non_quantified_outcomes = models.TextField(
+        blank=True,
+        null=True,
+        help_text='Use quantified outcomes if possible, otherwise, note positive outcomes here.'
+    )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -431,11 +302,6 @@ class ProjectOutcome(models.Model):
         Project,
         on_delete=models.CASCADE,
         help_text='Associated project.'
-    )
-    non_quantified_outcomes = models.TextField(
-        blank=True,
-        null=True,
-        help_text='Use quantified outcomes if possible, otherwise, note positive outcomes here.'
     )
     metric_type = models.ForeignKey(
         MetricType,
@@ -460,11 +326,7 @@ class ProjectOutcome(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        if self.metric_subject:
-            return self.metric_subject
-        else:
-            return self.non_quantified_outcomes if len(self.non_quantified_outcomes) < 41 \
-                else self.non_quantified_outcomes[:40]
+        return self.metric_subject
 
 
 """
@@ -554,6 +416,7 @@ class Myself(models.Model):
         default=False,
         help_text='Ready for new opportunities.'
     )
+    projects = models.ManyToManyField('Project', through='MyExperience', related_name='people')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -637,10 +500,12 @@ class MyExperience(models.Model):
 
     myself = models.ForeignKey(
         Myself,
+        related_name='membership',
         on_delete=models.CASCADE
     )
     project = models.ForeignKey(
         Project,
+        related_name='membership',
         on_delete=models.CASCADE
     )
     role = models.ForeignKey(
@@ -673,6 +538,10 @@ class MyExperience(models.Model):
     tools = models.ManyToManyField(
         MyTool,
         help_text='Tools used to complete this project.'
+    )
+    project_owner = models.BooleanField(
+        default=False,
+        help_text='Controls sharing of project with other team members.'
     )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
