@@ -77,9 +77,13 @@ class DegreeOfUse(models.Model):
     weight = models.IntegerField(
         help_text='Weight of use for analysis.'
     )
+    display_order = models.IntegerField(
+        default=0,
+        help_text='Numeric value for ordering display.'
+    )
 
     class Meta:
-        ordering = ('degree_used', )
+        ordering = ('display_order', )
 
     def __str__(self):
         return self.degree_used
@@ -343,6 +347,10 @@ def user_directory_path(instance, filename):
 
 class Myself(models.Model):
 
+    user = models.OneToOneField(
+        'auth.User',
+        on_delete=models.CASCADE
+    )
     first_name = models.CharField(
         max_length=20,
         help_text='Your first name.'
@@ -382,6 +390,8 @@ class Myself(models.Model):
         help_text='Contact email address.'
     )
     passion = models.TextField(
+        null=True,
+        blank=True,
         help_text='Describe what you are good at; what you are passionate about.'
     )
     personality = models.TextField(
@@ -427,7 +437,7 @@ class Myself(models.Model):
         return '{}, {}'.format(self.last_name, self.first_name)
 
     def get_absolute_url(self):
-        return reverse("talent:project_update", kwargs={"pk": hasher.encode(self.pk)})
+        return reverse("talent:myself_update", kwargs={"pk": hasher.encode(self.pk)})
 
     def get_encoded_id(self):
         return hasher.encode(self.pk) if self.pk else ''

@@ -154,3 +154,52 @@ class ProjectAndProjectOutcomesUpdateView(SimpleModelUpdateView):
             outcomes_formset.instance = self.object
             outcomes_formset.save()
         return super(ProjectAndProjectOutcomesUpdateView, self).form_valid(form)
+
+
+class MyselfAndMyExternalAccountsCreateView(SimpleModelCreateView):
+
+    title = 'My Profile'
+    form_class = MyselfForm
+
+    def get_context_data(self, **kwargs):
+        context = super(MyselfAndMyExternalAccountsCreateView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            context['formset'] = MyselfInlineFormSet(self.request.POST, instance=self.object)
+        else:
+            context['formset'] = MyselfInlineFormSet()
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        accounts_formset = context['formset']
+        if accounts_formset.is_valid():
+            self.object = form.save(commit=False)
+            self.object.user = self.request.user
+            self.object.save()
+            accounts_formset.instance = self.object
+            accounts_formset.save()
+        return super(MyselfAndMyExternalAccountsCreateView, self).form_valid(form)
+
+
+class MyselfAndMyExternalAccountsUpdateView(SimpleModelUpdateView):
+
+    model = 'Myself'
+    title = 'My Profile'
+    form_class = MyselfForm
+
+    def get_context_data(self, **kwargs):
+        context = super(MyselfAndMyExternalAccountsUpdateView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            context['formset'] = MyselfInlineFormSet(self.request.POST, instance=self.object)
+        else:
+            context['formset'] = MyselfInlineFormSet(instance=self.object)
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        accounts_formset = context['formset']
+        if accounts_formset.is_valid():
+            self.object = form.save()
+            accounts_formset.instance = self.object
+            accounts_formset.save()
+        return super(MyselfAndMyExternalAccountsUpdateView, self).form_valid(form)

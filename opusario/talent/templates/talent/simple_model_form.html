@@ -9,9 +9,6 @@
 {% endblock %}
 
 {% block navigation %}
-    <ul>
-    <li><a href="{% url 'talent:company_create' %}"></a></li>
-    </ul>
 {% endblock %}
 
 {% block body_container %}
@@ -63,7 +60,7 @@
                 {% with ajax_url=field|get_refresh_url ajax_target=field|get_refresh_target %}
                     $("#id_{{ field.name }}").change(function () {
                         $.ajax({
-                            url: "{{ ajax_url }}",
+                            url: "{% if request.is_secure %}HTTPS{% else %}HTTP{% endif %}://{{ request.META.HTTP_HOST }}/{{ ajax_url }}",
                             data: {'selected': $(this).val()},
                             success: function (data) {$("#id_{{ ajax_target }}").html(data);}
                         });
@@ -87,7 +84,7 @@
                         }});
                         $.ajax({
                             type: 'POST',
-                            url: "{{ ajax_url }}",
+                            url: "{% if request.is_secure %}HTTPS{% else %}HTTP{% endif %}://{{ request.META.HTTP_HOST }}/{{ ajax_url }}",
                             data: {
                                 '{{ field.name }}': $('#modal-value-{{ field.name }}').val(),
                                 'dependency': relatedItem

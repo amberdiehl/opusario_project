@@ -4,7 +4,7 @@ from .models import *
 
 @admin.register(DegreeOfUse)
 class DegreeOfUseAdmin(admin.ModelAdmin):
-    list_display = ('id', 'degree_used', 'weight', )
+    list_display = ('id', 'degree_used', 'weight', 'display_order', )
 
 
 @admin.register(ExternalAccountType)

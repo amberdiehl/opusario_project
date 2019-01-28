@@ -188,7 +188,7 @@ ProjectInlineFormSet = inlineformset_factory(Project, ProjectOutcome,
                                              form=ProjectOutcomeInlineForm, extra=1, can_delete=True, can_order=False)
 
 
-class MyselfModelForm(SimpleModelForm):
+class MyselfForm(SimpleModelForm):
 
     placeholders = {
         'first_name': 'First name',
@@ -243,14 +243,27 @@ class MyselfModelForm(SimpleModelForm):
                 initial_country = 0
             initial_state = 0
 
-        self.fields['country'].widget.attrs = {'data-refresh': 'state', 'data-refresh-url': 'core/ajax-get-states'}
+        self.fields['country'].widget.attrs = {
+            'data-refresh': 'state',
+            'data-refresh-url': 'core/ajax-get-states',
+            'data-modal-url': 'core/ajax-put-country'
+        }
         self.fields['country'].initial = initial_country
 
         self.fields['state'].queryset = State.objects.filter(country=initial_country)
-        self.fields['state'].widget.attrs = {'data-refresh': 'city', 'data-refresh-url': 'core/ajax-get-cities'}
+        self.fields['state'].widget.attrs = {
+            'data-refresh': 'city',
+            'data-refresh-url': 'core/ajax-get-cities',
+            'data-modal-url': 'core/ajax-put-state',
+            'data-modal-dependency': 'country'
+        }
         self.fields['state'].initial = initial_state
 
         self.fields['city'].queryset = City.objects.filter(state=initial_state)
+        self.fields['city'].widget.attrs = {
+            'data-modal-url': 'core/ajax-put-city',
+            'data-modal-dependency': 'state'
+        }
 
     def clean_first_name(self):
         name = self.cleaned_data['first_name']
@@ -309,5 +322,5 @@ class MyExternalAccountInlineForm(SimpleModelForm):
         }
 
 
-MyExternalAccountInlineFormSet = inlineformset_factory(Myself, MyExternalAccount, form=MyExternalAccountInlineForm,
-                                                       extra=1, can_delete=True, can_order=False)
+MyselfInlineFormSet = inlineformset_factory(Myself, MyExternalAccount, form=MyExternalAccountInlineForm, extra=1,
+                                            can_delete=True, can_order=False)
