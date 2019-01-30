@@ -383,7 +383,8 @@ class Myself(models.Model):
         null=True,
         help_text='The city where you are located.'
     )
-    phone_number = models.IntegerField(
+    phone_number = models.CharField(
+        max_length=20,
         help_text='Contact phone number.'
     )
     email_address = models.EmailField(

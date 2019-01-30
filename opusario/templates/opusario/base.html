@@ -1,5 +1,7 @@
 {% load static %}
 
+{% load account_tags opusario_tags %}
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -32,8 +34,13 @@
                                 <ul>
                                     <li><a href="/">Home</a></li>
                                     {% if user.is_authenticated %}
-                                        <li><a href="{% url 'account_logout' %}">Log out</a></li>
+                                        {% with pid=request|get_profile_id %}
+                                            {% if pid %}
+                                        <li><a href="{% url 'talent:myself_update' pid %}">My Profile</a></li>
+                                            {% endif %}
+                                        {% endwith %}
                                         <li><a href="{% url 'talent:landing_page' %}">Experience</a></li>
+                                        <li><a href="{% url 'account_logout' %}">Log out</a></li>
                                     {% else %}
                                         <li><a href="{% url 'account_signup' %}">Join</a></li>
                                         <li><a href="{% url 'account_login' %}">Sign in</a></li>

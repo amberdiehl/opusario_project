@@ -1,4 +1,6 @@
 from django import template
+from talent.models import Myself
+from utils import hasher
 
 register = template.Library()
 
@@ -64,3 +66,14 @@ def get_modal_dependency(obj):
         return ''
     else:
         return dependency
+
+
+@register.filter
+def get_profile_id(request):
+    myself = None
+    try:
+        myself = Myself.objects.get(user_id=request.user)
+    except:
+        pass
+    else:
+        return hasher.encode(myself.pk)
