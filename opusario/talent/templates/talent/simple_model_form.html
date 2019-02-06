@@ -32,6 +32,7 @@
                     {% include 'talent/_render_fields.html' %}
                     {# Render the child inline formset if it exists  #}
                     {% if formset %}
+                        <h5>{{ formset_title }}</h5>
                         {{ formset.management_form }}
                         {% for form in formset %}
                             {% include 'talent/_render_fields.html' %}

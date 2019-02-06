@@ -116,10 +116,13 @@ class ProjectAndProjectOutcomesCreateView(SimpleModelCreateView):
 
     def get_context_data(self, **kwargs):
         context = super(ProjectAndProjectOutcomesCreateView, self).get_context_data(**kwargs)
+
+        context['formset_title'] = 'Quantified Project Outcomes'
         if self.request.POST:
             context['formset'] = ProjectInlineFormSet(self.request.POST, instance=self.object)
         else:
             context['formset'] = ProjectInlineFormSet()
+
         return context
 
     def form_valid(self, form):
@@ -140,10 +143,13 @@ class ProjectAndProjectOutcomesUpdateView(SimpleModelUpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(ProjectAndProjectOutcomesUpdateView, self).get_context_data(**kwargs)
+
+        context['formset_title'] = 'Quantified Project Outcomes'
         if self.request.POST:
             context['formset'] = ProjectInlineFormSet(self.request.POST, instance=self.object)
         else:
             context['formset'] = ProjectInlineFormSet(instance=self.object)
+
         return context
 
     def form_valid(self, form):
@@ -163,10 +169,13 @@ class MyselfAndMyExternalAccountsCreateView(SimpleModelCreateView):
 
     def get_context_data(self, **kwargs):
         context = super(MyselfAndMyExternalAccountsCreateView, self).get_context_data(**kwargs)
+
+        context['formset_title'] = 'External Accounts'
         if self.request.POST:
             context['formset'] = MyselfInlineFormSet(self.request.POST, instance=self.object)
         else:
             context['formset'] = MyselfInlineFormSet()
+
         return context
 
     def form_valid(self, form):
@@ -189,10 +198,13 @@ class MyselfAndMyExternalAccountsUpdateView(SimpleModelUpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(MyselfAndMyExternalAccountsUpdateView, self).get_context_data(**kwargs)
+
+        context['formset_title'] = 'External Accounts'
         if self.request.POST:
             context['formset'] = MyselfInlineFormSet(self.request.POST, instance=self.object)
         else:
             context['formset'] = MyselfInlineFormSet(instance=self.object)
+
         return context
 
     def form_valid(self, form):
