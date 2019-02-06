@@ -187,6 +187,9 @@ REST_FRAMEWORK = {
     )
 }
 
+# Override default Django login setting so that redirect for login required works; default is '/accounts/login/'
+LOGIN_URL = '/account/login/'
+
 # Account settings
 ACCOUNT_OPEN_SIGNUP = True
 ACCOUNT_LOGIN_URL = 'account_login'
