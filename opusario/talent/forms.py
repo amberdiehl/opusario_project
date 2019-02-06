@@ -184,8 +184,25 @@ class ProjectOutcomeInlineForm(SimpleModelForm):
         }
 
 
-ProjectInlineFormSet = inlineformset_factory(Project, ProjectOutcome,
-                                             form=ProjectOutcomeInlineForm, extra=1, can_delete=True, can_order=False)
+class MyExperienceInlineForm(SimpleModelForm):
+
+    placeholders = {
+        'description': 'Details regarding your role',
+    }
+
+    class Meta:
+        model = MyExperience
+        fields = ['role', 'description', 'involvement_level', 'work_relationship', 'skills', 'tools', 'project_owner']
+        widgets = {
+            'description': Textarea(attrs={'rows': 2}),
+        }
+
+
+ProjectOutcomeInlineFormSet = inlineformset_factory(Project, ProjectOutcome, form=ProjectOutcomeInlineForm, extra=1,
+                                                    can_delete=True, can_order=False)
+
+ProjectMyExperienceInlineFormSet = inlineformset_factory(Project, MyExperience, form=MyExperienceInlineForm, extra=1,
+                                                         can_delete=False, can_order=False, max_num=1)
 
 
 class MyselfForm(SimpleModelForm):

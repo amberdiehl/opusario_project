@@ -31,11 +31,13 @@
                     {# Render main form--potentially 'parent' if there is an inline formset #}
                     {% include 'talent/_render_fields.html' %}
                     {# Render the child inline formset if it exists  #}
-                    {% if formset %}
-                        <h5>{{ formset_title }}</h5>
-                        {{ formset.management_form }}
-                        {% for form in formset %}
-                            {% include 'talent/_render_fields.html' %}
+                    {% if formsets %}
+                        {% for formset in formsets %}
+                            <h5>{{ formset.title }}</h5>
+                            {{ formset.formset.management_form }}
+                            {% for form in formset.formset.forms %}
+                                {% include 'talent/_render_fields.html' %}
+                            {% endfor %}
                         {% endfor %}
                     {% endif %}
                 </div>

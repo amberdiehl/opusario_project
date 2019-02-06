@@ -117,11 +117,27 @@ class ProjectAndProjectOutcomesCreateView(SimpleModelCreateView):
     def get_context_data(self, **kwargs):
         context = super(ProjectAndProjectOutcomesCreateView, self).get_context_data(**kwargs)
 
-        context['formset_title'] = 'Quantified Project Outcomes'
+        context['formsets'] = []
+
+        formset = {
+            'title': 'Quantified Project Outcomes',
+            'formset': None
+        }
         if self.request.POST:
-            context['formset'] = ProjectInlineFormSet(self.request.POST, instance=self.object)
+            formset['formset'] = ProjectOutcomeInlineFormSet(self.request.POST, instance=self.object)
         else:
-            context['formset'] = ProjectInlineFormSet()
+            formset['formset'] = ProjectOutcomeInlineFormSet()
+        context['formsets'].append(formset)
+
+        formset = {
+            'title': 'My Project Experience',
+            'formset': None
+        }
+        if self.request.POST:
+            formset['formset'] = ProjectMyExperienceInlineFormSet(self.request.POST, instance=self.object)
+        else:
+            formset['formset'] = ProjectMyExperienceInlineFormSet()
+        context['formsets'].append(formset)
 
         return context
 
@@ -146,9 +162,9 @@ class ProjectAndProjectOutcomesUpdateView(SimpleModelUpdateView):
 
         context['formset_title'] = 'Quantified Project Outcomes'
         if self.request.POST:
-            context['formset'] = ProjectInlineFormSet(self.request.POST, instance=self.object)
+            context['formset'] = ProjectOutcomeInlineFormSet(self.request.POST, instance=self.object)
         else:
-            context['formset'] = ProjectInlineFormSet(instance=self.object)
+            context['formset'] = ProjectOutcomeInlineFormSet(instance=self.object)
 
         return context
 
@@ -170,17 +186,23 @@ class MyselfAndMyExternalAccountsCreateView(SimpleModelCreateView):
     def get_context_data(self, **kwargs):
         context = super(MyselfAndMyExternalAccountsCreateView, self).get_context_data(**kwargs)
 
-        context['formset_title'] = 'External Accounts'
+        context['formsets'] = []
+
+        formset = {
+            'title': 'External Accounts',
+            'formset': None
+        }
         if self.request.POST:
-            context['formset'] = MyselfInlineFormSet(self.request.POST, instance=self.object)
+            formset['formset'] = MyselfInlineFormSet(self.request.POST, instance=self.object)
         else:
-            context['formset'] = MyselfInlineFormSet()
+            formset['formset'] = MyselfInlineFormSet(instance=self.object)
+        context['formsets'].append(formset)
 
         return context
 
     def form_valid(self, form):
         context = self.get_context_data()
-        accounts_formset = context['formset']
+        accounts_formset = context['formsets'][0]['formset']
         if accounts_formset.is_valid():
             self.object = form.save(commit=False)
             self.object.user = self.request.user
@@ -199,17 +221,23 @@ class MyselfAndMyExternalAccountsUpdateView(SimpleModelUpdateView):
     def get_context_data(self, **kwargs):
         context = super(MyselfAndMyExternalAccountsUpdateView, self).get_context_data(**kwargs)
 
-        context['formset_title'] = 'External Accounts'
+        context['formsets'] = []
+
+        formset = {
+            'title': 'External Accounts',
+            'formset': None
+        }
         if self.request.POST:
-            context['formset'] = MyselfInlineFormSet(self.request.POST, instance=self.object)
+            formset['formset'] = MyselfInlineFormSet(self.request.POST, instance=self.object)
         else:
-            context['formset'] = MyselfInlineFormSet(instance=self.object)
+            formset['formset'] = MyselfInlineFormSet(instance=self.object)
+        context['formsets'].append(formset)
 
         return context
 
     def form_valid(self, form):
         context = self.get_context_data()
-        accounts_formset = context['formset']
+        accounts_formset = context['formsets'][0]['formset']
         if accounts_formset.is_valid():
             self.object = form.save()
             accounts_formset.instance = self.object
