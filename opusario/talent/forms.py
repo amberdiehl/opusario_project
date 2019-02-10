@@ -6,11 +6,70 @@ from django.forms import (
     ModelChoiceField,
     Textarea,
     TextInput)
+from django.forms.widgets import Input
 from utils import validate
 from core.models import (
     Country,
     State)
 from .models import *
+
+
+class PillButtonSelectWidget(Input):
+    """
+    Base class for Models that need pill button multi-select widget.
+    """
+    data_source = None  # Subclasses must define this.
+    data_items = None # Subclasses must define this.
+    data_filter = ['all', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
+                   't', 'u', 'v', 'w', 'x', 'y', 'z']
+    template_name = 'talent/widgets/pill_button_select.html'
+
+    def __init__(self, attrs=None):
+        if attrs is not None:
+            attrs = attrs.copy()
+            self.data_source = attrs.pop('source', self.data_source)
+            self.data_items = attrs.pop('items', self.data_items)
+            self.data_filter = attrs.pop('filter', self.data_filter)
+        super().__init__(attrs)
+
+    def get_context(self, name, value, attrs):
+        context = super().get_context(name, value, attrs)
+        context['widget']['source'] = self.data_source
+        context['widget']['items'] = self.data_items
+        context['widget']['filter'] = self.data_filter
+        return context
+
+
+class SkillWidget(PillButtonSelectWidget):
+
+    data_source = 'skill'
+    data_items = None
+
+    def __init__(self, attrs=None):
+        super().__init__(attrs)
+
+        experience = attrs.pop('experience')
+        my_skills = [skill.id for skill in MySkill.objects.filter(my_experience=experience)]
+
+        items = [(skill.id, skill.name, 'minus' if skill.id in my_skills else 'plus') for skill in Skill.objects.all()]
+
+        self.data_items = items
+
+
+class ToolWidget(PillButtonSelectWidget):
+
+    data_source = 'tool'
+    data_items = None
+
+    def __init__(self, attrs=None):
+        super().__init__(attrs)
+
+        experience = attrs.pop('experience')
+        my_tools = [tool.id for tool in MyTool.objects.filter(my_experience=experience)]
+
+        items = [(tool.id, tool.name, 'minus' if tool.id in my_tools else 'plus') for tool in Tool.objects.all()]
+
+        self.data_items = items
 
 
 class SimpleModelForm(ModelForm):
@@ -196,6 +255,17 @@ class MyExperienceInlineForm(SimpleModelForm):
         widgets = {
             'description': Textarea(attrs={'rows': 2}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['skills'].widget = SkillWidget(attrs={
+            'col-size': 10,
+            'experience': self.instance.pk if self.instance.pk else 0,
+        })
+        self.fields['tools'].widget = ToolWidget(attrs={
+            'col-size': 10,
+            'experience': self.instance.pk if self.instance.pk else 0,
+        })
 
 
 ProjectOutcomeInlineFormSet = inlineformset_factory(Project, ProjectOutcome, form=ProjectOutcomeInlineForm, extra=1,

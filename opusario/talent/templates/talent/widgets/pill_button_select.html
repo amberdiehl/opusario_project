@@ -1,0 +1,12 @@
+{% include 'talent/widgets/pill_filter_buttons.html' %}<br /><br />
+{% for id, name, icon in widget.items %}
+    {% if icon == 'plus' %}
+        {% include 'talent/widgets/pill_button.html' %}
+    {% endif %}
+{% endfor %}
+<br />
+{% for id, name, icon in widget.items %}
+    {% if icon == 'minus' %}
+        {% include 'talent/widgets/pill_button.html' %}
+    {% endif %}
+{% endfor %}

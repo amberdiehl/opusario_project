@@ -12,15 +12,23 @@ def get_widget_class(ob):
 
 @register.filter
 def get_widget_size(obj):
+
+    # if column size is provided, return it regardless of type
+    column_size = obj.attrs.get('col-size', None)
+    if column_size:
+        return column_size
+
+    # otherwise return default size by widget types
     if obj.__class__.__name__ == "Textarea":
         return 8
 
     if obj.__class__.__name__ == "TextInput":
-        return obj.attrs.get('col-size', 3)
+        return 4
 
     if obj.__class__.__name__ == 'Select':
-        return obj.attrs.get('col-size', 3)
+        return 4
 
+    # otherwise return default size
     return 3
 
 

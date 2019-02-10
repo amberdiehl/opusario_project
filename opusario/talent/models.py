@@ -471,6 +471,10 @@ class MyExternalAccount(models.Model):
 
 class MySkill(models.Model):
 
+    my_experience = models.ForeignKey(
+        'MyExperience',
+        on_delete=models.CASCADE
+    )
     skill = models.ForeignKey(
         Skill,
         on_delete=models.CASCADE
@@ -490,6 +494,10 @@ class MySkill(models.Model):
 
 class MyTool(models.Model):
 
+    my_experience = models.ForeignKey(
+        'MyExperience',
+        on_delete=models.CASCADE
+    )
     tool = models.ForeignKey(
         Tool,
         on_delete=models.CASCADE
@@ -543,11 +551,13 @@ class MyExperience(models.Model):
         help_text='Your employment relationship to this project.'
     )
     skills = models.ManyToManyField(
-        MySkill,
+        Skill,
+        through=MySkill,
         help_text='Skills used to complete this project.'
     )
     tools = models.ManyToManyField(
-        MyTool,
+        Tool,
+        through=MyTool,
         help_text='Tools used to complete this project.'
     )
     project_owner = models.BooleanField(

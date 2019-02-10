@@ -28,9 +28,9 @@
                     </div>
                 {% endif %}
                 <div class="form-field-group">
-                    {# Render main form--potentially 'parent' if there is an inline formset #}
+                    {# Render main form--potentially 'parent' if there are inline formset(s) #}
                     {% include 'talent/_render_fields.html' %}
-                    {# Render the child inline formset if it exists  #}
+                    {# Render inline formset(s); formsets is an array to control order rendered #}
                     {% if formsets %}
                         {% for formset in formsets %}
                             <h5>{{ formset.title }}</h5>
@@ -72,8 +72,8 @@
                     $('#id_{{ field.name }} > option[value="{{ field.field.initial }}"]').attr('selected','selected');
                 {% endwith %}
             {% endif %}
-            {# Dynamically render ajax for fields which are enabled to add values via modal form #}
 
+            {# Dynamically render ajax for fields which are enabled to add values via modal form #}
             {% if field|has_modal %}
                 {% with ajax_url=field|get_modal_url dependency=field|get_modal_dependency %}
                     $("#modal-add-{{ field.name }}").click(function () {

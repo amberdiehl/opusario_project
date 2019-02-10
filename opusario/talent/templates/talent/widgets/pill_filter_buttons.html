@@ -1,0 +1,6 @@
+{% for item in widget.filter %}
+    <button id="{{ widget.source }}-filter-{{ item }}" class="button button-many-select-alphabet" value="{{ item }}"
+            onclick="">
+        {{ item }}
+    </button>
+{% endfor %}
