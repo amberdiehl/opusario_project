@@ -14,4 +14,5 @@ urlpatterns = [
     url(r'^skill/?$', SkillCreateView.as_view(), name='skill_create'),
     url(r'^tool/(?P<pk>[a-zA-Z0-9]+)/?$', ToolUpdateView.as_view(), name='tool_update'),
     url(r'^tool/?$', ToolCreateView.as_view(), name='tool_create'),
+    url(r'^ajax-filter-pills/?$', ajax_filter_pills, name='ajax_filter_pills'),
 ]

@@ -1,4 +1,6 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import (
+    get_object_or_404,
+    render)
 from braces.views import LoginRequiredMixin
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -9,9 +11,37 @@ from utils import (  # Pycharm doesn't see these as used but they are.
     hasher,
     validate)
 
+# imports which enable dynamically instantiating objects
 import talent.models
+import talent.forms
+
 from .forms import *
 from .models import *
+
+
+def ajax_filter_pills(request):
+
+    type = request.GET.get('type', '').title()
+    experience_id = request.GET.get('experience', 0)
+    filter_by = request.GET.get('filter_by', 'all')
+
+    try:
+        widget = getattr(talent.forms, '{}Widget'.format(type))
+    except AttributeError:
+        return render(request, 'talent/widgets/pill_button_error.html', {})
+
+    instance = widget(attrs={
+        'col-size': 10,
+        'experience': experience_id,
+        'filter_by': filter_by,
+    })
+
+    context = {
+        'source': instance.data_source,
+        'items': instance.data_items
+    }
+
+    return render(request, 'talent/widgets/pill_button_groups.html', {'widget': context})
 
 
 class ModelFormActionMixin(object):

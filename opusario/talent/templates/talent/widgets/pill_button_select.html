@@ -1,12 +1,21 @@
-{% include 'talent/widgets/pill_filter_buttons.html' %}<br /><br />
-{% for id, name, icon in widget.items %}
-    {% if icon == 'plus' %}
-        {% include 'talent/widgets/pill_button.html' %}
-    {% endif %}
-{% endfor %}
-<br />
-{% for id, name, icon in widget.items %}
-    {% if icon == 'minus' %}
-        {% include 'talent/widgets/pill_button.html' %}
-    {% endif %}
-{% endfor %}
+{% include 'talent/widgets/pill_button_filter.html' %}
+{% include 'talent/widgets/pill_button_groups.html' %}
+<script>
+    document.getElementById("{{ widget.source }}-filter").addEventListener("click",function(e){
+        e.preventDefault();
+        $.ajaxSetup({beforeSend: function(xhr, settings){
+            xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+        }});
+        $.ajax({
+            type: 'GET',
+            url: "/talent/ajax-filter-pills",
+            data: {
+                'type': e.target.id.split('-')[0],
+                'experience_id': 0,
+                'filter_by': $('#' + e.target.id).val()
+            },
+            success: function (data) {$("#{{ widget.source }}-buttons").html(data);},
+            error: function () {}
+        });
+    },false);
+</script>

@@ -20,8 +20,10 @@ class PillButtonSelectWidget(Input):
     """
     data_source = None  # Subclasses must define this.
     data_items = None # Subclasses must define this.
+
     data_filter = ['all', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
                    't', 'u', 'v', 'w', 'x', 'y', 'z']
+
     template_name = 'talent/widgets/pill_button_select.html'
 
     def __init__(self, attrs=None):
@@ -49,9 +51,13 @@ class SkillWidget(PillButtonSelectWidget):
         super().__init__(attrs)
 
         experience = attrs.pop('experience')
+        filter_by = attrs.pop('filter_by')
+
+        # get person's existing selected skills for this project experience
         my_skills = [skill.id for skill in MySkill.objects.filter(my_experience=experience)]
 
-        items = [(skill.id, skill.name, 'minus' if skill.id in my_skills else 'plus') for skill in Skill.objects.all()]
+        items = [(skill.id, skill.name, 'minus' if skill.id in my_skills else 'plus') for skill in Skill.objects.all()
+                 if filter_by == 'all' or skill.name[:1].lower() == filter_by]
 
         self.data_items = items
 
@@ -65,9 +71,13 @@ class ToolWidget(PillButtonSelectWidget):
         super().__init__(attrs)
 
         experience = attrs.pop('experience')
+        filter_by = attrs.pop('filter_by')
+
+        # get person's existing selected tools for this project experience
         my_tools = [tool.id for tool in MyTool.objects.filter(my_experience=experience)]
 
-        items = [(tool.id, tool.name, 'minus' if tool.id in my_tools else 'plus') for tool in Tool.objects.all()]
+        items = [(tool.id, tool.name, 'minus' if tool.id in my_tools else 'plus') for tool in Tool.objects.all()
+                 if filter_by == 'all' or tool.name[:1].lower() == filter_by]
 
         self.data_items = items
 
@@ -261,11 +271,14 @@ class MyExperienceInlineForm(SimpleModelForm):
         self.fields['skills'].widget = SkillWidget(attrs={
             'col-size': 10,
             'experience': self.instance.pk if self.instance.pk else 0,
+            'filter_by': 'all',
         })
         self.fields['tools'].widget = ToolWidget(attrs={
             'col-size': 10,
             'experience': self.instance.pk if self.instance.pk else 0,
+            'filter_by': 'all',
         })
+        this = 'that'
 
 
 ProjectOutcomeInlineFormSet = inlineformset_factory(Project, ProjectOutcome, form=ProjectOutcomeInlineForm, extra=1,
