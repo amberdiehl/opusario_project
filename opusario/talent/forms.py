@@ -278,7 +278,6 @@ class MyExperienceInlineForm(SimpleModelForm):
             'experience': self.instance.pk if self.instance.pk else 0,
             'filter_by': 'all',
         })
-        this = 'that'
 
 
 ProjectOutcomeInlineFormSet = inlineformset_factory(Project, ProjectOutcome, form=ProjectOutcomeInlineForm, extra=1,
