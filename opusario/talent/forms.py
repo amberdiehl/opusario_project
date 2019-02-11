@@ -44,16 +44,13 @@ class SkillWidget(PillButtonMultipleSelectWidget):
     input_type = 'skill'
     data_items = None
 
-    def __init__(self, attrs=None):
+    def __init__(self, attrs):
         super().__init__(attrs)
-
-        experience = attrs.pop('experience')
+        attrs = attrs.copy()
+        selected = attrs.pop('selected')
         filter_by = attrs.pop('filter_by')
 
-        # get person's existing selected skills for this project experience
-        my_skills = [skill.id for skill in MySkill.objects.filter(my_experience=experience)]
-
-        items = [(skill.id, skill.name, 'minus' if skill.id in my_skills else 'plus') for skill in Skill.objects.all()
+        items = [(skill.id, skill.name, 'minus' if skill.id in selected else 'plus') for skill in Skill.objects.all()
                  if filter_by == 'all' or skill.name[:1].lower() == filter_by]
 
         self.data_items = items
@@ -66,14 +63,11 @@ class ToolWidget(PillButtonMultipleSelectWidget):
 
     def __init__(self, attrs=None):
         super().__init__(attrs)
-
-        experience = attrs.pop('experience')
+        attrs = attrs.copy()
+        selected = attrs.pop('selected')
         filter_by = attrs.pop('filter_by')
 
-        # get person's existing selected tools for this project experience
-        my_tools = [tool.id for tool in MyTool.objects.filter(my_experience=experience)]
-
-        items = [(tool.id, tool.name, 'minus' if tool.id in my_tools else 'plus') for tool in Tool.objects.all()
+        items = [(tool.id, tool.name, 'minus' if tool.id in selected else 'plus') for tool in Tool.objects.all()
                  if filter_by == 'all' or tool.name[:1].lower() == filter_by]
 
         self.data_items = items
@@ -265,14 +259,20 @@ class MyExperienceInlineForm(SimpleModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        my_experience = self.instance.pk if self.instance.pk else 0
+
+        selected = [skill.id for skill in MySkill.objects.filter(my_experience=my_experience)]
         self.fields['skills'].widget = SkillWidget(attrs={
             'col-size': 10,
-            'experience': self.instance.pk if self.instance.pk else 0,
+            'selected': selected,
             'filter_by': 'all',
         })
+
+        selected = [tool.id for tool in MyTool.objects.filter(my_experience=my_experience)]
         self.fields['tools'].widget = ToolWidget(attrs={
             'col-size': 10,
-            'experience': self.instance.pk if self.instance.pk else 0,
+            'selected': selected,
             'filter_by': 'all',
         })
         this = 'this'

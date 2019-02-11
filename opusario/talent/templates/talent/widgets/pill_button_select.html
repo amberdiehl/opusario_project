@@ -11,7 +11,7 @@
             url: "/talent/ajax-filter-pills",
             data: {
                 'type': e.target.id.split('-')[0],
-                'experience_id': 0,
+                'selected': [],
                 'filter_by': $('#' + e.target.id).val()
             },
             success: function (data) {$("#{{ widget.type }}-buttons").html(data);},

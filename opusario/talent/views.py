@@ -22,7 +22,7 @@ from .models import *
 def ajax_filter_pills(request):
 
     type = request.GET.get('type', '').title()
-    experience_id = request.GET.get('experience', 0)
+    selected = request.GET.get('selected', [])
     filter_by = request.GET.get('filter_by', 'all')
 
     try:
@@ -32,7 +32,7 @@ def ajax_filter_pills(request):
 
     instance = widget(attrs={
         'col-size': 10,
-        'experience': experience_id,
+        'selected': selected,
         'filter_by': filter_by,
     })
 
