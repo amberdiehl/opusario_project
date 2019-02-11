@@ -1,7 +1,7 @@
 {% include 'talent/widgets/pill_button_filter.html' %}
 {% include 'talent/widgets/pill_button_groups.html' %}
 <script>
-    document.getElementById("{{ widget.source }}-filter").addEventListener("click",function(e){
+    document.getElementById("{{ widget.type }}-filter").addEventListener("click",function(e){
         e.preventDefault();
         $.ajaxSetup({beforeSend: function(xhr, settings){
             xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
@@ -14,8 +14,12 @@
                 'experience_id': 0,
                 'filter_by': $('#' + e.target.id).val()
             },
-            success: function (data) {$("#{{ widget.source }}-buttons").html(data);},
+            success: function (data) {$("#{{ widget.type }}-buttons").html(data);},
             error: function () {}
         });
     },false);
+    document.getElementById("{{ widget.type }}-group-plus").addEventListener("click", function(e) {
+        e.preventDefault();
+
+    }, false);
 </script>

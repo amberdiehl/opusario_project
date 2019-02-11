@@ -14,11 +14,10 @@ from core.models import (
 from .models import *
 
 
-class PillButtonSelectWidget(Input):
+class PillButtonMultipleSelectWidget(Input):
     """
     Base class for Models that need pill button multi-select widget.
     """
-    data_source = None  # Subclasses must define this.
     data_items = None # Subclasses must define this.
 
     data_filter = ['all', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
@@ -27,24 +26,22 @@ class PillButtonSelectWidget(Input):
     template_name = 'talent/widgets/pill_button_select.html'
 
     def __init__(self, attrs=None):
+        super().__init__(attrs)
         if attrs is not None:
             attrs = attrs.copy()
-            self.data_source = attrs.pop('source', self.data_source)
             self.data_items = attrs.pop('items', self.data_items)
             self.data_filter = attrs.pop('filter', self.data_filter)
-        super().__init__(attrs)
 
     def get_context(self, name, value, attrs):
         context = super().get_context(name, value, attrs)
-        context['widget']['source'] = self.data_source
         context['widget']['items'] = self.data_items
         context['widget']['filter'] = self.data_filter
         return context
 
 
-class SkillWidget(PillButtonSelectWidget):
+class SkillWidget(PillButtonMultipleSelectWidget):
 
-    data_source = 'skill'
+    input_type = 'skill'
     data_items = None
 
     def __init__(self, attrs=None):
@@ -62,9 +59,9 @@ class SkillWidget(PillButtonSelectWidget):
         self.data_items = items
 
 
-class ToolWidget(PillButtonSelectWidget):
+class ToolWidget(PillButtonMultipleSelectWidget):
 
-    data_source = 'tool'
+    input_type = 'tool'
     data_items = None
 
     def __init__(self, attrs=None):
@@ -278,6 +275,7 @@ class MyExperienceInlineForm(SimpleModelForm):
             'experience': self.instance.pk if self.instance.pk else 0,
             'filter_by': 'all',
         })
+        this = 'this'
 
 
 ProjectOutcomeInlineFormSet = inlineformset_factory(Project, ProjectOutcome, form=ProjectOutcomeInlineForm, extra=1,

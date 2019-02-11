@@ -37,7 +37,6 @@ def ajax_filter_pills(request):
     })
 
     context = {
-        'source': instance.data_source,
         'items': instance.data_items
     }
 
