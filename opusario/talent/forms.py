@@ -268,6 +268,7 @@ class MyExperienceInlineForm(SimpleModelForm):
             'selected': selected,
             'filter_by': 'all',
         })
+        self.fields['skills'].required = False
 
         selected = [tool.id for tool in MyTool.objects.filter(my_experience=my_experience)]
         self.fields['tools'].widget = ToolWidget(attrs={
@@ -275,7 +276,11 @@ class MyExperienceInlineForm(SimpleModelForm):
             'selected': selected,
             'filter_by': 'all',
         })
-        this = 'this'
+        self.fields['tools'].required = False
+
+    def clean_skills(self):
+        skills = self.cleaned_data['skills']
+        return skills
 
 
 ProjectOutcomeInlineFormSet = inlineformset_factory(Project, ProjectOutcome, form=ProjectOutcomeInlineForm, extra=1,
