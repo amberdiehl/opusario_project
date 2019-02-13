@@ -21,12 +21,14 @@ from .models import *
 
 def ajax_filter_pills(request):
 
-    type = request.GET.get('type', '').title()
-    selected = request.GET.get('selected', [])
+    model = request.GET.get('model', '')
+    selected_string = request.GET.get('selected', '')
     filter_by = request.GET.get('filter_by', 'all')
 
+    selected = [int(item) for item in selected_string.split(',') if item.isdigit()]
+
     try:
-        widget = getattr(talent.forms, '{}Widget'.format(type))
+        widget = getattr(talent.forms, '{}Widget'.format(model))
     except AttributeError:
         return render(request, 'talent/widgets/pill_button_error.html', {})
 

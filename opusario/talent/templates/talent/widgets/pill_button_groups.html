@@ -1,16 +1,14 @@
-<div id="{{ widget.type }}-buttons" value="{{ field.value }}">
-    <div id="{{ widget.type }}-group-plus">
+<div id="{{ widget.name }}-group-plus" class="pill-buttons">
     {% for id, name, icon in widget.items %}
         {% if icon == 'plus' %}
             {% include 'talent/widgets/pill_button.html' %}
         {% endif %}
     {% endfor %}
 </div>
-    <div id="{{ widget.type }}-group-minus">
+<div id="{{ widget.name }}-group-minus" class="pill-buttons">
     {% for id, name, icon in widget.items %}
         {% if icon == 'minus' %}
             {% include 'talent/widgets/pill_button.html' %}
         {% endif %}
     {% endfor %}
-    </div>
 </div>

@@ -1,6 +1,6 @@
-<div id="{{ widget.type }}-filter" style="padding-bottom: 5px;">
+<div id="{{ widget.name }}-filter" style="padding-bottom: 5px;">
 {% for item in widget.filter %}
-    <button id="{{ widget.type }}-filter-{{ item }}" class="button button-many-select-alphabet" value="{{ item }}">
+    <button id="{{ widget.name }}-filter-{{ item }}" class="button button-many-select-alphabet" value="{{ item }}">
         {{ item }}
     </button>
 {% endfor %}

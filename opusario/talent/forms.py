@@ -6,7 +6,7 @@ from django.forms import (
     ModelChoiceField,
     Textarea,
     TextInput)
-from django.forms.widgets import Input
+from django.forms.widgets import Select
 from utils import validate
 from core.models import (
     Country,
@@ -14,12 +14,12 @@ from core.models import (
 from .models import *
 
 
-class PillButtonMultipleSelectWidget(Input):
+class PillButtonMultipleSelectWidget(Select):
     """
     Base class for Models that need pill button multi-select widget.
     """
     data_items = None # Subclasses must define this.
-
+    data_model = None
     data_filter = ['all', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
                    't', 'u', 'v', 'w', 'x', 'y', 'z']
 
@@ -34,6 +34,7 @@ class PillButtonMultipleSelectWidget(Input):
 
     def get_context(self, name, value, attrs):
         context = super().get_context(name, value, attrs)
+        context['widget']['model'] = self.data_model
         context['widget']['items'] = self.data_items
         context['widget']['filter'] = self.data_filter
         return context
@@ -41,7 +42,7 @@ class PillButtonMultipleSelectWidget(Input):
 
 class SkillWidget(PillButtonMultipleSelectWidget):
 
-    input_type = 'skill'
+    data_model = 'Skill'
     data_items = None
 
     def __init__(self, attrs):
@@ -51,14 +52,14 @@ class SkillWidget(PillButtonMultipleSelectWidget):
         filter_by = attrs.pop('filter_by')
 
         items = [(skill.id, skill.name, 'minus' if skill.id in selected else 'plus') for skill in Skill.objects.all()
-                 if filter_by == 'all' or skill.name[:1].lower() == filter_by]
+                 if filter_by == 'all' or skill.name[:1].lower() == filter_by or skill.id in selected]
 
         self.data_items = items
 
 
 class ToolWidget(PillButtonMultipleSelectWidget):
 
-    input_type = 'tool'
+    data_model = 'Tool'
     data_items = None
 
     def __init__(self, attrs=None):
@@ -68,7 +69,7 @@ class ToolWidget(PillButtonMultipleSelectWidget):
         filter_by = attrs.pop('filter_by')
 
         items = [(tool.id, tool.name, 'minus' if tool.id in selected else 'plus') for tool in Tool.objects.all()
-                 if filter_by == 'all' or tool.name[:1].lower() == filter_by]
+                 if filter_by == 'all' or tool.name[:1].lower() == filter_by or tool.id in selected]
 
         self.data_items = items
 
@@ -281,6 +282,9 @@ class MyExperienceInlineForm(SimpleModelForm):
     def clean_skills(self):
         skills = self.cleaned_data['skills']
         return skills
+
+    def clean(self):
+        this = 'that'
 
 
 ProjectOutcomeInlineFormSet = inlineformset_factory(Project, ProjectOutcome, form=ProjectOutcomeInlineForm, extra=1,
