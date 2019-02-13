@@ -6,7 +6,7 @@ from django.forms import (
     ModelChoiceField,
     Textarea,
     TextInput)
-from django.forms.widgets import Select
+from django.forms.widgets import SelectMultiple
 from utils import validate
 from core.models import (
     Country,
@@ -14,7 +14,7 @@ from core.models import (
 from .models import *
 
 
-class PillButtonMultipleSelectWidget(Select):
+class PillButtonMultipleSelectWidget(SelectMultiple):
     """
     Base class for Models that need pill button multi-select widget.
     """
