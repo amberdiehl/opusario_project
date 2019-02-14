@@ -46,6 +46,26 @@ def ajax_filter_pills(request):
     return render(request, 'talent/widgets/pill_button_groups.html', {'widget': context})
 
 
+def my_experience_save_m2m(selected_items, field_name, experience):
+    """
+    MySkill and MyTool are M2M through models associated with MyExperience, so cannot use Django .save_m2m()
+    :param selected_items: from the model form M2M field, e.g. experience_formset.forms[0].cleaned_data['skills']
+    :param through_model: the through model name, e.g. MySkill
+    :param experience: the instance of MyExperience
+    :return:
+    """
+    model = getattr(talent.models, 'My{}'.format(field_name.title()))
+    selected = [item for item in selected_items]
+    saved = model.objects.filter(my_experience=experience)
+    for item in saved:
+        if not item in selected:
+            item.delete()
+    for item in selected:
+        if model.objects.filter(my_experience=experience, **{field_name: item}).count() == 0:
+            new_item = model(my_experience=experience, **{field_name: item})
+            new_item.save()
+
+
 class ModelFormActionMixin(object):
 
     @property
@@ -181,11 +201,21 @@ class ProjectAndProjectOutcomesCreateView(SimpleModelCreateView):
             return self.form_invalid(form, experience_formset, outcome_formset)
 
     def form_valid(self, form, experience_formset, outcome_formset):
-        self.object = form.save()
-        experience_formset.instance = self.object
-        experience_formset.save()
+
+        project = form.save(commit=False)
+        project.save()
+
+        # experience_formset.instance = self.object
+        experience = experience_formset.forms[0].save(commit=False)
+        myself = Myself.objects.get(user=self.request.user)
+        experience.myself = myself
+        experience.project = project
+        experience.save()
+        experience.save_m2m()
+
         outcome_formset.instance = self.object
         outcome_formset.save()
+
         return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form, experience_formset, outcome_formset):
@@ -212,45 +242,76 @@ class ProjectAndProjectOutcomesUpdateView(SimpleModelUpdateView):
     title = 'Project'
     form_class = ProjectForm
 
-    def get_context_data(self, **kwargs):
-        context = super(ProjectAndProjectOutcomesUpdateView, self).get_context_data(**kwargs)
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        experience_formset = ProjectMyExperienceInlineFormSet(instance=self.object)
+        outcome_formset = ProjectOutcomeInlineFormSet(instance=self.object)
+        return self.render_to_response(
+            self.get_context_data(
+                form=form,
+                formsets=[
+                    {
+                        'title': 'My Project Experience',
+                        'formset': experience_formset
+                    },
+                    {
+                        'title': 'Project Outcomes',
+                        'formset': outcome_formset
+                    }
+                ]
+            )
+        )
 
-        context['formsets'] = []
-
-        formset = {
-            'title': 'My Project Experience',
-            'formset': None
-        }
-        if self.request.POST:
-            formset['formset'] = ProjectMyExperienceInlineFormSet(self.request.POST, instance=self.object)
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        experience_formset = ProjectMyExperienceInlineFormSet(self.request.POST, instance=self.object)
+        outcome_formset = ProjectOutcomeInlineFormSet(self.request.POST, instance=self.object)
+        if form.is_valid() and experience_formset.is_valid() and outcome_formset.is_valid():
+            return self.form_valid(form, experience_formset, outcome_formset)
         else:
-            formset['formset'] = ProjectMyExperienceInlineFormSet(instance=self.object)
-        context['formsets'].append(formset)
+            return self.form_invalid(form, experience_formset, outcome_formset)
 
-        formset = {
-            'title': 'Quantified Project Outcomes',
-            'formset': None
-        }
-        if self.request.POST:
-            formset['formset'] = ProjectOutcomeInlineFormSet(self.request.POST, instance=self.object)
-        else:
-            formset['formset'] = ProjectOutcomeInlineFormSet(instance=self.object)
-        context['formsets'].append(formset)
+    def form_valid(self, form, experience_formset, outcome_formset):
 
-        return context
+        project = form.save(commit=False)
+        project.save()
 
-    def form_valid(self, form):
-        context = self.get_context_data()
-        # experience_formset = context['formsets'][0]['formset']
-        experience_formset = ProjectMyExperienceInlineFormSet(self.request.POST)
-        outcomes_formset = context['formsets'][1]['formset']
-        if outcomes_formset.is_valid() and not experience_formset.errors:
-            self.object = form.save()
-            outcomes_formset.instance = self.object
-            outcomes_formset.save()
-            experience_formset.instance = self.object
-            experience_formset.save()
-        return super(ProjectAndProjectOutcomesUpdateView, self).form_valid(form)
+        # experience_formset.instance = self.object
+        experience = experience_formset.forms[0].save(commit=False)
+        myself = Myself.objects.get(user=self.request.user)
+        experience.myself = myself
+        experience.project = project
+        experience.save()
+
+        # per Django documentation many to many instances must be maintained manually
+        my_experience_save_m2m(experience_formset.forms[0].cleaned_data['skills'], 'skill', experience)
+        my_experience_save_m2m(experience_formset.forms[0].cleaned_data['tools'], 'tool', experience)
+
+        outcome_formset.instance = self.object
+        outcome_formset.save()
+
+        return HttpResponseRedirect(self.get_success_url())
+
+    def form_invalid(self, form, experience_formset, outcome_formset):
+        return self.render_to_response(
+            self.get_context_data(
+                form=form,
+                formsets=[
+                    {
+                        'title': 'My Project Experience',
+                        'formset': experience_formset
+                    },
+                    {
+                        'title': 'Project Outcomes',
+                        'formset': outcome_formset
+                    }
+                ]
+            )
+        )
 
 
 class MyselfAndMyExternalAccountsCreateView(SimpleModelCreateView):

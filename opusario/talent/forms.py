@@ -6,7 +6,8 @@ from django.forms import (
     ModelChoiceField,
     Textarea,
     TextInput)
-from django.forms.widgets import SelectMultiple
+from django.forms.widgets import Select, SelectMultiple
+from django.forms.models import ModelMultipleChoiceField
 from utils import validate
 from core.models import (
     Country,
@@ -14,23 +15,63 @@ from core.models import (
 from .models import *
 
 
-class PillButtonMultipleSelectWidget(SelectMultiple):
+class PillButtonSelectWidget(Select):
+
+    def get_context(self, name, value, attrs):
+        context = super().get_context(name, value, attrs)
+        if self.allow_multiple_selected:
+            context['widget']['attrs']['multiple'] = True
+        return context
+
+
+class PillButtonSelectMultipleWidget(PillButtonSelectWidget):
+
+    allow_multiple_selected = True
+
+    def value_from_datadict(self, data, files, name):
+        try:
+            getter = data.getlist
+        except AttributeError:
+            getter = data.get
+        return getter(name)
+
+    def value_omitted_from_data(self, data, files, name):
+        # An unselected <select multiple> doesn't appear in POST data, so it's
+        # never known if the value is actually omitted.
+        return False
+
+
+class PillButtonModelMultipleChoiceField(ModelMultipleChoiceField):
+
+    widget = PillButtonSelectMultipleWidget
+
+
+class PillButtonMultipleSelectWidgetOld(SelectMultiple):
     """
     Base class for Models that need pill button multi-select widget.
     """
-    data_items = None # Subclasses must define this.
     data_model = None
+    data_items = None # Subclasses must define this.
     data_filter = ['all', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
                    't', 'u', 'v', 'w', 'x', 'y', 'z']
 
     template_name = 'talent/widgets/pill_button_select.html'
 
-    def __init__(self, attrs=None):
+    #def __init__(self, attrs=None):
+    #    super().__init__(attrs)
+    #    if attrs is not None:
+    #        attrs = attrs.copy()
+    #        self.data_items = attrs.pop('items', self.data_items)
+    #        self.data_filter = attrs.pop('filter', self.data_filter)
+    def __init__(self, attrs=None, choices=()):
         super().__init__(attrs)
-        if attrs is not None:
-            attrs = attrs.copy()
-            self.data_items = attrs.pop('items', self.data_items)
-            self.data_filter = attrs.pop('filter', self.data_filter)
+        # choices can be any iterable, but we may need to render this widget
+        # multiple times. Thus, collapse it into a list so it can be consumed
+        # more than once.
+        self.selected = attrs.pop('selected')
+        self.filter_by = attrs.pop('filter_by')
+        self.choices = list(choices)
+
 
     def get_context(self, name, value, attrs):
         context = super().get_context(name, value, attrs)
@@ -40,36 +81,21 @@ class PillButtonMultipleSelectWidget(SelectMultiple):
         return context
 
 
-class SkillWidget(PillButtonMultipleSelectWidget):
+class SkillWidget(PillButtonMultipleSelectWidgetOld):
 
     data_model = 'Skill'
     data_items = None
 
-    def __init__(self, attrs):
+    def __init__(self, attrs=None, choices=()):
         super().__init__(attrs)
-        attrs = attrs.copy()
-        selected = attrs.pop('selected')
-        filter_by = attrs.pop('filter_by')
+    #def __init__(self, attrs):
+    #    super().__init__(attrs)
+    #    attrs = attrs.copy()
+    #    selected = attrs.pop('selected')
+    #    filter_by = attrs.pop('filter_by')
 
-        items = [(skill.id, skill.name, 'minus' if skill.id in selected else 'plus') for skill in Skill.objects.all()
-                 if filter_by == 'all' or skill.name[:1].lower() == filter_by or skill.id in selected]
-
-        self.data_items = items
-
-
-class ToolWidget(PillButtonMultipleSelectWidget):
-
-    data_model = 'Tool'
-    data_items = None
-
-    def __init__(self, attrs=None):
-        super().__init__(attrs)
-        attrs = attrs.copy()
-        selected = attrs.pop('selected')
-        filter_by = attrs.pop('filter_by')
-
-        items = [(tool.id, tool.name, 'minus' if tool.id in selected else 'plus') for tool in Tool.objects.all()
-                 if filter_by == 'all' or tool.name[:1].lower() == filter_by or tool.id in selected]
+        items = [(skill.id, skill.name, 'minus' if skill.id in self.selected else 'plus') for skill in Skill.objects.all()
+                 if self.filter_by == 'all' or skill.name[:1].lower() == self.filter_by or skill.id in self.selected]
 
         self.data_items = items
 
@@ -251,6 +277,8 @@ class MyExperienceInlineForm(SimpleModelForm):
         'description': 'Details regarding your role',
     }
 
+    skills = PillButtonModelMultipleChoiceField(queryset=Skill.objects.all())
+
     class Meta:
         model = MyExperience
         fields = ['role', 'description', 'involvement_level', 'work_relationship', 'skills', 'tools', 'project_owner']
@@ -263,13 +291,13 @@ class MyExperienceInlineForm(SimpleModelForm):
 
         my_experience = self.instance.pk if self.instance.pk else 0
 
-        selected = [skill.id for skill in MySkill.objects.filter(my_experience=my_experience)]
-        self.fields['skills'].widget = SkillWidget(attrs={
-            'col-size': 10,
-            'selected': selected,
-            'filter_by': 'all',
-        })
-        self.fields['skills'].required = False
+        #selected = [skill.id for skill in MySkill.objects.filter(my_experience=my_experience)]
+        #self.fields['skills'].widget = PillButtonMultipleSelectWidget(attrs={
+        #    'col-size': 10,
+        #    'selected': selected,
+        #    'filter_by': 'all',
+        #})
+        #self.fields['skills'].required = False
 
         #selected = [tool.id for tool in MyTool.objects.filter(my_experience=my_experience)]
         #self.fields['tools'].widget = ToolWidget(attrs={
