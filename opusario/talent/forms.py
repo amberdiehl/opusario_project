@@ -17,10 +17,18 @@ from .models import *
 
 class PillButtonSelectWidget(Select):
 
+    template_name = 'talent/widgets/pill_button_select.html'
+    filter = ['all', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
+                   't', 'u', 'v', 'w', 'x', 'y', 'z']
+
     def get_context(self, name, value, attrs):
         context = super().get_context(name, value, attrs)
         if self.allow_multiple_selected:
             context['widget']['attrs']['multiple'] = True
+        items = [(item[1][0]['value'], item[1][0]['label'], 'minus' if item[1][0]['selected'] else 'plus')
+                 for item in context['widget']['optgroups']]
+        context['widget']['items'] = items
+        context['widget']['filter'] = self.filter
         return context
 
 

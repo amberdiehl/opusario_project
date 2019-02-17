@@ -1,5 +1,12 @@
 {% include 'talent/widgets/pill_button_filter.html' %}
-<select id="{{ widget.attrs.id }}" style="display: none;"></select>
+<select id="{{ widget.attrs.id }}" name="{{ widget.attrs.id }}" placeholder="" multiple="">
+    {% for id, name, icon in widget.items %}
+        {% if icon == 'minus' %}
+            <option value="{{ id }}" selected="">{{ name }}</option>
+        {% endif %}
+    {% endfor %}
+    <option value="2" selected="">Django</option>
+</select>
 <div id="{{ widget.name }}-container">
     {% include 'talent/widgets/pill_button_groups.html' %}
 </div>
@@ -27,6 +34,7 @@
     },false);
     document.getElementById("{{ widget.name }}-group-plus").addEventListener("click", function(e) {
         e.preventDefault();
+        alert(this.id);
         var $addOption = $('#' + e.target.id);
         $("#{{ widget.attrs.id }}").append($("<option></option>")
             .attr("value", $addOption.attr('data-value'))
