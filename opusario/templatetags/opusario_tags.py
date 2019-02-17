@@ -19,14 +19,17 @@ def get_widget_size(obj):
         return column_size
 
     # otherwise return default size by widget types
-    if obj.__class__.__name__ == "Textarea":
+    if obj.__class__.__name__ == 'Textarea':
         return 8
 
-    if obj.__class__.__name__ == "TextInput":
+    if obj.__class__.__name__ == 'TextInput':
         return 4
 
     if obj.__class__.__name__ == 'Select':
         return 4
+
+    if obj.__class__.__name__ == 'PillButtonSelectMultipleWidget':
+        return 10
 
     # otherwise return default size
     return 3

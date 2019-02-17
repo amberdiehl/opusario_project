@@ -23,12 +23,21 @@ class PillButtonSelectWidget(Select):
 
     def get_context(self, name, value, attrs):
         context = super().get_context(name, value, attrs)
+
+        # TODO Figure out why setting widget col-size attr here does not work. Am setting in template tag for class.
+
         if self.allow_multiple_selected:
             context['widget']['attrs']['multiple'] = True
-        items = [(item[1][0]['value'], item[1][0]['label'], 'minus' if item[1][0]['selected'] else 'plus')
-                 for item in context['widget']['optgroups']]
-        context['widget']['items'] = items
+
+        # reprocess native option groups into new list for widget
+        context['widget']['items'] = \
+            [(item[1][0]['value'], item[1][0]['label'], 'minus' if item[1][0]['selected'] else 'plus')
+             for item in context['widget']['optgroups']]
+
         context['widget']['filter'] = self.filter
+
+        context['widget']['model'] = self.choices.queryset.model._meta.object_name
+
         return context
 
 
@@ -52,60 +61,6 @@ class PillButtonSelectMultipleWidget(PillButtonSelectWidget):
 class PillButtonModelMultipleChoiceField(ModelMultipleChoiceField):
 
     widget = PillButtonSelectMultipleWidget
-
-
-class PillButtonMultipleSelectWidgetOld(SelectMultiple):
-    """
-    Base class for Models that need pill button multi-select widget.
-    """
-    data_model = None
-    data_items = None # Subclasses must define this.
-    data_filter = ['all', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
-                   't', 'u', 'v', 'w', 'x', 'y', 'z']
-
-    template_name = 'talent/widgets/pill_button_select.html'
-
-    #def __init__(self, attrs=None):
-    #    super().__init__(attrs)
-    #    if attrs is not None:
-    #        attrs = attrs.copy()
-    #        self.data_items = attrs.pop('items', self.data_items)
-    #        self.data_filter = attrs.pop('filter', self.data_filter)
-    def __init__(self, attrs=None, choices=()):
-        super().__init__(attrs)
-        # choices can be any iterable, but we may need to render this widget
-        # multiple times. Thus, collapse it into a list so it can be consumed
-        # more than once.
-        self.selected = attrs.pop('selected')
-        self.filter_by = attrs.pop('filter_by')
-        self.choices = list(choices)
-
-
-    def get_context(self, name, value, attrs):
-        context = super().get_context(name, value, attrs)
-        context['widget']['model'] = self.data_model
-        context['widget']['items'] = self.data_items
-        context['widget']['filter'] = self.data_filter
-        return context
-
-
-class SkillWidget(PillButtonMultipleSelectWidgetOld):
-
-    data_model = 'Skill'
-    data_items = None
-
-    def __init__(self, attrs=None, choices=()):
-        super().__init__(attrs)
-    #def __init__(self, attrs):
-    #    super().__init__(attrs)
-    #    attrs = attrs.copy()
-    #    selected = attrs.pop('selected')
-    #    filter_by = attrs.pop('filter_by')
-
-        items = [(skill.id, skill.name, 'minus' if skill.id in self.selected else 'plus') for skill in Skill.objects.all()
-                 if self.filter_by == 'all' or skill.name[:1].lower() == self.filter_by or skill.id in self.selected]
-
-        self.data_items = items
 
 
 class SimpleModelForm(ModelForm):
@@ -285,7 +240,8 @@ class MyExperienceInlineForm(SimpleModelForm):
         'description': 'Details regarding your role',
     }
 
-    skills = PillButtonModelMultipleChoiceField(queryset=Skill.objects.all())
+    skills = PillButtonModelMultipleChoiceField(queryset=Skill.objects.all(),
+                                                help_text='Skills used to complete this project.')
 
     class Meta:
         model = MyExperience

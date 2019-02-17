@@ -1,15 +1,17 @@
 {% include 'talent/widgets/pill_button_filter.html' %}
-<select id="{{ widget.attrs.id }}" name="{{ widget.attrs.id }}" placeholder="" multiple="">
+
+<select id="{{ widget.attrs.id }}" name="{{ widget.name }}" placeholder="" multiple="" style="display: none;">
     {% for id, name, icon in widget.items %}
         {% if icon == 'minus' %}
             <option value="{{ id }}" selected="">{{ name }}</option>
         {% endif %}
     {% endfor %}
-    <option value="2" selected="">Django</option>
 </select>
-<div id="{{ widget.name }}-container">
+
+<div id="{{ widget.name }}-container" class="col-10 col-10-xsmall">
     {% include 'talent/widgets/pill_button_groups.html' %}
 </div>
+
 <script>
     document.getElementById("{{ widget.name }}-filter").addEventListener("click",function(e){
         e.preventDefault();
@@ -32,14 +34,40 @@
             error: function () {}
         });
     },false);
-    document.getElementById("{{ widget.name }}-group-plus").addEventListener("click", function(e) {
+    document.getElementById("{{ widget.name }}-container").addEventListener("click", function(e) {
         e.preventDefault();
-        alert(this.id);
-        var $addOption = $('#' + e.target.id);
-        $("#{{ widget.attrs.id }}").append($("<option></option>")
-            .attr("value", $addOption.attr('data-value'))
-            .attr('selected', 'selected')
-            .text($addOption.text())
-        );
+
+        var objPillButton = $('#' + e.target.id);  // Child 'plus' or 'minus' button element that was clicked
+        var dataIcon = objPillButton.attr('data-icon');  // Get icon type for ease of use
+        var dataValue = objPillButton.attr('data-value');  // get data value for east of use
+        var htmlPlusIcon = '<i class="fa fa-plus-circle icon-plus"></i>';
+        var htmlMinusIcon = '<i class="fa fa-minus-circle icon-minus"></i>';
+
+        // Add or remove option from actual select DOM element which is returned when the form is submitted
+        if (dataIcon === 'plus') {
+            $("#{{ widget.attrs.id }}").append($("<option></option>")
+                .attr("value", objPillButton.attr('data-value'))
+                .attr('selected', 'selected')
+                .text(objPillButton.text())
+            );
+        } else {
+            $("#{{ widget.attrs.id }} option[value=" + objPillButton.attr('data-value') + "]").remove();
+        }
+
+        // Update group divs so that option is moved to reflect selection
+        var baseGroupID = '{{ widget.name }}-group-';
+        var movingToGroup = (dataIcon==='plus')? 'minus' : 'plus';
+        var divGroupID = baseGroupID + movingToGroup;
+        $('#' + divGroupID).find('div').each(function(){
+            if (objPillButton.text().toLowerCase() < $(this).text().toLowerCase()) {
+                $(this).before($('<div id="' + objPillButton.attr('id') + '" class="' + objPillButton.attr('class') +
+                    '" data-value="' + dataValue + '" data-icon="' + movingToGroup + '">' + objPillButton.text() +
+                    ((movingToGroup==='plus')? htmlPlusIcon : htmlMinusIcon) +
+                    '</div>'));
+                return false;
+            }
+        });
+        objPillButton.remove();
+
     }, false);
 </script>
