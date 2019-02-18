@@ -6,8 +6,7 @@ from django.forms import (
     ModelChoiceField,
     Textarea,
     TextInput)
-from django.forms.widgets import Select, SelectMultiple
-from django.forms.models import ModelMultipleChoiceField
+from django.forms.widgets import Select
 from utils import validate
 from core.models import (
     Country,
@@ -56,11 +55,6 @@ class PillButtonSelectMultipleWidget(PillButtonSelectWidget):
         # An unselected <select multiple> doesn't appear in POST data, so it's
         # never known if the value is actually omitted.
         return False
-
-
-class PillButtonModelMultipleChoiceField(ModelMultipleChoiceField):
-
-    widget = PillButtonSelectMultipleWidget
 
 
 class SimpleModelForm(ModelForm):
@@ -240,17 +234,13 @@ class MyExperienceInlineForm(SimpleModelForm):
         'description': 'Details regarding your role',
     }
 
-    skills = PillButtonModelMultipleChoiceField(queryset=Skill.objects.all(),
-                                                help_text='Skills used to complete this project.')
-
-    tools = PillButtonModelMultipleChoiceField(queryset=Tool.objects.all(),
-                                               help_text='Tools used to complete this project.')
-
     class Meta:
         model = MyExperience
         fields = ['role', 'description', 'involvement_level', 'work_relationship', 'skills', 'tools', 'project_owner']
         widgets = {
             'description': Textarea(attrs={'rows': 2}),
+            'skills': PillButtonSelectMultipleWidget(),
+            'tools': PillButtonSelectMultipleWidget(),
         }
 
     def __init__(self, *args, **kwargs):
