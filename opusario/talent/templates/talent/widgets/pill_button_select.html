@@ -21,17 +21,21 @@
     document.getElementById("{{ widget.name }}-filter").addEventListener("click",function(e){
         e.preventDefault();
 
-        var inlineStyle = 'color: whitesmoke !important; background-color: dimgray !important;';
+        var $FilterButton = $('#' + e.target.id);
 
+        // remove style from previously selected button and add to newly selected filter
+        var inlineStyle = 'color: whitesmoke !important; background-color: dimgray !important;';
         var $PreviousSelection = $("#{{ widget.name }}-filter").find("[style='" + inlineStyle + "']");
         $PreviousSelection.removeAttr('style');
-        $('#' + e.target.id).attr('style', inlineStyle);
+        $FilterButton.attr('style', inlineStyle);
 
-        // Get selected items so that they are not included in the filter
+        // get selected items so that they are not included in the new 'plus' items
         var selected = '';
         $('#{{ widget.attrs.id }}').find('option').each(function(){
             selected += ($(this).attr('value')) + ',';
         });
+
+        // call back to the server to filter items based on selected filter and current selections
         $.ajaxSetup({beforeSend: function(xhr, settings){
             xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
         }});
@@ -42,7 +46,7 @@
                 'model': '{{ widget.model }}',
                 'name': '{{ widget.name }}',
                 'selected': selected,
-                'filter_by': $('#' + e.target.id).val()
+                'filter_by': $FilterButton.val()
             },
             success: function (data) {$("#{{ widget.name }}-group-plus").replaceWith(data);},
             error: function () {}
