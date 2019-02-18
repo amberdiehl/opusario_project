@@ -1,13 +1,6 @@
-<div id="{{ widget.name }}-group-plus" class="pill-buttons">
+<div id="{{ widget.name }}-group-{{ group }}" class="pill-buttons">
     {% for id, name, icon in widget.items %}
-        {% if icon == 'plus' %}
-            {% include 'talent/widgets/pill_button.html' %}
-        {% endif %}
-    {% endfor %}
-</div>
-<div id="{{ widget.name }}-group-minus" class="pill-buttons">
-    {% for id, name, icon in widget.items %}
-        {% if icon == 'minus' %}
+        {% if icon == group %}
             {% include 'talent/widgets/pill_button.html' %}
         {% endif %}
     {% endfor %}

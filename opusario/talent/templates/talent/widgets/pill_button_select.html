@@ -9,7 +9,12 @@
 </select>
 
 <div id="{{ widget.name }}-container" class="col-10 col-10-xsmall">
-    {% include 'talent/widgets/pill_button_groups.html' %}
+    {% with 'plus' as group %}
+        {% include 'talent/widgets/pill_button_groups.html' %}
+    {% endwith %}
+    {% with 'minus' as group %}
+        {% include 'talent/widgets/pill_button_groups.html' %}
+    {% endwith %}
 </div>
 
 <script>
@@ -27,10 +32,11 @@
             url: "/talent/ajax-filter-pills",
             data: {
                 'model': '{{ widget.model }}',
+                'name': '{{ widget.name }}',
                 'selected': selected,
                 'filter_by': $('#' + e.target.id).val()
             },
-            success: function (data) {$("#{{ widget.name }}-container").html(data);},
+            success: function (data) {$("#{{ widget.name }}-group-plus").replaceWith(data);},
             error: function () {}
         });
     },false);

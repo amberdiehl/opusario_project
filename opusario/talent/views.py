@@ -22,21 +22,32 @@ from .models import *
 def ajax_filter_pills(request):
 
     model_name = request.GET.get('model', '')
+    group_name = request.GET.get('name', '')
     selected_string = request.GET.get('selected', '')
     filter_by = request.GET.get('filter_by', 'all')
-
-    selected = [int(item) for item in selected_string.split(',') if item.isdigit()]
 
     try:
         model = getattr(talent.models, model_name)
     except AttributeError:
         return render(request, 'talent/widgets/pill_button_error.html', {})
 
-    qs = model.objects.filter()
+    if not group_name:
+        return render(request, 'talent/widgets/pill_button_error.html', {})
 
-    field = PillButtonModelMultipleChoiceField(queryset=model.objects.all())
+    selected = [int(item) for item in selected_string.split(',') if item.isdigit()]
 
-    return render(request, 'talent/widgets/pill_button_groups.html', {'widget': context})
+    qs = model.objects.exclude(pk__in=selected)
+    if not filter_by == 'all':
+        qs = qs.filter(name__startswith=filter_by)
+
+    items = [(item.id, item.name, 'plus') for item in qs]
+
+    widget = {
+        'name': group_name,
+        'items': items
+    }
+
+    return render(request, 'talent/widgets/pill_button_groups.html', {'widget': widget, 'group': 'plus'})
 
 
 def my_experience_save_m2m(selected_items, field_name, experience):
