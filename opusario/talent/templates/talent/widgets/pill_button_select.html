@@ -20,6 +20,14 @@
 <script>
     document.getElementById("{{ widget.name }}-filter").addEventListener("click",function(e){
         e.preventDefault();
+
+        var inlineStyle = 'color: whitesmoke !important; background-color: dimgray !important;';
+
+        var $PreviousSelection = $("#{{ widget.name }}-filter").find("[style='" + inlineStyle + "']");
+        $PreviousSelection.removeAttr('style');
+        $('#' + e.target.id).attr('style', inlineStyle);
+
+        // Get selected items so that they are not included in the filter
         var selected = '';
         $('#{{ widget.attrs.id }}').find('option').each(function(){
             selected += ($(this).attr('value')) + ',';

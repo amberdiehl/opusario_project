@@ -1,6 +1,8 @@
 <div id="{{ widget.name }}-filter" style="padding-bottom: 5px;">
 {% for item in widget.filter %}
-    <button id="{{ widget.name }}-filter-{{ item }}" class="button button-many-select-alphabet" value="{{ item }}">
+    <button id="{{ widget.name }}-filter-{{ item }}" class="button button-many-select-alphabet"
+            {% if item == 'all' %}style="color: whitesmoke !important; background-color: dimgray !important;" {% endif %}
+            value="{{ item }}">
         {{ item }}
     </button>
 {% endfor %}

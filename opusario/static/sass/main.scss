@@ -2013,8 +2013,8 @@ ul.errorlist {
 	color: _colors(many-select-item) !important;
 	text-transform: none;
 	text-align: center;
-	height: 2.25em;
-	width: 2.25em;
+	height: 2.6em;
+	width: 2.6em;
   	display: inline-flex;
   	flex-direction: column;
   	justify-content: center;
@@ -2024,7 +2024,6 @@ ul.errorlist {
 	-webkit-border-radius: 50%;
 	-moz-border-radius: 50%;
 	border-radius: 50%;
-
 	&:hover {
 		color: whitesmoke !important;
 		background-color: _colors(brand-black) !important;
