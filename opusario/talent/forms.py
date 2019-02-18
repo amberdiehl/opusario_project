@@ -25,7 +25,6 @@ class PillButtonSelectWidget(Select):
         context = super().get_context(name, value, attrs)
 
         # TODO Figure out why setting widget col-size attr here does not work. Am setting in template tag for class.
-        # TODO BUG Moving item that is last on list cannot be added because there's nothing "before" at the end.
 
         if self.allow_multiple_selected:
             context['widget']['attrs']['multiple'] = True
@@ -244,6 +243,9 @@ class MyExperienceInlineForm(SimpleModelForm):
     skills = PillButtonModelMultipleChoiceField(queryset=Skill.objects.all(),
                                                 help_text='Skills used to complete this project.')
 
+    tools = PillButtonModelMultipleChoiceField(queryset=Tool.objects.all(),
+                                               help_text='Tools used to complete this project.')
+
     class Meta:
         model = MyExperience
         fields = ['role', 'description', 'involvement_level', 'work_relationship', 'skills', 'tools', 'project_owner']
@@ -255,22 +257,6 @@ class MyExperienceInlineForm(SimpleModelForm):
         super().__init__(*args, **kwargs)
 
         my_experience = self.instance.pk if self.instance.pk else 0
-
-        #selected = [skill.id for skill in MySkill.objects.filter(my_experience=my_experience)]
-        #self.fields['skills'].widget = PillButtonMultipleSelectWidget(attrs={
-        #    'col-size': 10,
-        #    'selected': selected,
-        #    'filter_by': 'all',
-        #})
-        #self.fields['skills'].required = False
-
-        #selected = [tool.id for tool in MyTool.objects.filter(my_experience=my_experience)]
-        #self.fields['tools'].widget = ToolWidget(attrs={
-        #    'col-size': 10,
-        #    'selected': selected,
-        #    'filter_by': 'all',
-        #})
-        #self.fields['tools'].required = False
 
     def clean_skills(self):
         skills = self.cleaned_data['skills']
