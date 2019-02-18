@@ -34,40 +34,54 @@
             error: function () {}
         });
     },false);
+
     document.getElementById("{{ widget.name }}-container").addEventListener("click", function(e) {
         e.preventDefault();
 
-        var objPillButton = $('#' + e.target.id);  // Child 'plus' or 'minus' button element that was clicked
-        var dataIcon = objPillButton.attr('data-icon');  // Get icon type for ease of use
-        var dataValue = objPillButton.attr('data-value');  // get data value for east of use
+        var $PillButton = $('#' + e.target.id);  // Child 'plus' or 'minus' button element that was clicked
+        var pillId = $PillButton.attr('id');
+        var pillClass = $PillButton.attr('class');
+        var pillValue = $PillButton.attr('data-value');
+        var pillIcon = $PillButton.attr('data-icon');
+        var pillText = $PillButton.text();
+
         var htmlPlusIcon = '<i class="fa fa-plus-circle icon-plus"></i>';
         var htmlMinusIcon = '<i class="fa fa-minus-circle icon-minus"></i>';
 
         // Add or remove option from actual select DOM element which is returned when the form is submitted
-        if (dataIcon === 'plus') {
+        if (pillIcon === 'plus') {
             $("#{{ widget.attrs.id }}").append($("<option></option>")
-                .attr("value", objPillButton.attr('data-value'))
+                .attr("value", pillValue)
                 .attr('selected', 'selected')
-                .text(objPillButton.text())
+                .text(pillText)
             );
         } else {
-            $("#{{ widget.attrs.id }} option[value=" + objPillButton.attr('data-value') + "]").remove();
+            $("#{{ widget.attrs.id }} option[value=" + pillValue + "]").remove();
         }
 
-        // Update group divs so that option is moved to reflect selection
+        // Update group pill button divs so that option is moved to reflect selection
         var baseGroupID = '{{ widget.name }}-group-';
-        var movingToGroup = (dataIcon==='plus')? 'minus' : 'plus';
-        var divGroupID = baseGroupID + movingToGroup;
-        $('#' + divGroupID).find('div').each(function(){
-            if (objPillButton.text().toLowerCase() < $(this).text().toLowerCase()) {
-                $(this).before($('<div id="' + objPillButton.attr('id') + '" class="' + objPillButton.attr('class') +
-                    '" data-value="' + dataValue + '" data-icon="' + movingToGroup + '">' + objPillButton.text() +
-                    ((movingToGroup==='plus')? htmlPlusIcon : htmlMinusIcon) +
-                    '</div>'));
-                return false;
-            }
-        });
-        objPillButton.remove();
+        var movingToGroup = (pillIcon==='plus')? 'minus' : 'plus';
+        var $DivGroup = $('#' + baseGroupID + movingToGroup);
+        var htmlDiv = '<div id="' + pillId + '" class="' + pillClass + '" data-value="' + pillValue + '" data-icon="' +
+            movingToGroup + '">' + pillText + ((movingToGroup === 'plus') ? htmlPlusIcon : htmlMinusIcon) + '</div>';
+
+        var groupItems = $DivGroup.find('div');  // get all the pill button divs in group where button needs to be added
+        if (groupItems.length > 0) {
+            groupItems.each(function () {
+                if ($PillButton.text() < $(this).text()) {  // insert in list alphabetically
+                    $(this).before($(htmlDiv));
+                    return false;
+                } else {
+                    if ($(this).is(':last-child')) {  // if at end, it needs to be added last
+                        $(this).after($(htmlDiv))
+                    }
+                }
+            });
+        } else {
+            $DivGroup.append($(htmlDiv));  // nothing in the group, add first skill selected
+        }
+        $PillButton.remove();  // and remove from group where pill button was when clicked
 
     }, false);
 </script>

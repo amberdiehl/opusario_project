@@ -25,6 +25,7 @@ class PillButtonSelectWidget(Select):
         context = super().get_context(name, value, attrs)
 
         # TODO Figure out why setting widget col-size attr here does not work. Am setting in template tag for class.
+        # TODO BUG Moving item that is last on list cannot be added because there's nothing "before" at the end.
 
         if self.allow_multiple_selected:
             context['widget']['attrs']['multiple'] = True
