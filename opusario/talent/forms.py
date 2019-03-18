@@ -263,6 +263,14 @@ ProjectMyExperienceInlineFormSet = inlineformset_factory(Project, MyExperience, 
                                                          can_delete=False, can_order=False, max_num=1)
 
 
+class ProjectListInlineForm(ModelForm):
+
+    class Meta:
+        model = Project
+        fields = ['company', 'name', 'start_year', 'duration', 'team_size', 'code_repository',
+                  'project_site']
+
+
 class MyselfForm(SimpleModelForm):
 
     placeholders = {
