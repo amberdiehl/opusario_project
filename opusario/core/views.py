@@ -134,7 +134,7 @@ class SimpleModelCreateView(LoginRequiredMixin, ModelFormActionMixin, CreateView
 
     title = NotImplemented
     form_class = NotImplemented
-    template_name = 'talent/simple_model_form.html'
+    template_name = 'talent/instance_model_form.html'
     success_message = NotImplemented
 
     def __init__(self, **kwargs):
@@ -158,7 +158,7 @@ class SimpleModelUpdateView(LoginRequiredMixin, ModelFormActionMixin, UpdateView
     model = NotImplemented
     title = NotImplemented
     form_class = NotImplemented
-    template_name = 'talent/simple_model_form.html'
+    template_name = 'talent/instance_model_form.html'
     success_message = NotImplemented
 
     def __init__(self, **kwargs):
