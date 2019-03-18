@@ -215,12 +215,15 @@ class ProjectAndProjectOutcomesCreateView(SimpleModelCreateView):
         experience.myself = myself
         experience.project = project
         experience.save()
-        experience.save_m2m()
+
+        # per Django documentation many to many instances must be maintained manually
+        my_experience_save_m2m(experience_formset.forms[0].cleaned_data['skills'], 'skill', experience)
+        my_experience_save_m2m(experience_formset.forms[0].cleaned_data['tools'], 'tool', experience)
 
         outcome_formset.instance = self.object
         outcome_formset.save()
 
-        return HttpResponseRedirect(self.get_success_url())
+        return HttpResponseRedirect(project.get_absolute_url())
 
     def form_invalid(self, form, experience_formset, outcome_formset):
         return self.render_to_response(
@@ -298,7 +301,7 @@ class ProjectAndProjectOutcomesUpdateView(SimpleModelUpdateView):
         outcome_formset.instance = self.object
         outcome_formset.save()
 
-        return HttpResponseRedirect(self.get_success_url())
+        return HttpResponseRedirect(project.get_absolute_url())
 
     def form_invalid(self, form, experience_formset, outcome_formset):
         return self.render_to_response(
