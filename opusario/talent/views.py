@@ -4,6 +4,7 @@ from django.shortcuts import (
 from braces.views import LoginRequiredMixin
 from django.contrib import messages
 from django.http import HttpResponseRedirect
+from django.views.generic import ListView
 from django.views.generic.edit import (
     CreateView,
     UpdateView)
@@ -81,7 +82,13 @@ class ModelFormActionMixin(object):
         return super(ModelFormActionMixin, self).form_valid(form)
 
 
-class SimpleModelCreateView(LoginRequiredMixin, ModelFormActionMixin, CreateView):
+class ModelListView(LoginRequiredMixin, ListView):
+    model = None
+    context_object_name = None
+    template_name = 'talent/list_model_form.html'
+
+
+class InstanceModelCreateView(LoginRequiredMixin, ModelFormActionMixin, CreateView):
 
     title = NotImplemented
     form_class = NotImplemented
@@ -89,22 +96,22 @@ class SimpleModelCreateView(LoginRequiredMixin, ModelFormActionMixin, CreateView
     success_message = NotImplemented
 
     def __init__(self, **kwargs):
-        super(SimpleModelCreateView, self).__init__(**kwargs)
+        super(InstanceModelCreateView, self).__init__(**kwargs)
         self.success_message = '{} added'.format(self.title)
 
     def dispatch(self, *args, **kwargs):
         # If next defined, go to specified path rather than default behavior
         if self.request.GET.get('next'):
             self.success_url = self.request.GET['next']
-        return super(SimpleModelCreateView, self).dispatch(*args, **kwargs)
+        return super(InstanceModelCreateView, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        context = super(SimpleModelCreateView, self).get_context_data(**kwargs)
+        context = super(InstanceModelCreateView, self).get_context_data(**kwargs)
         context['title'] = self.title
         return context
 
 
-class SimpleModelUpdateView(LoginRequiredMixin, ModelFormActionMixin, UpdateView):
+class InstanceModelUpdateView(LoginRequiredMixin, ModelFormActionMixin, UpdateView):
 
     model = NotImplemented
     title = NotImplemented
@@ -113,7 +120,7 @@ class SimpleModelUpdateView(LoginRequiredMixin, ModelFormActionMixin, UpdateView
     success_message = NotImplemented
 
     def __init__(self, **kwargs):
-        super(SimpleModelUpdateView, self).__init__(**kwargs)
+        super(InstanceModelUpdateView, self).__init__(**kwargs)
         self.success_message = '{} updated'.format(self.title)
 
     def get_object(self, queryset=None):
@@ -122,51 +129,71 @@ class SimpleModelUpdateView(LoginRequiredMixin, ModelFormActionMixin, UpdateView
         return model_instance
 
     def get_context_data(self, **kwargs):
-        context = super(SimpleModelUpdateView, self).get_context_data(**kwargs)
+        context = super(InstanceModelUpdateView, self).get_context_data(**kwargs)
         context['title'] = self.title
         return context
 
 
-class SkillCreateView(SimpleModelCreateView):
+class SkillCreateView(InstanceModelCreateView):
 
     title = 'Skill'
     form_class = SkillForm
 
 
-class SkillUpdateView(SimpleModelUpdateView):
+class SkillUpdateView(InstanceModelUpdateView):
 
     model = 'Skill'
     title = 'Skill'
     form_class = SkillForm
 
 
-class ToolCreateView(SimpleModelCreateView):
+class ToolCreateView(InstanceModelCreateView):
 
     title = 'Tool'
     form_class = ToolForm
 
 
-class ToolUpdateView(SimpleModelUpdateView):
+class ToolUpdateView(InstanceModelUpdateView):
 
     model = 'Tool'
     title = 'Tool'
     form_class = ToolForm
 
 
-class RoleCreateView(SimpleModelCreateView):
+class RoleCreateView(InstanceModelCreateView):
 
     title = 'Role'
     form_class = RoleForm
 
 
-class RoleUpdateView(SimpleModelUpdateView):
+class RoleUpdateView(InstanceModelUpdateView):
 
     model = 'Role'
     title = 'Role'
     form_class = RoleForm
 
 
-class ProjectAndProjectOutcomesCreateView(SimpleModelCreateView):
+class ProjectListView(ModelListView):
+    model = Project
+    context_object_name = 'my_projects'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['title'] = 'Projects'
+
+        form_list = []
+        my_experience = MyExperience.objects.filter(myself__user=self.request.user)
+        for experience in my_experience:
+            instance = Project.objects.get(pk=experience.project_id)
+            project_form = ProjectListForm(instance=instance)
+            form_list.append(project_form)
+        context['form_list'] = form_list
+
+        return context
+
+
+class ProjectAndProjectOutcomesCreateView(InstanceModelCreateView):
 
     title = 'Project'
     form_class = ProjectForm
@@ -243,7 +270,7 @@ class ProjectAndProjectOutcomesCreateView(SimpleModelCreateView):
         )
 
 
-class ProjectAndProjectOutcomesUpdateView(SimpleModelUpdateView):
+class ProjectAndProjectOutcomesUpdateView(InstanceModelUpdateView):
 
     model = 'Project'
     title = 'Project'
@@ -321,7 +348,7 @@ class ProjectAndProjectOutcomesUpdateView(SimpleModelUpdateView):
         )
 
 
-class MyselfAndMyExternalAccountsCreateView(SimpleModelCreateView):
+class MyselfAndMyExternalAccountsCreateView(InstanceModelCreateView):
 
     title = 'My Profile'
     form_class = MyselfForm
@@ -355,7 +382,7 @@ class MyselfAndMyExternalAccountsCreateView(SimpleModelCreateView):
         return super(MyselfAndMyExternalAccountsCreateView, self).form_valid(form)
 
 
-class MyselfAndMyExternalAccountsUpdateView(SimpleModelUpdateView):
+class MyselfAndMyExternalAccountsUpdateView(InstanceModelUpdateView):
 
     model = 'Myself'
     title = 'My Profile'

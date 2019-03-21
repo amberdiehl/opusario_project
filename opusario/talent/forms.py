@@ -1,6 +1,7 @@
 import datetime
 import re
 from django.forms import (
+    formset_factory,
     inlineformset_factory,
     ModelForm,
     ModelChoiceField,
@@ -263,7 +264,7 @@ ProjectMyExperienceInlineFormSet = inlineformset_factory(Project, MyExperience, 
                                                          can_delete=False, can_order=False, max_num=1)
 
 
-class ProjectListInlineForm(ModelForm):
+class ProjectListForm(ModelForm):
 
     class Meta:
         model = Project
