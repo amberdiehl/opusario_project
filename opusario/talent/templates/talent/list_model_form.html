@@ -30,7 +30,7 @@
                 <div class="row">
                     <div class="col-12">
                         <ul class="actions pull-right">
-                            <li><a href="/talent/project/" class="button">Add Project</a></li>
+                            <li><a href="{% url 'talent:project_create' %}?next={% url 'talent:project_list' %}" class="button">Add Project</a></li>
                         </ul>
                     </div>
                     </div>
@@ -40,7 +40,9 @@
                             <tr>
                                 <th>Actions</th>
                                 {% for field in form_list.0 %}
-                                    <th>{{ field.label }}</th>
+                                    {% if field.field.widget|get_widget_class != 'HiddenInput' %}
+                                        <th>{{ field.label }}</th>
+                                    {% endif %}
                                 {% endfor %}
                             </tr>
                         </thead>
@@ -49,18 +51,20 @@
                                 <tr>
                                     <td>
                                         <ul class="icons">
-                                            <li><a href="#" class="icon fa-edit"></a></li>
+                                            <li><a href="{% url 'talent:project_update' form.id.value %}?next={% url 'talent:project_list' %}" class="icon fa-edit"></a></li>
                                             <li><a href="#" class="icon fa-trash"></a></li>
                                         </ul>
                                     </td>
                                     {% for field in form %}
-                                        <td>
-                                            {% if field.field.widget|get_widget_class == 'Select' %}
-                                                {{ field|get_choice_name }}
-                                            {% else %}
-                                                {{ field.value }}
-                                            {% endif %}
+                                        {% if field.field.widget|get_widget_class != 'HiddenInput' %}
+                                            <td>
+                                                {% if field.field.widget|get_widget_class == 'Select' %}
+                                                    {{ field|get_choice_name }}
+                                                {% else %}
+                                                    {{ field.value }}
+                                                {% endif %}
                                         </td>
+                                        {% endif %}
                                     {% endfor %}
                                 </tr>
                             {% endfor %}

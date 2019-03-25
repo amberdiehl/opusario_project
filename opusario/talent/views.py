@@ -123,6 +123,12 @@ class InstanceModelUpdateView(LoginRequiredMixin, ModelFormActionMixin, UpdateVi
         super(InstanceModelUpdateView, self).__init__(**kwargs)
         self.success_message = '{} updated'.format(self.title)
 
+    def dispatch(self, *args, **kwargs):
+        # If next defined, go to specified path rather than default behavior
+        if self.request.GET.get('next'):
+            self.success_url = self.request.GET['next']
+        return super(InstanceModelUpdateView, self).dispatch(*args, **kwargs)
+
     def get_object(self, queryset=None):
         model_instance = get_object_or_404(getattr(talent.models, self.model),
                                            pk=hasher.decode(self.kwargs.get('pk'))[0])  # hasher returns tuple
@@ -250,7 +256,7 @@ class ProjectAndProjectOutcomesCreateView(InstanceModelCreateView):
         outcome_formset.instance = self.object
         outcome_formset.save()
 
-        return HttpResponseRedirect(project.get_absolute_url())
+        return HttpResponseRedirect(project.get_absolute_url() if not self.success_url else self.success_url)
 
     def form_invalid(self, form, experience_formset, outcome_formset):
         return self.render_to_response(
@@ -328,7 +334,7 @@ class ProjectAndProjectOutcomesUpdateView(InstanceModelUpdateView):
         outcome_formset.instance = self.object
         outcome_formset.save()
 
-        return HttpResponseRedirect(project.get_absolute_url())
+        return HttpResponseRedirect(project.get_absolute_url() if not self.success_url else self.success_url)
 
     def form_invalid(self, form, experience_formset, outcome_formset):
         return self.render_to_response(
