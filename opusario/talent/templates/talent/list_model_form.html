@@ -27,10 +27,45 @@
                         </div>
                     </div>
                 {% endif %}
-                <div class="form-field-group">
-                    {% for form in form_list %}
-                        {% include 'talent/_render_fields.html' %}
-                    {% endfor %}
+                <div class="row">
+                    <div class="col-12">
+                        <ul class="actions pull-right">
+                            <li><a href="/talent/project/" class="button">Add Project</a></li>
+                        </ul>
+                    </div>
+                    </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Actions</th>
+                                {% for field in form_list.0 %}
+                                    <th>{{ field.label }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for form in form_list %}
+                                <tr>
+                                    <td>
+                                        <ul class="icons">
+                                            <li><a href="#" class="icon fa-edit"></a></li>
+                                            <li><a href="#" class="icon fa-trash"></a></li>
+                                        </ul>
+                                    </td>
+                                    {% for field in form %}
+                                        <td>
+                                            {% if field.field.widget|get_widget_class == 'Select' %}
+                                                {{ field|get_choice_name }}
+                                            {% else %}
+                                                {{ field.value }}
+                                            {% endif %}
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </form>
         </div>

@@ -268,8 +268,7 @@ class ProjectListForm(ModelForm):
 
     class Meta:
         model = Project
-        fields = ['company', 'name', 'start_year', 'duration', 'team_size', 'code_repository',
-                  'project_site']
+        fields = ['company', 'name', 'project_objective', 'start_year', 'duration']
 
 
 class MyselfForm(SimpleModelForm):
