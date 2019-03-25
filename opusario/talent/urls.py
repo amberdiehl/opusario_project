@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^myself/?$', MyselfAndMyExternalAccountsCreateView.as_view(), name='myself_create'),
     url(r'^project/(?P<pk>[a-zA-Z0-9]+)/?$', ProjectAndProjectOutcomesUpdateView.as_view(), name='project_update'),
     url(r'^project/?$', ProjectAndProjectOutcomesCreateView.as_view(), name='project_create'),
+    url(r'^projects/?$', ProjectListView.as_view(), name='project_list'),
     url(r'^role/(?P<pk>[a-zA-Z0-9]+)/?$', RoleUpdateView.as_view(), name='role_update'),
     url(r'^role/?$', RoleCreateView.as_view(), name='role_create'),
     url(r'^skill/(?P<pk>[a-zA-Z0-9]+)/?$', SkillUpdateView.as_view(), name='skill_update'),

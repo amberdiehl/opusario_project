@@ -1,12 +1,14 @@
 import datetime
 import re
 from django.forms import (
+    CharField,
+    formset_factory,
     inlineformset_factory,
     ModelForm,
     ModelChoiceField,
     Textarea,
     TextInput)
-from django.forms.widgets import Select
+from django.forms.widgets import Select, HiddenInput
 from utils import validate
 from core.models import (
     Country,
@@ -261,6 +263,21 @@ ProjectOutcomeInlineFormSet = inlineformset_factory(Project, ProjectOutcome, for
 
 ProjectMyExperienceInlineFormSet = inlineformset_factory(Project, MyExperience, form=MyExperienceInlineForm, extra=1,
                                                          can_delete=False, can_order=False, max_num=1)
+
+
+class ProjectListForm(ModelForm):
+
+    class Meta:
+        model = Project
+        fields = ['company', 'name', 'project_objective', 'start_year', 'duration']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Dynamically add hidden pk field for edit and delete functions
+        self.fields.update({
+            'id': CharField(widget=HiddenInput(), initial=self.instance.get_encoded_id)
+        })
 
 
 class MyselfForm(SimpleModelForm):

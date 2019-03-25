@@ -88,3 +88,14 @@ def get_profile_id(request):
         pass
     else:
         return hasher.encode(myself.pk)
+
+
+@register.filter
+def get_choice_name(obj):
+    # Created for list pages; since model forms are used within the template, the choice field wants to show the value
+    # of the selection, e.g. 3 (or, the key) not the name, e.g. SFMOMA.
+    try:
+        choice_name = obj.field.queryset.filter(pk=obj.initial)[0].name
+    except AttributeError:
+        choice_name = 'Error'
+    return choice_name

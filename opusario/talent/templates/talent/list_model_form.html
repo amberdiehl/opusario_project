@@ -1,0 +1,81 @@
+{% extends "../opusario/base.html" %}
+{% load static from staticfiles %}
+
+{% load account_tags opusario_tags %}
+{% load i18n %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block static %}
+{% endblock %}
+
+{% block navigation %}
+{% endblock %}
+
+{% block body_container %}
+
+    <section class="wrapper style5">
+        <div class="inner">
+            <form action="{{ form.form_action }}" method="post">
+                {% csrf_token %}
+                <h2>{{ title }}</h2>
+                {% if messages %}
+                    <div class="row">
+                        <div class="col-10 form-messages">
+                        {% for message in messages %}
+                            <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                        {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="row">
+                    <div class="col-12">
+                        <ul class="actions pull-right">
+                            <li><a href="{% url 'talent:project_create' %}?next={% url 'talent:project_list' %}" class="button">Add Project</a></li>
+                        </ul>
+                    </div>
+                    </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Actions</th>
+                                {% for field in form_list.0 %}
+                                    {% if field.field.widget|get_widget_class != 'HiddenInput' %}
+                                        <th>{{ field.label }}</th>
+                                    {% endif %}
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for form in form_list %}
+                                <tr>
+                                    <td>
+                                        <ul class="icons">
+                                            <li><a href="{% url 'talent:project_update' form.id.value %}?next={% url 'talent:project_list' %}" class="icon fa-edit"></a></li>
+                                            <li><a href="#" class="icon fa-trash"></a></li>
+                                        </ul>
+                                    </td>
+                                    {% for field in form %}
+                                        {% if field.field.widget|get_widget_class != 'HiddenInput' %}
+                                            <td>
+                                                {% if field.field.widget|get_widget_class == 'Select' %}
+                                                    {{ field|get_choice_name }}
+                                                {% else %}
+                                                    {{ field.value }}
+                                                {% endif %}
+                                        </td>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
