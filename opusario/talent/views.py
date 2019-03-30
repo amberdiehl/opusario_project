@@ -225,7 +225,8 @@ class ProjectListView(ModelListView):
         context['title'] = 'Projects'
 
         form_list = []
-        my_experience = MyExperience.objects.filter(myself__user=self.request.user)
+        my_experience = MyExperience.objects.filter(myself__user=self.request.user)\
+            .order_by('-project__start_year', 'project__company__name')
         for experience in my_experience:
             instance = Project.objects.get(pk=experience.project_id)
             project_form = ProjectListForm(instance=instance)
