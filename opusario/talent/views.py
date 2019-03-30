@@ -7,7 +7,8 @@ from django.http import HttpResponseRedirect
 from django.views.generic import ListView
 from django.views.generic.edit import (
     CreateView,
-    UpdateView)
+    UpdateView,
+    DeleteView)
 from utils import (  # Pycharm doesn't see these as used but they are.
     hasher,
     validate)
@@ -140,6 +141,24 @@ class InstanceModelUpdateView(LoginRequiredMixin, ModelFormActionMixin, UpdateVi
         return context
 
 
+class InstanceModelDeleteView(LoginRequiredMixin, ModelFormActionMixin, DeleteView):
+
+    title = NotImplemented
+    target_item = NotImplemented
+    template_name = 'talent/confirm_delete.html'
+    success_message = NotImplemented
+
+    def __init__(self, **kwargs):
+        super(InstanceModelDeleteView, self).__init__(**kwargs)
+        self.success_message = '{} deleted'.format(self.title)
+
+    def get_context_data(self, **kwargs):
+        context = super(InstanceModelDeleteView, self).get_context_data(**kwargs)
+        context['title'] = self.title
+        context['target_item'] = self.target_item
+        return context
+
+
 class SkillCreateView(InstanceModelCreateView):
 
     title = 'Skill'
@@ -197,6 +216,15 @@ class ProjectListView(ModelListView):
         context['form_list'] = form_list
 
         return context
+
+
+class ProjectDeleteView(InstanceModelDeleteView):
+    title = 'Delete Project'
+    target_item = 99
+
+    def __init__(self, **kwargs):
+        super(InstanceModelDeleteView, self).__init__(**kwargs)
+        self.success_message = '{} deleted'.format(self.title)
 
 
 class ProjectAndProjectOutcomesCreateView(InstanceModelCreateView):

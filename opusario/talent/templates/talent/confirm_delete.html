@@ -1,0 +1,43 @@
+{% extends "../opusario/base.html" %}
+{% load static from staticfiles %}
+
+{% load account_tags opusario_tags %}
+{% load i18n %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block static %}
+{% endblock %}
+
+{% block navigation %}
+{% endblock %}
+
+{% block body_container %}
+
+    <section class="wrapper style5">
+        <div class="inner">
+            <form action="{{ form.form_action }}" method="post">
+                {% csrf_token %}
+                <h2>{{ title }}</h2>
+                {% if messages %}
+                    <div class="row">
+                        <div class="col-10 form-messages">
+                        {% for message in messages %}
+                            <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                        {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="row">
+                    <div class="col-12">
+                        Are you sure you want to delete {{ target_item }}?
+                        <button>Yes, delete it.</button><button>No, keep it.</button>
+                     </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

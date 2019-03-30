@@ -52,7 +52,7 @@
                                     <td>
                                         <ul class="icons">
                                             <li><a href="{% url 'talent:project_update' form.id.value %}?next={% url 'talent:project_list' %}" class="icon fa-edit"></a></li>
-                                            <li><a href="#" class="icon fa-trash"></a></li>
+                                            <li><a href="{% url 'talent:project_delete' form.id.value %}?next={% url 'talent:project_list' %}" class="icon fa-trash"></a></li>
                                         </ul>
                                     </td>
                                     {% for field in form %}
