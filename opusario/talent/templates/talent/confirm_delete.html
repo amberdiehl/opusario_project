@@ -29,8 +29,9 @@
                 {% endif %}
                 <div class="row">
                     <div class="col-12">
-                        Are you sure you want to delete {{ target_item }}?
-                        <button>Yes, delete it.</button><button>No, keep it.</button>
+                        Are you sure you want to delete "{{ object }}"?<br><br>
+                        <button type="submit" name="delete" class="button primary">Yes, delete it.</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="submit" name="keep">No, keep it.</button>
                      </div>
                 </div>
             </form>

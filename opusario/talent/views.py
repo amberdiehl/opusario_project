@@ -1,9 +1,10 @@
-from django.shortcuts import (
-    get_object_or_404,
-    render)
 from braces.views import LoginRequiredMixin
 from django.contrib import messages
 from django.http import HttpResponseRedirect
+from django.shortcuts import (
+    get_object_or_404,
+    render)
+from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.edit import (
     CreateView,
@@ -143,8 +144,8 @@ class InstanceModelUpdateView(LoginRequiredMixin, ModelFormActionMixin, UpdateVi
 
 class InstanceModelDeleteView(LoginRequiredMixin, ModelFormActionMixin, DeleteView):
 
+    model = NotImplemented
     title = NotImplemented
-    target_item = NotImplemented
     template_name = 'talent/confirm_delete.html'
     success_message = NotImplemented
 
@@ -152,11 +153,27 @@ class InstanceModelDeleteView(LoginRequiredMixin, ModelFormActionMixin, DeleteVi
         super(InstanceModelDeleteView, self).__init__(**kwargs)
         self.success_message = '{} deleted'.format(self.title)
 
+    def get_object(self, queryset=None):
+        model_name = self.model._meta.object_name
+        model_instance = get_object_or_404(getattr(talent.models, model_name),
+                                           pk=hasher.decode(self.kwargs.get('pk'))[0])  # hasher returns tuple
+        return model_instance
+
     def get_context_data(self, **kwargs):
         context = super(InstanceModelDeleteView, self).get_context_data(**kwargs)
         context['title'] = self.title
-        context['target_item'] = self.target_item
         return context
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Call the delete() method on the fetched object if the user has confirmed; regardless, redirect to the
+        success URL.
+        """
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        if 'delete' in request.POST:
+            self.object.delete()
+        return HttpResponseRedirect(success_url)
 
 
 class SkillCreateView(InstanceModelCreateView):
@@ -219,12 +236,10 @@ class ProjectListView(ModelListView):
 
 
 class ProjectDeleteView(InstanceModelDeleteView):
-    title = 'Delete Project'
-    target_item = 99
 
-    def __init__(self, **kwargs):
-        super(InstanceModelDeleteView, self).__init__(**kwargs)
-        self.success_message = '{} deleted'.format(self.title)
+    title = 'Delete Project'
+    model = Project
+    success_url = reverse_lazy('talent:project_list')
 
 
 class ProjectAndProjectOutcomesCreateView(InstanceModelCreateView):
